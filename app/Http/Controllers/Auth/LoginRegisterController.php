@@ -21,7 +21,7 @@ class LoginRegisterController extends Controller
         $validate = Validator::make($request->all(), [
             'name' => 'required|string|max:250',
             'email' => 'required|string|email:rfc,dns|max:250|unique:users,email',
-            'password' => 'required|string|min:8|confirmed'
+            'password' => 'required|string|min:8|'
         ]);
 
         if ($validate->fails()) {
@@ -38,13 +38,9 @@ class LoginRegisterController extends Controller
             'password' => Hash::make($request->password)
         ]);
 
-        $data['token'] = $user->createToken($request->email)->plainTextToken;
-        $data['user'] = $user;
-
         $response = [
             'status' => 'success',
-            'message' => 'User is created successfully.',
-            'data' => $data,
+            'message' => 'User is created successfully.'
         ];
 
         return response()->json($response, 201);

@@ -14,6 +14,17 @@ class ModuloResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'codigo' => $this->codigo,
+            'materia' => $this->materia,
+            'h_semanales' => $this->h_semanales,
+            'h_totales' => $this->h_totales,
+            'user_id' => $this->user_id,
+            'especialidad_id' => $this->especialidad_id,
+            'curso_id' => $this->curso_id,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
+        ];
     }
 }

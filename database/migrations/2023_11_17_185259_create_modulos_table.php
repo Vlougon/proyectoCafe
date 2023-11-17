@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('modulos', function (Blueprint $table) {
             $table->id();
-            $table->tinyText('codigo', 3);
+            $table->tinyText('codigo');
             $table->tinyText('materia');
             $table->unsignedTinyInteger('h_semanales');
             $table->unsignedTinyInteger('h_totales');
