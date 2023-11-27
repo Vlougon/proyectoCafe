@@ -7,6 +7,7 @@ use App\Models\Modulo;
 use Illuminate\Http\Request;
 use App\Http\Requests\ModuloForm;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Resources\ModuloResource;
 
 class ModuloController extends Controller
 {
@@ -15,7 +16,7 @@ class ModuloController extends Controller
      */
     public function index()
     {
-        $modulos = Modulo::latest()->get();
+        $modulos = ModuloResource::collection(Modulo::latest()->get());
 
         if (is_null($modulos->first())) {
             return response()->json([
@@ -51,7 +52,7 @@ class ModuloController extends Controller
         $response = [
             'status' => 'success',
             'message' => '¡Se ha agregado el curso!',
-            'data' => $modulos,
+            'data' => new ModuloResource($modulos),
         ];
 
         return response()->json($response, 200);
@@ -72,7 +73,7 @@ class ModuloController extends Controller
         $response = [
             'status' => 'success',
             'message' => '¡Se ha encontrado el modulo!',
-            'data' => $modulo,
+            'data' => new ModuloResource($modulo),
         ];
 
         return response()->json($response, 200);
@@ -107,7 +108,7 @@ class ModuloController extends Controller
         $response = [
             'status' => 'success',
             'message' => '¡Se ha actualizaod exitosamente el Modulo!',
-            'data' => $modulo,
+            'data' => new ModuloResource($modulo),
         ];
 
         return response()->json($response, 200);
