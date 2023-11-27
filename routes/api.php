@@ -30,8 +30,10 @@ Route::controller(LoginRegisterController::class)->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [LoginRegisterController::class, 'logout']);
 
-    Route::apiResource('modulos', ModuloController::class)
-    ->missing(function (Request $request) {
-        return response()->json("No se encontró el modulo indicado", 404);
+    Route::prefix('V1')->group(function () {
+        Route::apiResource('modulos', ModuloController::class)
+        ->missing(function (Request $request) {
+            return response()->json("No se encontró el modulo indicado", 404);
+        });
     });
 });
