@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Models\Modulo;
 use Illuminate\Http\Request;
+use App\Http\Requests\ModuloForm;
 use Illuminate\Support\Facades\Validator;
 
 class ModuloController extends Controller
@@ -35,25 +36,15 @@ class ModuloController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ModuloForm $request)
     {
-        $validate = Validator::make($request->all(), [
-            'codigo' => 'required|string|max:255',
-            'materia' => 'required|string|max:255',
-            'h_semanales' => 'required|integer|',
-            'h_totales' => 'required|integer|',
-            'user_id' => 'required|integer|',
-            'especialidad_id' => 'required|integer|',
-            'curso_id' => 'required|integer|'
-        ]);
-
-        if ($validate->fails()) {
-            return response()->json([
-                'status' => 'failed',
-                'message' => '¡No se ha podido validar el formulario! No se creará el modulo.',
-                'data' => $validate->errors(),
-            ], 403);
-        }
+        // if ($request->fails()) {
+        //     return response()->json([
+        //         'status' => 'failed',
+        //         'message' => '¡No se ha podido validar el formulario! No se creará el modulo.',
+        //         'data' => $request->errors(),
+        //     ], 403);
+        // }
 
         $modulos = Modulo::create($request->all());
 
@@ -90,7 +81,7 @@ class ModuloController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Modulo $modulo)
+    public function update(ModuloForm $request, Modulo $modulo)
     {
         if (is_null($modulo)) {
             return response()->json([
@@ -99,23 +90,17 @@ class ModuloController extends Controller
             ], 200);
         }
 
-        $validate = Validator::make($request->all(), [
-            'codigo' => 'required|string',
-            'materia' => 'required|string',
-            'h_semanales' => 'required|integer',
-            'h_totales' => 'required|integer',
-            'user_id' => 'required|integer',
-            'especialidad_id' => 'required|integer',
-            'curso_id' => 'required|integer'
-        ]);
+        // $validate = Validator::make($request->all(), [
 
-        if ($validate->fails()) {
-            return response()->json([
-                'status' => 'failed',
-                'message' => '¡No se ha podido validar el formulario! No se actualizarán los datos.',
-                'data' => $validate->errors(),
-            ], 403);
-        }
+        // ]);
+
+        // if ($validate->fails()) {
+        //     return response()->json([
+        //         'status' => 'failed',
+        //         'message' => '¡No se ha podido validar el formulario! No se actualizarán los datos.',
+        //         'data' => $validate->errors(),
+        //     ], 403);
+        // }
 
         $modulo->update($request->all());
 

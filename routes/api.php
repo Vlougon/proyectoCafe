@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\ModuloController;
 use App\Http\Controllers\Auth\LoginRegisterController;
 use App\Models\Modulo;
+use Illuminate\Cache\Repository;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,5 +30,8 @@ Route::controller(LoginRegisterController::class)->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [LoginRegisterController::class, 'logout']);
 
-    Route::apiResource('modulos', ModuloController::class);
+    Route::apiResource('modulos', ModuloController::class)
+    ->missing(function (Request $request) {
+        return response()->json("No se encontró el modulo indicado", 404);
+    });
 });
