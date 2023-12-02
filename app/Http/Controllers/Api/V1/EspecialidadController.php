@@ -8,14 +8,46 @@ use Illuminate\Http\Request;
 use App\Http\Requests\EspecialidadForm;
 use App\Http\Resources\EspecialidadResource;
 
+
+
 class EspecialidadController extends Controller
 {
+
+    public function obtenerModulosPorEspecialidad($especialidadId)
+    {
+        // Encuentra la especialidad por su ID
+        $especialidad = Especialidad::with('modulos')->find($especialidadId);
+
+        if (!$especialidad) {
+            return response()->json(['message' => 'Especialidad no encontrada'], 404);
+        }
+
+        // Obtiene los IDs de los módulos asociados a esta especialidad
+        $modulosIds = $especialidad->modulos->pluck('id');
+
+        return response()->json(['especialidad' => $especialidad]);
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $especialidades = EspecialidadResource::collection(Especialidad::latest()->get());
+
+        if (is_null($especialidades->first())) {
+            return response()->json([
+                'status' => 'failed',
+                'message' => '¡No hay Especialidades que enseñar!',
+            ], 200);
+        }
+
+        $response = [
+            'status' => 'success',
+            'message' => '¡Se ha conseguido extraer las Especialidades!.',
+            'data' => $especialidades,
+        ];
+
+        return response()->json($response, 200);
     }
 
     /**
@@ -23,7 +55,15 @@ class EspecialidadController extends Controller
      */
     public function store(EspecialidadForm $request)
     {
-        //
+        $especialidades = Especialidad::create($request->all());
+
+        $response = [
+            'status' => 'success',
+            'message' => '¡Se ha agregado la Especialidad!',
+            'data' => new EspecialidadResource($especialidades),
+        ];
+
+        return response()->json($response, 200);
     }
 
     /**
@@ -34,11 +74,16 @@ class EspecialidadController extends Controller
         if (is_null($especialidad)) {
             return response()->json([
                 'status' => 'failed',
-                'message' => '¡No se ha encontrado el modulo Indicado!',
+                'message' => '¡No se ha encontrado la especialidad!',
             ], 200);
         }
 
-        $response = new EspecialidadResource($especialidad);
+
+        $response = [
+            'status' => 'success',
+            'message' => '¡Se ha encontrado la especialidad!',
+            'data' => new EspecialidadResource($especialidad),
+        ];
 
         return response()->json($response, 200);
     }

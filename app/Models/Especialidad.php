@@ -9,7 +9,15 @@ class Especialidad extends Model
 {
     use HasFactory;
 
+    protected $table = 'especialidades';
+
     protected $fillable = [
-        'nombre'
+        'nombre',
+        'modulos'
     ];
+
+    public function modulos() //Relación 1:N
+    {
+        return $this->hasMany(Modulo::class);
+    }
 }

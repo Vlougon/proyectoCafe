@@ -23,6 +23,7 @@ class EspecialidadForm extends FormRequest
     {
         return [
             'nombre' => 'required|string',
+            'modulos' => 'required',
         ];
     }
 }
