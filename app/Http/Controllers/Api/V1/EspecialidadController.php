@@ -38,7 +38,7 @@ class EspecialidadController extends Controller
         }
 
         // Obtiene los IDs de los módulos asociados a esta especialidad
-        $modulosIds = $especialidad->modulos->pluck('id');
+        // $modulosIds = $especialidad->modulos->pluck('id');
 
         return response()->json(['especialidad' => $especialidad]);
     }

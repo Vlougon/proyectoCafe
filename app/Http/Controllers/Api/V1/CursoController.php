@@ -9,6 +9,18 @@ use Illuminate\Http\Request;
 
 class CursoController extends Controller
 {
+
+    public function obtenerModulosPorCurso($cursoId){
+
+        // Encuentra la especialidad por su ID
+        $cursoId = Curso::with('modulos')->find($cursoId);
+        //Manejo de errores
+        if(!$cursoId){
+            return response()->json(['message' => 'Curso no encontrado'], 404);
+        }
+
+        return response()->json(['Cusos' => $cursoId]);
+    }
     /**
      * Display a listing of the resource.
      */

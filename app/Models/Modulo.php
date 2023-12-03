@@ -22,5 +22,9 @@ class Modulo extends Model
     public function especialidad() {
         return $this->belongsTo(Especialidad::class);
     }
-    
+
+    public function curso() {
+        return $this->belongsTo(Curso::class);
+    }
+
 }

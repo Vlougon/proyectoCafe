@@ -58,7 +58,11 @@ Route::middleware('auth:sanctum')->group(function () {
         });
         Route::get('/especialidad/{especialidadId}/users',[EspecialidadController::class, 'obtenerUsersPorEspecialidad'] )
         ->missing(function (Request $request) {
-            return response()->json("No se encontró la especialidad indicada con sus modulos", 404);
+            return response()->json("No se encontró la especialidad indicada con sus users", 404);
+        });
+        Route::get('/curso/{cursoId}/modulos',[CursoController::class, 'obtenerModulosPorCurso'] )
+        ->missing(function (Request $request) {
+            return response()->json("No se encontró el curso indicada con sus modulos", 404);
         });
 
     });

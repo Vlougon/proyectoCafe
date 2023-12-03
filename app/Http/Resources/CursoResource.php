@@ -20,6 +20,7 @@ class CursoResource extends JsonResource
             'group' => $this->group,
             'turn' => $this->turn,
             'year' => $this->year,
+            'modulos' => new ModuloResource($this->modulos),
         ];
     }
 }
