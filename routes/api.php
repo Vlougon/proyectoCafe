@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\CursoController;
 use App\Http\Controllers\Api\V1\EspecialidadController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -45,6 +46,10 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('users', UserController::class)
         ->missing(function (Request $request) {
             return response()->json("No se encontró el Usuario indicado", 404);
+        });
+        Route::apiResource('cursos', CursoController::class)
+        ->missing(function (Request $request) {
+            return response()->json("No se encontró el Curso indicado", 404);
         });
 
         Route::get('/especialidad/{especialidadId}/modulos',[EspecialidadController::class, 'obtenerModulosPorEspecialidad'] )
