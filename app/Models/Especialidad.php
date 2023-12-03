@@ -13,11 +13,17 @@ class Especialidad extends Model
 
     protected $fillable = [
         'nombre',
-        'modulos'
+        'modulos',
+        'users',
     ];
 
     public function modulos() //Relación 1:N
     {
         return $this->hasMany(Modulo::class);
+    }
+
+    public function users() //Relación 1:N
+    {
+        return $this->hasMany(User::class);
     }
 }

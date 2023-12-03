@@ -27,6 +27,21 @@ class EspecialidadController extends Controller
 
         return response()->json(['especialidad' => $especialidad]);
     }
+
+    public function obtenerUsersPorEspecialidad($especialidadId)
+    {
+        // Encuentra la especialidad por su ID
+        $especialidad = Especialidad::with('users')->find($especialidadId);
+
+        if (!$especialidad) {
+            return response()->json(['message' => 'Especialidad no encontrada'], 404);
+        }
+
+        // Obtiene los IDs de los módulos asociados a esta especialidad
+        $modulosIds = $especialidad->modulos->pluck('id');
+
+        return response()->json(['especialidad' => $especialidad]);
+    }
     /**
      * Display a listing of the resource.
      */
