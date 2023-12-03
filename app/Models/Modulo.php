@@ -27,4 +27,8 @@ class Modulo extends Model
         return $this->belongsTo(Curso::class);
     }
 
+    public function aula() {
+        return $this->belongsTo(Aula::class);
+    }
+
 }
