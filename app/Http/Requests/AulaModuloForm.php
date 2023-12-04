@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class Aula_Modulo_Form extends FormRequest
+class AulaModuloForm extends FormRequest
 {
     public function authorize(): bool
     {

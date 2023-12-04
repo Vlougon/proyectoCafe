@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('aula_modulos', function (Blueprint $table) {
+        Schema::create('aula_modulo', function (Blueprint $table) {
             $table->unsignedBigInteger('aula_id');
             $table->unsignedBigInteger('modulo_id');
             $table->foreign('aula_id')->references('id')->on('aulas');
@@ -19,6 +19,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('aula_modulos');
+        Schema::dropIfExists('aula_modulo');
     }
 };

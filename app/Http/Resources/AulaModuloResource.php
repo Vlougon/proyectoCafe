@@ -8,13 +8,13 @@ use App\Http\Resources\AulaResource;
 use App\Http\Resources\ModuloResource;
 
 
-class Aula_Modulo_Resource extends JsonResource
+class AulaModuloResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
         return [
-            'aula' =>  AulaResource::collection($this->aulas),
-            'modulo' =>  ModuloResource::collection($this->modulos),
+            'aula' => new  AulaResource($this->aulas),
+            'modulo' =>  new ModuloResource($this->modulos),
         ];
     }
 }

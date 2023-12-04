@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Api\V1\Aula_Modulo_Controller;
+use App\Http\Controllers\Api\V1\AulaModuloController;
 use App\Http\Controllers\Api\V1\AulaController;
 use App\Http\Controllers\Api\V1\CursoController;
 use App\Http\Controllers\Api\V1\EspecialidadController;
@@ -56,19 +56,26 @@ Route::middleware('auth:sanctum')->group(function () {
             return response()->json("No se encontró el Aula indicado", 404);
         });
 
-        Route::apiResource('aula_modulos', Aula_Modulo_Controller::class)
-        ->missing(function (Request $request) {
-            return response()->json("No se encontró el Aula con los modulos indicada", 404);
-        });
-
         Route::get('/especialidad/{especialidadId}/modulos',[EspecialidadController::class, 'obtenerModulosPorEspecialidad'] )
         ->missing(function (Request $request) {
             return response()->json("No se encontró la especialidad indicada con sus modulos", 404);
         });
+
+        Route::get('/aulamodulo/{aula_id}/modulos',[AulaModuloController::class, 'obtenerModulosPorAula'] )
+        ->missing(function (Request $request) {
+            return response()->json("No se encontró los modulos para este aula", 404);
+        });
+        
+        Route::get('/aulamodulo/{modulo_id}/aulas',[AulaModuloController::class, 'obtenerAulasPorModulo'] )
+        ->missing(function (Request $request) {
+            return response()->json("No se encontró los modulos para este aula", 404);
+        });
+
         Route::get('/especialidad/{especialidadId}/users',[EspecialidadController::class, 'obtenerUsersPorEspecialidad'] )
         ->missing(function (Request $request) {
             return response()->json("No se encontró la especialidad indicada con sus users", 404);
         });
+
         Route::get('/curso/{cursoId}/modulos',[CursoController::class, 'obtenerModulosPorCurso'] )
         ->missing(function (Request $request) {
             return response()->json("No se encontró el curso indicada con sus modulos", 404);
