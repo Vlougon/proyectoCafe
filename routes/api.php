@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\Aula_Modulo_Controller;
 use App\Http\Controllers\Api\V1\AulaController;
 use App\Http\Controllers\Api\V1\CursoController;
 use App\Http\Controllers\Api\V1\EspecialidadController;
@@ -53,6 +54,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('aulas', AulaController::class)
         ->missing(function (Request $request) {
             return response()->json("No se encontró el Aula indicado", 404);
+        });
+
+        Route::apiResource('aula_modulos', Aula_Modulo_Controller::class)
+        ->missing(function (Request $request) {
+            return response()->json("No se encontró el Aula con los modulos indicada", 404);
         });
 
         Route::get('/especialidad/{especialidadId}/modulos',[EspecialidadController::class, 'obtenerModulosPorEspecialidad'] )

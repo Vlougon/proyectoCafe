@@ -5,15 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Aula extends Model
+class Aula_Modulo extends Model
 {
     use HasFactory;
-
+    protected $table = 'aula_modulos';
     protected $fillable = [
-        'nombre'
+        'aula_id',
+        'modulo_id',
     ];
 
-    public function modulos(){
-        return $this->belongsToMany(Modulo::class, 'aula_modulos');
-    }
+
 }
