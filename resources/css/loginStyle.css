@@ -1,0 +1,376 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #f4f4f4;
+}
+
+header {
+    position: absolute;
+    left: 0;
+    right: 0;
+    background: transparent;
+    color: white;
+    text-align: center;
+    overflow-x: auto;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 61px);
+    background-color: #1D2333;
+    overflow-x: auto;
+}
+
+footer {
+    background-color: #050091;
+    /* #3900d7 */
+    padding: 10px;
+    border-top: 3px solid #312f65;
+    /* #290099 */
+    color: white;
+    text-align: center;
+}
+
+footer p a {
+    display: inline-block;
+    color: #c4eafa
+}
+
+footer p a img {
+    width: 118px !important;
+    height: 41px !important;
+    margin-left: 3px;
+    vertical-align: middle;
+}
+
+footer img {
+    display: inline-block;
+    width: 118px !important;
+    height: 41px !important;
+    margin-top: 10px;
+    margin-left: 3px;
+}
+
+form {
+    padding-top: 20px;
+    border-top: 2px rgba(0, 0, 0, .1) solid;
+}
+
+form div,
+form p {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+input[type=text],
+input[type=password] {
+    padding: 10px 5px;
+    border-top-right-radius: 9px;
+    border-bottom-right-radius: 9px;
+}
+
+input[type=text]:focus,
+input[type=password]:focus {
+    border: 2px black solid;
+    box-shadow: 0 0 5px black;
+    outline: none;
+}
+
+input::placeholder {
+    font-weight: bolder;
+}
+
+#container {
+    background-color: white;
+    /* box-shadow: 0 3px 100px 10px rgba(255, 255, 255, 0.3); */
+    /* 0 3px 13px 10px rgba(170, 0, 255, 0.3) */
+    padding: 15px;
+    margin: 0 10px;
+    margin-top: 20vh;
+    margin-bottom: 50px;
+    min-width: fit-content;
+    border-radius: 10px;
+    animation: shadowChange 120s infinite;
+}
+
+@keyframes shadowChange {
+    0% {
+        box-shadow: 0 3px 13px 7px rgba(255, 255, 255, 0.3);
+    }
+
+    20% {
+        box-shadow: 0 3px 13px 7px rgba(255, 251, 0, 0.3);
+    }
+
+    40% {
+        box-shadow: 0 3px 13px 7px rgba(255, 89, 0, 0.3);
+    }
+
+    60% {
+        box-shadow: 0 3px 13px 7px rgba(7, 0, 198, 0.3);
+    }
+
+    80% {
+        box-shadow: 0 3px 13px 7px rgba(0, 200, 255, 0.3);
+    }
+
+    100% {
+        box-shadow: 0 3px 13px 7px rgba(255, 255, 255, 0.3);
+    }
+}
+
+#container img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#nameBox,
+#passwordBox {
+    margin-top: 5px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+#nameBox span,
+#passwordBox span {
+    background-color: rgb(175, 175, 175);
+    padding: 9px;
+    border: 2px solid black;
+    border-right: none;
+    border-bottom-left-radius: 9px;
+    border-top-left-radius: 9px;
+    vertical-align: -1px;
+}
+
+#nameBox svg,
+#passwordBox svg {
+    width: 14px;
+    height: 16px;
+    vertical-align: -1px;
+}
+
+#submitBox {
+    display: block;
+    background-color: #00acdf;
+    font-weight: bolder;
+    padding: 7px;
+    margin-top: 28px;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 10px;
+    border: 2px solid #00607e;
+    text-align: center;
+}
+
+#submitBox:hover {
+    background-color: #008eb9;
+    border: 2px solid #00455a;
+    color: #e9e9e9;
+}
+
+#submitBox svg {
+    color: white;
+    height: 16px;
+    width: 16px;
+    vertical-align: -3px;
+}
+
+#submitBox span {
+    display: inline;
+    margin-left: 5px;
+    background: none;
+    color: white;
+    font-weight: bolder;
+    border: none;
+}
+
+.missInputText {
+    color: rgb(255, 57, 57);
+    text-align: justify;
+    font-size: small;
+    font-style: italic;
+}
+
+input.validInput:focus {
+    border: 2px rgb(96, 160, 0) solid;
+    box-shadow: 0 0 7px greenyellow;
+    outline: none;
+}
+
+input.invalidInput {
+    border: 2px rgb(180, 0, 0) solid;
+}
+
+input.invalidInput:focus {
+    border: 2px rgb(180, 0, 0) solid;
+    box-shadow: 0 0 7px red;
+    outline: none;
+}
+
+/* #################################################################################################### */
+/* ####################################### EXTRA SMALL (MOBILE) ####################################### */
+/* #################################################################################################### */
+@media (max-width: 576px) {
+    header {
+        top: 2.6vh;
+        font-size: 1.6em;
+    }
+
+    input[type=text],
+    input[type=password] {
+        width: 80%;
+    }
+
+    input::placeholder {
+        font-size: 1em;
+    }
+
+    #submitBox {
+        width: 60%;
+        font-size: 1em;
+    }
+
+    #container {
+        width: 75%;
+    }
+
+    .missInputText {
+        width: 77%;
+    }
+}
+
+/* ########################################################################################################### */
+/* ####################################### SMALL/SM (VERTICAL TABLETS) ####################################### */
+/* ########################################################################################################### */
+@media (min-width: 576px) and (max-width: 768px) {
+    header {
+        top: 1.6vh;
+        font-size: 1.3em;
+    }
+
+    input[type=text],
+    input[type=password] {
+        width: 70%;
+    }
+
+    input::placeholder {
+        font-size: 1em;
+    }
+
+    #submitBox {
+        width: 50%;
+        font-size: 1em;
+    }
+
+    #container {
+        width: 67%;
+    }
+
+    .missInputText {
+        width: 67%;
+    }
+}
+
+/* ############################################################################################################## */
+/* ####################################### MEDIUM/MD (HORIZONTAL TABLETS) ####################################### */
+/* ############################################################################################################## */
+@media (min-width: 768px) and (max-width: 992px) {
+    header {
+        top: 1vh;
+        font-size: 2em;
+    }
+
+    input[type=text],
+    input[type=password] {
+        width: 65%;
+    }
+
+    input::placeholder {
+        font-size: 1em;
+    }
+
+    #submitBox {
+        width: 55%;
+        font-size: 1em;
+    }
+
+    #container {
+        width: 60%;
+    }
+
+    .missInputText {
+        width: 62%;
+    }
+}
+
+/* ################################################################################################## */
+/* ####################################### LARGE/LG (DESKTOP) ####################################### */
+/* ################################################################################################## */
+@media (min-width: 992px) and (max-width: 1200px) {
+    header {
+        top: 10vh;
+        font-size: 1.8em;
+    }
+
+    input[type=text],
+    input[type=password] {
+        width: 80%;
+    }
+
+    input::placeholder {
+        font-size: 1.1em;
+    }
+
+    #submitBox {
+        width: 50%;
+        font-size: .9em;
+    }
+
+    #container {
+        width: 55%;
+    }
+
+    .missInputText {
+        width: 77%;
+    }
+}
+
+/* ############################################################################################################ */
+/* ####################################### EXTRA LARGE/XL (BIG DESKTOP) ####################################### */
+/* ############################################################################################################ */
+@media (min-width: 1200px) {
+    header {
+        top: 10vh;
+        font-size: 1.8em;
+    }
+
+    input[type=text],
+    input[type=password] {
+        width: 85%;
+    }
+
+    input::placeholder {
+        font-size: 1.4em;
+    }
+
+    #submitBox {
+        width: 50%;
+        font-size: 1em;
+    }
+
+    #container {
+        width: 45%;
+    }
+
+    .missInputText {
+        width: 87%;
+    }
+}
