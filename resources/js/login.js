@@ -90,7 +90,7 @@ function createErrorNameText() {
     let nameMissInputParraf = document.createElement('p');
     nameMissInputParraf.setAttribute('id', 'missInputName');
     nameMissInputParraf.classList.add("missInputText");
-    nameMissInputParraf.textContent = "Asegúrese de Introducir un nombre de Usuario, un NIF/CIE o CIAL válido, sin espacios al principio o al final.";
+    nameMissInputParraf.textContent = "Asegúrese de Introducir un name de Usuario, un NIF/CIE o CIAL válido, sin espacios al principio o al final.";
 
     if (!professorLogInForm.querySelector('#missInputName')) {
         professorNameInput.insertAdjacentElement('afterend', nameMissInputParraf);

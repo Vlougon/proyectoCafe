@@ -11,8 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->foreignId('especialidad_id')->nullable();   
+        Schema::create('departamento', function (Blueprint $table) {
+            $table->id();
+            $table->tinyText('name');
+            $table->timestamps();
         });
     }
 
@@ -21,8 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('especialidad_id');   
-        });
+        Schema::dropIfExists('departamento');
     }
 };

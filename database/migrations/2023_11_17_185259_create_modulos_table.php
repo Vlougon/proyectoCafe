@@ -13,13 +13,15 @@ return new class extends Migration
     {
         Schema::create('modulos', function (Blueprint $table) {
             $table->id();
-            $table->tinyText('codigo');
-            $table->tinyText('materia');
-            $table->unsignedTinyInteger('h_semanales');
-            $table->unsignedTinyInteger('h_totales');
-            $table->foreignId('user_id');
-            $table->foreignId('especialidad_id');
-            $table->foreignId('curso_id');
+            $table->tinyText('code');
+            $table->tinyText('subject');
+            $table->unsignedTinyInteger('hours_per_week');
+            $table->unsignedTinyInteger('total_hours');
+            $table->string('weekly_distribution')->nullable();
+            $table->tinyInteger('classroom')->default(0);
+            $table->foreignId('user_id')->onDelete('set null')->nullable();
+            $table->foreignId('especialidad_id')->onDelete('set null')->nullable();
+            $table->foreignId('curso_id')->onDelete('set null')->nullable();
             $table->timestamps();
         });
     }

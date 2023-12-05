@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('aulas', function (Blueprint $table) {
             $table->id();
-            $table->tinyText('nombre');
+            $table->tinyText('name');
+            $table->tinyInteger('schedule_load')->default(0);
             $table->timestamps();
         });
     }

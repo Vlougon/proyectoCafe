@@ -10,10 +10,8 @@ class Curso extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name',
-        'group',
+        'course',
         'turn',
-        'year',
     ];
 
     public function modulos(){

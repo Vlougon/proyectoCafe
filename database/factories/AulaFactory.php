@@ -17,7 +17,7 @@ class AulaFactory extends Factory
     public function definition(): array
     {
         return [
-            'nombre' => $this->faker->sentence(1),
+            'name' => $this->faker->sentence(1),
         ];
     }
 }

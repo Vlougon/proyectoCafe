@@ -18,10 +18,10 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->enum('rol',['teacher', 'head_of_department', 'study_manager']);
-            $table->tinyInteger('total_hours');
-            $table->tinyText('schedule_status');
-            $table->text('observatioins');
-            $table->string('profile_picture');
+            $table->tinyInteger('total_hours')->default(0);
+            $table->string('schedule_status')->default("started");
+            $table->text('observatioins')->nullable();
+            $table->string('profile_picture')->default('');
             $table->foreignId('especialidad_id')->onDelete('set null')->nullable();
             $table->foreignId('departamento_id')->onDelete('set null')->nullable();
             $table->rememberToken();

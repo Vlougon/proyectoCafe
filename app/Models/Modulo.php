@@ -10,13 +10,11 @@ class Modulo extends Model
     use HasFactory;
 
     protected $fillable = [
-        'codigo',
-        'materia',
-        'h_semanales',
-        'h_totales',
-        'user_id',
+        'code',
+        'subject',
+        'hours_per_week',
+        'total_hours',
         'especialidad_id',
-        'curso_id'
     ];
 
     public function especialidad() {

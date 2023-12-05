@@ -17,7 +17,7 @@ class AulaForm extends FormRequest
     public function rules(): array
     {
         return [
-            'nombre' => 'string|required'
+            'name' => 'string|required|max:255'
         ];
     }
 }

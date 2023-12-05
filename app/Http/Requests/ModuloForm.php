@@ -22,19 +22,17 @@ class ModuloForm extends FormRequest
     public function rules(): array
     {
         return [
-            'codigo' => 'required|string',
-
-            'materia' => 'required|string',
-
-            'h_semanales' => 'required|integer',
-
-            'h_totales' => 'required|integer',
-
-            'user_id' => 'required|integer',
-
-            'especialidad_id' => 'required|integer',
+            'code' => 'required|string|max:255',
             
-            'curso_id' => 'required|integer'
+            'subject' => 'required|string|max:255',
+            
+            'hours_per_week' => 'required|integer|min:0|max:255',
+            
+            'total_hours' => 'required|integer|min:0|max:255',
+            
+            'especialidad_id' => 'required|exists:especialidad,id',
+            
+            'curso_id' => 'required|exists:curso,id'
         ];
     }
 }

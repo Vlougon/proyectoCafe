@@ -39,7 +39,7 @@
                     <button id="profileBox">
                         <img src="images/defaultUserIcon.png" alt="Icono de Perfil del Profesor"
                             class="d-inline-block">
-                        <span>Nombre Profesor Fesor</span>
+                        <span>name Profesor Fesor</span>
                     </button>
                 </div>
             </div>

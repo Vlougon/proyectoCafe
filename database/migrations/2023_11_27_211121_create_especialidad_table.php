@@ -13,8 +13,7 @@ return new class extends Migration
     {
         Schema::create('especialidades', function (Blueprint $table) {
             $table->id();
-            $table->tinyText('nombre');
-            $table->foreignId('modulo_id');
+            $table->tinyText('name');
             $table->timestamps();
         });
     }

@@ -22,6 +22,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'rol',
+        'especialidad_id',
+        'departamento_id',
     ];
 
     /**
@@ -47,5 +50,9 @@ class User extends Authenticatable
     public function especialidad() //Relación 1:N
     {
         return $this->belongsTo(Especialidad::class);
+    }
+    public function departamento() //Relación 1:N
+    {
+        return $this->belongsTo(Departamento::class);
     }
 }

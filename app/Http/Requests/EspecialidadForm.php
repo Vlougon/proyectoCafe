@@ -22,9 +22,7 @@ class EspecialidadForm extends FormRequest
     public function rules(): array
     {
         return [
-            'nombre' => 'required|string',
-            'modulos' => 'required',
-            'users' => 'required',
+            'name' => 'string|required|max:255'
         ];
     }
 }

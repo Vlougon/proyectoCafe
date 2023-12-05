@@ -4,14 +4,14 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CursoForm extends FormRequest
+class DepartamentoForm extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        return false;
     }
 
     /**
@@ -22,9 +22,7 @@ class CursoForm extends FormRequest
     public function rules(): array
     {
         return [
-            'course' => 'required|string|max:255',
-            
-            'turn' => 'required|in:M,T',
+            'name' => 'string|required|max:255',
         ];
     }
 }

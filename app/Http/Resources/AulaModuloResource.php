@@ -14,6 +14,7 @@ class AulaModuloResource extends JsonResource
     {
         return [
             'aula' => new  AulaResource($this->aulas),
+            
             'modulo' =>  new ModuloResource($this->modulos),
         ];
     }
