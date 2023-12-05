@@ -9,7 +9,21 @@ class Especialidad extends Model
 {
     use HasFactory;
 
+    protected $table = 'especialidades';
+
     protected $fillable = [
-        'nombre'
+        'nombre',
+        'modulos',
+        'users',
     ];
+
+    public function modulos() //Relación 1:N
+    {
+        return $this->hasMany(Modulo::class);
+    }
+
+    public function users() //Relación 1:N
+    {
+        return $this->hasMany(User::class);
+    }
 }

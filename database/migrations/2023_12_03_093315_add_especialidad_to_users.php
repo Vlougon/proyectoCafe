@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('especialidades', function (Blueprint $table) {
-            $table->id();
-            $table->tinyText('nombre');
-            $table->foreignId('modulo_id');
-            $table->timestamps();
+        Schema::table('users', function (Blueprint $table) {
+            $table->foreignId('especialidad_id');   
         });
     }
 
@@ -24,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('especialidades');
+        Schema::table('users', function (Blueprint $table) {
+            $table->foreignId('especialidad_id');
+        });
     }
 };

@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('especialidades', function (Blueprint $table) {
+        Schema::create('cursos', function (Blueprint $table) {
             $table->id();
-            $table->tinyText('nombre');
-            $table->foreignId('modulo_id');
+            $table->string('name');
+            $table->enum('group', ['1º', '2º']);
+            $table->enum('turn', ['morning', 'evening']);
+            $table->integer('year');
             $table->timestamps();
         });
     }
@@ -24,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('especialidades');
+        Schema::dropIfExists('cursos');
     }
 };
