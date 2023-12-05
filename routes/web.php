@@ -14,5 +14,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('html/login');
+    return view('html.login');
+});
+
+Route::get('teacherSheets', function () {
+    return view('html.teacherSheets');
 });

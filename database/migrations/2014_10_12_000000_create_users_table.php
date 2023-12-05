@@ -17,6 +17,13 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->enum('rol',['teacher', 'head_of_department', 'study_manager']);
+            $table->tinyInteger('total_hours');
+            $table->tinyText('schedule_status');
+            $table->text('observatioins');
+            $table->string('profile_picture');
+            $table->foreignId('especialidad_id')->onDelete('set null')->nullable();
+            $table->foreignId('departamento_id')->onDelete('set null')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

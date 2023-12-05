@@ -23,7 +23,7 @@
         <div id="container">
             <img src="images/logoMajada.png" alt="Logo del CIFP Majada Marcial">
 
-            <form id="professorsForm" action="./teacherSheets.html" method="POST">
+            <form id="professorsForm" action="http://coffe-proyect-back.test/api/login" method="POST">
                 <div id="nameBox">
                     <span>
                         <svg viewBox="0 0 448 512" title="Icono de una Persona de Frente">
