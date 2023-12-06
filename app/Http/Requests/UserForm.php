@@ -30,9 +30,9 @@ class UserForm extends FormRequest
 
             'rol' => 'required|in:teacher,head_of_department,study_manager',
 
-            'especialidad_id' => 'nullable|exists:especialidad,id',
+            'especialidad_id' => 'required|exists:especialidades,id',
             
-            'departamento_id' => 'nullable|exists:departamento,id',
+            'departamento_id' => 'required|exists:departamentos,id',
         ];
     }
 }

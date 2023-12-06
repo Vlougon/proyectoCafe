@@ -25,7 +25,7 @@ class ModuloResource extends JsonResource
             'classroom' => $this->classroom,
             'user_id' => new UserResource($this->user_id),
             'especialidad_id' => new EspecialidadResource($this->especialidad),
-            'curso_id' => new CursoResource($this->curso_id),
+            'curso_id' => new CursoResource($this->curso),
         ];
     }
 }

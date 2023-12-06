@@ -15,6 +15,7 @@ class Modulo extends Model
         'hours_per_week',
         'total_hours',
         'especialidad_id',
+        'curso_id',
     ];
 
     public function especialidad() {

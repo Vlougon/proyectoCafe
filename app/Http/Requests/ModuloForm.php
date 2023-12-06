@@ -30,9 +30,9 @@ class ModuloForm extends FormRequest
             
             'total_hours' => 'required|integer|min:0|max:255',
             
-            'especialidad_id' => 'required|exists:especialidad,id',
+            'especialidad_id' => 'required|exists:especialidades,id',
             
-            'curso_id' => 'required|exists:curso,id'
+            'curso_id' => 'required|exists:cursos,id'
         ];
     }
 }

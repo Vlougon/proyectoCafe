@@ -7,13 +7,13 @@
 
     <title>Hojas de profesores</title>
 
-    <link rel="stylesheet" href="/css/teacherSheets.css">
     <!-- Agrega Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
 
-    <script src="/js/teachersSheet.js" defer></script>
+    @vite(['resources/css/teacherSheetsStyle.css', 'resources/js/teachersSheet.js'])
+
 </head>
 
 <body>
