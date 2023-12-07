@@ -1,6 +1,6 @@
 let professorLogInForm = document.querySelector("#professorsForm");
-let professorNameInput = document.querySelector("#professorName");
-let professorPasswordInput = document.querySelector("#professorPassword");
+let professorNameInput = document.querySelector("#email");
+let professorPasswordInput = document.querySelector("#password");
 
 window.addEventListener('keyup', readSelectedElement);
 
@@ -10,8 +10,8 @@ professorPasswordInput.addEventListener('input', checkInput);
 professorLogInForm.addEventListener("submit", (event) => {
 
     let validInputContorler = 0;
-    professorNameInput = document.querySelector("#professorName");
-    professorPasswordInput = document.querySelector('#professorPassword');
+    professorNameInput = document.querySelector("#email");
+    professorPasswordInput = document.querySelector('#password');
 
 
     if (!professorNameInput || professorNameInput.value.match(/^[\s]*$|\s$/) ||
@@ -27,7 +27,7 @@ professorLogInForm.addEventListener("submit", (event) => {
         validInputContorler++;
     }
 
-    if (!professorPasswordInput || !professorPasswordInput.value.match(/^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])[A-Za-z0-9]{10,}$/)) {
+    if (!professorPasswordInput || !professorPasswordInput.value.match(/^(?=.*[a-z])(?=.*[0-9])[A-Za-z0-9]{8,}$/)) {
 
         if (professorPasswordInput != null) {
             createErrorPasswordText();
@@ -45,13 +45,54 @@ professorLogInForm.addEventListener("submit", (event) => {
 });
 
 
+/*
+// En el login.blade.php
+// Añadir un evento submit al formulario
+document.getElementById("professorsForm").addEventListener("submit", function(event) {
+  // Prevenir el comportamiento por defecto del formulario
+  event.preventDefault();
+  // Obtener los valores de los inputs
+  let email = document.getElementById("email").value;
+  let password = document.getElementById("password").value;
+  // Enviar una petición POST usando fetch
+  fetch("http://proyectocafe.test/api/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email: email,
+      password: password,
+    }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      // Comprobar si la respuesta es exitosa
+      if (data.status === "success") {
+        // Obtener el token de la respuesta
+        let token = data.data.token;
+        // Redirigir a la vista usando el token como parámetro
+        window.location.href = "http://proyectocafe.test/teacherSheets?token=" + token;
+      } else {
+        // Mostrar un mensaje de error
+        alert(data.message);
+      }
+    })
+    .catch((error) => {
+      // Manejar el error
+      console.error(error);
+    });
+});
+*/
+
+
 
 /* ################################################################################################################################ */
 /* ################################################### FORM VALIDATOR FUNCTIONS ################################################### */
 /* ################################################################################################################################ */
 function checkInput(event) {
     switch (event.target.getAttribute('id')) {
-        case "professorName":
+        case "email":
 
             if (!event.target.value.match(/(^[\s]*$)|\s$/) && !professorNameInput.value.match(/^[0-9]/i) || professorNameInput.value.match(/^[0-9]{8}[A-Z]$/i)) {
 
@@ -65,9 +106,9 @@ function checkInput(event) {
 
             break;
 
-        case "professorPassword":
+        case "password":
 
-            if (event.target.value.match(/^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])[A-Za-z0-9]{10,}$/)) {
+            if (event.target.value.match(/^(?=.*[a-z])(?=.*[0-9])[A-Za-z0-9]{8,}$/)) {
 
                 validateInput(event.target);
                 deleteErrorPasswordText();

@@ -58,11 +58,7 @@ class LoginRegisterController extends Controller
         ]);
 
         if ($validate->fails()) {
-            return response()->json([
-                'status' => 'failed',
-                'message' => 'Validation Error!',
-                'data' => $validate->errors(),
-            ], 403);
+            return back()->with('message', 'Usuario o Contraseña incorrecto(s)');
         }
 
         // Check email exist
@@ -85,7 +81,21 @@ class LoginRegisterController extends Controller
             'data' => $data,
         ];
 
-        return response()->json($response, 200);
+        return view('html.teacherSheets', compact('data'));
+
+        // dd(redirect()->intended('teacherSheets')->with('token', $data['token']));
+
+        // dd(auth('sanctum')->check());
+
+        // return redirect()->intended('teacherSheets')->with('token', $data['token']);
+
+        // dd(redirect('teacherSheets/'.$user->id)->header('token', $data['token']));
+
+        // session(['token' => $data['token']]);
+
+        // dd(session('token'));
+
+        // return redirect('teacherSheets/'.$user->id)->with('token', $data['token']);
     }
 
     /**

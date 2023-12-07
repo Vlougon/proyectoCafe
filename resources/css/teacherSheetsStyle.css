@@ -5,7 +5,7 @@
 }
 
 body {
-    background-color: #f4f4f4;
+    background-color: #f4f4f4 !important;
 }
 
 header,
@@ -20,6 +20,7 @@ header {
 }
 
 main {
+    background-color: #f4f4f4;
     min-height: calc(100vh - 97px - 77px);
     margin: 20px 0;
 }
@@ -64,6 +65,7 @@ footer img {
     width: 118px !important;
     height: 41px !important;
     margin-left: 10px;
+    vertical-align: middle;
 }
 
 textarea {
@@ -120,8 +122,31 @@ td.selectCell select {
     appearance: none;
 }
 
+.nav-item {
+    background-color: white;
+    border-radius: 15px;
+    margin: 0 10px;
+}
+
+.nav-item:hover {
+    background-color: rgb(212, 212, 212);
+}
+
+.nav-item a.nav-link {
+    color: black !important;
+    font-weight: bold;
+}
+
+.navbar-toggler {
+    background-color: white !important;
+}
+
 .mainButtonsBox {
     text-align: center;
+}
+
+.mainButtonsBox button {
+    margin-top: 15px;
 }
 
 .nav-link {
@@ -139,4 +164,12 @@ td.selectCell select {
 
 .totalCell {
     text-align: start;
+}
+
+@media (max-width: 767px) {
+    .nav-item {
+        max-width: fit-content;
+        padding: 8px;
+        margin: 10px 0;
+    }
 }
