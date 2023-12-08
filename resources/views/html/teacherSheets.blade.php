@@ -17,8 +17,6 @@
 </head>
 
 <body>
-    <input id="userData" type="hidden" value="{{ $data['user'] }}">
-    <input id="userToken" type="hidden" value="{{ $data['token'] }}">
     <header>
         <nav class="navbar navbar-expand-md">
             <div class="container-fluid">
@@ -30,24 +28,11 @@
                 </button>
                 <div class="collapse navbar-collapse" id="teachersNavbar">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        @if ($data['user']['rol'] == 'head_of_department')
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Vista de Departamento</a>
-                        </li>
-
-                        @elseif ($data['user']['rol'] == 'study_manager')
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Vista de Estudio</a>
-                        </li>
-
-                        @endif
                     </ul>
 
                     <button id="profileBox">
                         <img src="{{ asset('images/defaultUserIcon.png') }}" alt="Icono de Perfil del Profesor" class="d-inline-block">
-                        <span id="teachersName">name Profesor Fesor</span>
+                        <span id="teachersName"></span>
                     </button>
                 </div>
             </div>
@@ -96,12 +81,10 @@
                                 <td id="horas1" class="horasPorModulo"></td>
                                 <td class="selectCell">
                                     <select name="teacherHoursWeek1" id="teacherHoursWeek1">
-                                        <option value="Select Hours per Week">Seleccionar Distribución Semanal</option>
                                     </select>
                                 </td>
                                 <td class="selectCell">
                                     <select name="teacherClasses1" id="teacherClasses1">
-                                        <option value="Select Class">Seleccionar Clase</option>
                                     </select>
                                 </td>
                             </tr>

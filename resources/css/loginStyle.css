@@ -196,29 +196,6 @@ input::placeholder {
     border: none;
 }
 
-.missInputText {
-    color: rgb(255, 57, 57);
-    text-align: justify;
-    font-size: small;
-    font-style: italic;
-}
-
-input.validInput:focus {
-    border: 2px rgb(96, 160, 0) solid;
-    box-shadow: 0 0 7px greenyellow;
-    outline: none;
-}
-
-input.invalidInput {
-    border: 2px rgb(180, 0, 0) solid;
-}
-
-input.invalidInput:focus {
-    border: 2px rgb(180, 0, 0) solid;
-    box-shadow: 0 0 7px red;
-    outline: none;
-}
-
 /* #################################################################################################### */
 /* ####################################### EXTRA SMALL (MOBILE) ####################################### */
 /* #################################################################################################### */
@@ -244,10 +221,6 @@ input.invalidInput:focus {
 
     #container {
         width: 75%;
-    }
-
-    .missInputText {
-        width: 77%;
     }
 }
 
@@ -275,10 +248,6 @@ input.invalidInput:focus {
     }
 
     #container {
-        width: 67%;
-    }
-
-    .missInputText {
         width: 67%;
     }
 }
@@ -309,10 +278,6 @@ input.invalidInput:focus {
     #container {
         width: 60%;
     }
-
-    .missInputText {
-        width: 62%;
-    }
 }
 
 /* ################################################################################################## */
@@ -341,10 +306,6 @@ input.invalidInput:focus {
     #container {
         width: 55%;
     }
-
-    .missInputText {
-        width: 77%;
-    }
 }
 
 /* ############################################################################################################ */
@@ -372,9 +333,5 @@ input.invalidInput:focus {
 
     #container {
         width: 45%;
-    }
-
-    .missInputText {
-        width: 87%;
     }
 }

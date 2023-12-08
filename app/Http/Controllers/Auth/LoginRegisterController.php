@@ -59,23 +59,31 @@ class LoginRegisterController extends Controller
         ]);
 
         if ($validate->fails()) {
-            return back()->with('message', 'Usuario o Contraseña incorrecto(s)');
+            return response()->json([
+                'status' => 'failed',
+                'message' => '¡No se pudo validar al usuario!'
+            ], 401);
         }
 
         // Check email exist
         $user = User::where('email', $request->email)->first();
-
-        // Check password
-        if (!$user || !Hash::check($request->password, $user->password)) {
+        if (!$user) {
             return response()->json([
                 'status' => 'failed',
-                'message' => 'Invalid credentials'
+                'message' => '¡Email Inválido!'
+            ], 401);
+        }
+
+        // Check password
+        if (!Hash::check($request->password, $user->password)) {
+            return response()->json([
+                'status' => 'failed',
+                'message' => '¡Contraseña Incorrecta!'
             ], 401);
         }
 
         $data['token'] = $user->createToken($request->email)->plainTextToken;
-        $data['user'] = $user;
-        // new UserResource($user);
+        $data['user'] = new UserResource($user);
 
         $response = [
             'status' => 'success',
@@ -83,21 +91,7 @@ class LoginRegisterController extends Controller
             'data' => $data,
         ];
 
-        return view('html.teacherSheets', compact('data'));
-
-        // dd(redirect()->intended('teacherSheets')->with('token', $data['token']));
-
-        // dd(auth('sanctum')->check());
-
-        // return redirect()->intended('teacherSheets')->with('token', $data['token']);
-
-        // dd(redirect('teacherSheets/'.$user->id)->header('token', $data['token']));
-
-        // session(['token' => $data['token']]);
-
-        // dd(session('token'));
-
-        // return redirect('teacherSheets/'.$user->id)->with('token', $data['token']);
+        return response()->json($response, 200);
     }
 
     /**

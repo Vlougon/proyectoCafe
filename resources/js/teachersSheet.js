@@ -14,8 +14,8 @@ const finalRow = document.querySelector('#totalRow');
 const addRowButton = document.querySelector('#addRow');
 const removeRowButton = document.querySelector('#removeRow');
 
-const token = document.querySelector('#userToken').getAttribute('value');
-const userData = JSON.parse(document.querySelector('#userData').getAttribute('value'));
+const token = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).token : null;
+const userData = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).data : null;
 
 window.addEventListener('load', setLocalData);
 window.addEventListener('load', loadFirstContentPage);
@@ -24,7 +24,7 @@ addRowButton.addEventListener('click', addTableRow);
 removeRowButton.addEventListener('click', removeTableRow);
 
 async function loadFirstContentPage() {
-    await fetch('http://proyectocafe.test/api/V1/modulos', {
+    await fetch(location.origin + '/api/V1/modulos', {
         method: "GET",
         mode: "cors",
         cache: "no-cache",
@@ -44,45 +44,47 @@ async function loadFirstContentPage() {
 }
 
 function setLocalData() {
+    if (userData) {
+        const navbarLiElement = document.createElement('li');
+        const navbarLinkEelement = document.createElement('a');
+
+        navbarLiElement.className = 'nav-item';
+
+        navbarLinkEelement.className = 'nav-link';
+
+        if (userData.rol === 'head_of_department') {
+
+            navbarLinkEelement.setAttribute('href', '#');
+            navbarLinkEelement.textContent = 'Vista de Departamento';
+
+            navbarLiElement.insertAdjacentElement('beforeend', navbarLinkEelement);
+
+            document.querySelector('#teachersNavbar ul').insertAdjacentElement('beforeend', navbarLiElement);
+
+        } else if (userData.rol === 'study_manager') {
+
+            navbarLinkEelement.setAttribute('href', '#');
+            navbarLinkEelement.textContent = 'Vista de Estudio';
+
+            navbarLiElement.insertAdjacentElement('beforeend', navbarLinkEelement);
+
+            document.querySelector('#teachersNavbar ul').insertAdjacentElement('beforeend', navbarLiElement);
+        }
+    }
+
     schoolYear.textContent = currentAcademicYear;
     totalHoursCell.textContent = 0;
 }
 
 function setUserData() {
     if (userData.departamento_id) {
-        fetch('http://proyectocafe.test/api/V1/departamentos/' + userData.departamento_id, {
-            method: "GET",
-            mode: "cors",
-            cache: "no-cache",
-            credentials: "same-origin",
-            headers: {
-                Authorization: "Bearer " + token,
-                Accept: "application/json",
-            },
-            redirect: "follow",
-            referrerPolicy: "no-referrer",
-        })
-            .then(respuesta => respuesta.json())
-            .then(datos => department.textContent = datos.data.name);
+        department.textContent = userData.departamento_id.name;
     } else {
         department.textContent = 'No Especificado';
     }
 
     if (userData.especialidad_id) {
-        fetch('http://proyectocafe.test/api/V1/especialidads/' + userData.especialidad_id, {
-            method: "GET",
-            mode: "cors",
-            cache: "no-cache",
-            credentials: "same-origin",
-            headers: {
-                Authorization: "Bearer " + token,
-                Accept: "application/json",
-            },
-            redirect: "follow",
-            referrerPolicy: "no-referrer",
-        })
-            .then(respuesta => respuesta.json())
-            .then(datos => specialization.textContent = datos.data.name);
+        specialization.textContent = userData.especialidad_id.name;
     } else {
         specialization.textContent = 'No Especificado';
     }
@@ -95,7 +97,7 @@ function setMainSelectors() {
     if (modules.some(modulo => modulo.especialidad_id)) {
         for (const modulo of modules) {
             document.querySelector('#teacherModules' + rowsNumber).innerHTML += `
-            <option value="${modulo.subject}" name="${modulo.code}" id="${modulo.code + rowsNumber}">${modulo.code}</option>
+            <option value="${modulo.subject}" id="${modulo.code + rowsNumber}">${modulo.code}</option>
             `;
         }
 
@@ -134,12 +136,10 @@ function addTableRow() {
         <td id="horas${rowsNumber}" class="horasPorModulo"></td>
         <td class="selectCell">
                 <select name="teacherHoursWeek${rowsNumber}" id="teacherHoursWeek${rowsNumber}">
-                <option value="Select Hours per Week">Seleccionar Distribución Semanal</option>
             </select>
         </td>
         <td class="selectCell">
             <select name="teacherClasses${rowsNumber}" id="teacherClasses${rowsNumber}">
-                <option value="Select Class">Seleccionar Clase</option>
             </select>
         </td>
     </tr>
