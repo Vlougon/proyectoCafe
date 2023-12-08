@@ -68,11 +68,14 @@ footer img {
     vertical-align: middle;
 }
 
+label {
+    margin-top: 10px;
+}
+
 textarea {
     display: block;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 30px;
     padding: 10px;
 }
 
@@ -107,6 +110,10 @@ textarea {
 
 #teacherDataBox span {
     font-weight: normal;
+}
+
+#totalCell {
+    font-weight: 900;
 }
 
 td.selectCell {
@@ -164,6 +171,21 @@ td.selectCell select {
 
 .totalCell {
     text-align: start;
+}
+
+#totalCell.idealHours {
+    background-color: #c6ffc9;
+    color: #005004;
+}
+
+#totalCell.inRangeHours {
+    background-color: #fdeab5;
+    color: #574000;
+}
+
+#totalCell.undesideredHours {
+    background-color: #ffc6c6;
+    color: #4b0000;
 }
 
 @media (max-width: 767px) {

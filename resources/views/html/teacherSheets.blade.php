@@ -30,16 +30,24 @@
                 </button>
                 <div class="collapse navbar-collapse" id="teachersNavbar">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        @if ($data['user']['rol'] == 'head_of_department')
+
                         <li class="nav-item">
                             <a class="nav-link" href="#">Vista de Departamento</a>
                         </li>
+
+                        @ elseif ($data['user']['rol'] == 'study_manager')
+
                         <li class="nav-item">
                             <a class="nav-link" href="#">Vista de Estudio</a>
                         </li>
+
+                        @endif
                     </ul>
+
                     <button id="profileBox">
                         <img src="{{ asset('images/defaultUserIcon.png') }}" alt="Icono de Perfil del Profesor" class="d-inline-block">
-                        <span>name Profesor Fesor</span>
+                        <span id="teachersName">name Profesor Fesor</span>
                     </button>
                 </div>
             </div>
@@ -77,32 +85,23 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td></td>
-                                <td></td>
+                            <tr id="tableRow1">
+                                <td id="turno1"></td>
+                                <td id="curso1"></td>
                                 <td class="selectCell">
-                                    <select name="teacherModules" id="teacherModules">
+                                    <select name="teacherModules1" id="teacherModules1">
                                         <option value="Select Module">Seleccionar Modulo</option>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
                                     </select>
                                 </td>
-                                <td></td>
+                                <td id="horas1" class="horasPorModulo"></td>
                                 <td class="selectCell">
-                                    <select name="teacherHoursWeek" id="teacherHoursWeek">
+                                    <select name="teacherHoursWeek1" id="teacherHoursWeek1">
                                         <option value="Select Hours per Week">Seleccionar Distribución Semanal</option>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
                                     </select>
                                 </td>
                                 <td class="selectCell">
-                                    <select name="teacherClasses" id="teacherClasses">
+                                    <select name="teacherClasses1" id="teacherClasses1">
                                         <option value="Select Class">Seleccionar Clase</option>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
                                     </select>
                                 </td>
                             </tr>
@@ -119,8 +118,10 @@
 
                 <div class="mainButtonsBox">
                     <button id="addRow" type="button" class="btn btn-success">Agregar Fila</button>
-                    <button id="saveChanges" type="button" class="btn btn-primary">Guardar Cambios</button>
+                    <button id="removeRow" type="button" class="btn btn-danger">Eliminar Última Fila</button>
+                    <div class="w-100"></div>
                     <button id="downloadPDF" type="button" class="btn btn-warning">Imprimir en PDF</button>
+                    <button id="saveChanges" type="button" class="btn btn-primary">Guardar Cambios</button>
                 </div>
 
                 <label for="teacherObservations">Observaciones: </label>
