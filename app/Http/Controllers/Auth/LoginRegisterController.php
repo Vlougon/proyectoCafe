@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserForm;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -74,6 +75,7 @@ class LoginRegisterController extends Controller
 
         $data['token'] = $user->createToken($request->email)->plainTextToken;
         $data['user'] = $user;
+        // new UserResource($user);
 
         $response = [
             'status' => 'success',

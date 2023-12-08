@@ -36,7 +36,7 @@
                             <a class="nav-link" href="#">Vista de Departamento</a>
                         </li>
 
-                        @ elseif ($data['user']['rol'] == 'study_manager')
+                        @elseif ($data['user']['rol'] == 'study_manager')
 
                         <li class="nav-item">
                             <a class="nav-link" href="#">Vista de Estudio</a>

@@ -49,8 +49,44 @@ function setLocalData() {
 }
 
 function setUserData() {
-    department.textContent = userData.departamento_id ? userData.departamento_id.name : 'No Especificado';
-    specialization.textContent = userData.especialidad_id ? userData.especialidad_id.name : 'No Especificado';
+    if (userData.departamento_id) {
+        fetch('http://proyectocafe.test/api/V1/departamentos/' + userData.departamento_id, {
+            method: "GET",
+            mode: "cors",
+            cache: "no-cache",
+            credentials: "same-origin",
+            headers: {
+                Authorization: "Bearer " + token,
+                Accept: "application/json",
+            },
+            redirect: "follow",
+            referrerPolicy: "no-referrer",
+        })
+            .then(respuesta => respuesta.json())
+            .then(datos => department.textContent = datos.data.name);
+    } else {
+        department.textContent = 'No Especificado';
+    }
+
+    if (userData.especialidad_id) {
+        fetch('http://proyectocafe.test/api/V1/especialidads/' + userData.especialidad_id, {
+            method: "GET",
+            mode: "cors",
+            cache: "no-cache",
+            credentials: "same-origin",
+            headers: {
+                Authorization: "Bearer " + token,
+                Accept: "application/json",
+            },
+            redirect: "follow",
+            referrerPolicy: "no-referrer",
+        })
+            .then(respuesta => respuesta.json())
+            .then(datos => specialization.textContent = datos.data.name);
+    } else {
+        specialization.textContent = 'No Especificado';
+    }
+
     teacher.textContent = userData.name ? userData.name.charAt(0).toUpperCase() + userData.name.slice(1) : 'Anon';
     teachersName.textContent = teacher.textContent;
 }

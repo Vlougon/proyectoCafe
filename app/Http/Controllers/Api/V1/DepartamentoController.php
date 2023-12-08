@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\DepartamentoResource;
 use App\Models\Departamento;
 use Illuminate\Http\Request;
 
@@ -29,7 +30,20 @@ class DepartamentoController extends Controller
      */
     public function show(Departamento $departamento)
     {
-        //
+        if (is_null($departamento)) {
+            return response()->json([
+                'status' => 'failed',
+                'message' => '¡No se ha encontrado el departamento!',
+            ], 200);
+        }
+
+        $response = [
+            'status' => 'success',
+            'message' => '¡Se ha encontrado la especialidad!',
+            'data' => new DepartamentoResource($departamento),
+        ];
+
+        return response()->json($response, 200);
     }
 
     /**

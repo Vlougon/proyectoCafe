@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\V1\AulaModuloController;
 use App\Http\Controllers\Api\V1\AulaController;
 use App\Http\Controllers\Api\V1\CursoController;
+use App\Http\Controllers\Api\V1\DepartamentoController;
 use App\Http\Controllers\Api\V1\EspecialidadController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -39,9 +40,13 @@ Route::middleware('auth:sanctum')->group(function () {
         ->missing(function (Request $request) {
             return response()->json("No se encontró el modulo indicado", 404);
         });
-        Route::apiResource('especialidades', EspecialidadController::class)
+        Route::apiResource('especialidads', EspecialidadController::class)
         ->missing(function (Request $request) {
             return response()->json("No se encontró la especialidad indicada", 404);
+        });
+        Route::apiResource('departamentos', DepartamentoController::class)
+        ->missing(function (Request $request) {
+            return response()->json("No se encontró el departamento indicado", 404);
         });
         Route::apiResource('users', UserController::class)
         ->missing(function (Request $request) {
