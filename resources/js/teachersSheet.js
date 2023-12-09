@@ -105,6 +105,11 @@ function setMainSelectors() {
     }
 }
 
+
+
+/* ##################################################################################################################### */
+/* ################################################### DOM FUNCTIONS ################################################### */
+/* ##################################################################################################################### */
 function loadModuleData(target) {
     const targetID = target.srcElement.getAttribute('id');
     const selectedRow = targetID.charAt(targetID.length - 1);
@@ -117,9 +122,11 @@ function loadModuleData(target) {
         document.querySelector('#curso' + selectedRow).textContent = selectedModule[0].curso_id['course'];
         document.querySelector('#horas' + selectedRow).textContent = selectedModule[0].hours_per_week;
 
+        updateWeeklyDistribution(parseInt(selectedModule[0].hours_per_week), selectedRow);
         updateTotalHours();
     }
 }
+
 
 function addTableRow() {
     rowsNumber++;
@@ -150,6 +157,7 @@ function addTableRow() {
     setMainSelectors();
 }
 
+
 function removeTableRow() {
     if (rowsNumber > 1) {
         document.querySelector('#tableRow' + rowsNumber).remove();
@@ -159,6 +167,7 @@ function removeTableRow() {
         console.error('¡No puedes hacer eso!');
     }
 }
+
 
 function updateTotalHours() {
     const modulesHours = document.querySelectorAll('.horasPorModulo');
@@ -179,4 +188,76 @@ function updateTotalHours() {
     }
 
     totalHoursCell.textContent = totalHoursValue;
+}
+
+
+
+/* ###################################################################################################################################### */
+/* ################################################### WEEKLY DISTRIBUTIOON FUNCTIONS ################################################### */
+/* ###################################################################################################################################### */
+function updateWeeklyDistribution(totalHours, elementID) {
+    document.querySelector('#teacherHoursWeek' + elementID).innerHTML = null;
+
+    let hoursPerWeek = getWeeklyDistribution([1, 2, 3], totalHours);
+
+    // If the hours are too much, filter the hours per week
+    if (totalHours >= 6) {
+        hoursPerWeek = hoursPerWeek.filter(distribution => distribution.reduce((sum, number) => { number === 1 ? sum++ : ''; return sum }, 0) < 2);
+    }
+
+    // Brush Up the results and show them to the user
+    for (let distribution of hoursPerWeek) {
+        distribution = distribution.join(' + ');
+
+        document.querySelector('#teacherHoursWeek' + elementID).innerHTML += `
+        <option value="${distribution}" id="${distribution}">${distribution}</option>
+        `;
+    }
+}
+
+
+function getWeeklyDistribution(hours, totalHours) {
+    // Create an array to store the possible weekly hours combinations
+    let weeklyDistribution = []
+
+    // If hours isn't set, stop the script
+    if (hours === null || hours.length === 0 || totalHours === null) {
+        return weeklyDistribution;
+    }
+
+    // Sort the hours array in ascending order
+    hours.sort((a, b) => a - b);
+
+    // Create an array to store the current subset of weekly hours
+    let currentDistribution = []
+
+    // Call the findDistribution function and store the result in the weeklyDistribution array
+    findDistribution(hours, totalHours, 0, currentDistribution, weeklyDistribution);
+    return weeklyDistribution;
+};
+
+
+function findDistribution(hours, totalHours, i, currentDistribution, weeklyDistribution) {
+    // When the hours reach zero, create a copy of the current array and push it to the weeklyDistribution array
+    if (totalHours === 0) {
+        const temp = currentDistribution.slice();
+        weeklyDistribution.push(temp);
+        return;
+    }
+
+    // Loop through the hours array from i to its length - 1
+    for (let j = i; j < hours.length; j++) {
+
+        // If the totalHours is less than or equal to the hours[j], break out of the loop
+        if (totalHours < hours[j]) {
+            return;
+        }
+
+        // Push the hours[j] to the currentDistribution array and call this function recursively with updated parameters
+        currentDistribution.push(hours[j]);
+        findDistribution(hours, totalHours - hours[j], j, currentDistribution, weeklyDistribution);
+
+        // Remove the last element from the current array, to avoid duplicates
+        currentDistribution.pop();
+    }
 }
