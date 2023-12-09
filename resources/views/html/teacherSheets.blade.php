@@ -74,7 +74,7 @@
                                 <td id="turno1"></td>
                                 <td id="curso1"></td>
                                 <td class="selectCell">
-                                    <select name="teacherModules1" id="teacherModules1">
+                                    <select class="listadoDeModulos" name="teacherModules1" id="teacherModules1">
                                         <option value="Select Module">Seleccionar Modulo</option>
                                     </select>
                                 </td>

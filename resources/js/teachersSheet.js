@@ -21,6 +21,8 @@ const userData = localStorage.getItem('user') ? JSON.parse(localStorage.getItem(
 window.addEventListener('load', setLocalData);
 window.addEventListener('load', loadFirstContentPage);
 
+console.log(location.href)
+
 addRowButton.addEventListener('click', addTableRow);
 removeRowButton.addEventListener('click', removeTableRow);
 
@@ -111,7 +113,21 @@ function setUserData() {
 
 function setMainSelectors() {
     if (modules.some(modulo => modulo.especialidad_id)) {
+        let modulesSelected = document.querySelectorAll('.listadoDeModulos');
+        let modulesFiltered = modules;
+
+        // Filter the modules to show, so it doesn't repeat
         for (const modulo of modules) {
+
+            for (const moduloSelected of modulesSelected) {
+                if (modulo.code === moduloSelected.selectedOptions[0].textContent) {
+                    modulesFiltered = modulesFiltered.filter(modulo => modulo.code !== moduloSelected.selectedOptions[0].textContent);
+                }
+            }
+        }
+
+        // Insert options with the modules code
+        for (const modulo of modulesFiltered) {
             document.querySelector('#teacherModules' + rowsNumber).innerHTML += `
             <option value="${modulo.subject}" id="${modulo.code + rowsNumber}">${modulo.code}</option>
             `;
@@ -123,19 +139,10 @@ function setMainSelectors() {
 
 
 
-/* ####################################################################################################################### */
-/* ################################################### FETCH FUNCTIONS ################################################### */
-/* ####################################################################################################################### */
-async function updateModuleClassrooms(moduloID, elementID) {
-    document.querySelector('#teacherClasses' + elementID).innerHTML = null;
-    let classrooms = classRoomsByModules.filter(modulo => modulo.modulo_id.id == moduloID);
+/* ################################################################################################################################ */
+/* ################################################### FETCH/REDIRECT FUNCTIONS ################################################### */
+/* ################################################################################################################################ */
 
-    for (const classroom of classrooms) {
-        document.querySelector('#teacherClasses' + elementID).innerHTML += `
-        <option value="${classroom.aula_id.id}" id="${classroom.aula_id.name + elementID}">${classroom.aula_id.name}</option>
-        `;
-    }
-}
 
 
 
@@ -170,7 +177,7 @@ function addTableRow() {
         <td id="turno${rowsNumber}"></td>
         <td id="curso${rowsNumber}"></td>
         <td class="selectCell">
-                <select name="teacherModules${rowsNumber}" id="teacherModules${rowsNumber}">
+                <select class="listadoDeModulos" name="teacherModules${rowsNumber}" id="teacherModules${rowsNumber}">
                 <option value="Select Module">Seleccionar Modulo</option>
             </select>
         </td>
@@ -199,6 +206,18 @@ function removeTableRow() {
         rowsNumber--;
     } else {
         console.error('¡No puedes hacer eso!');
+    }
+}
+
+
+async function updateModuleClassrooms(moduloID, elementID) {
+    document.querySelector('#teacherClasses' + elementID).innerHTML = null;
+    let classrooms = classRoomsByModules.filter(modulo => modulo.modulo_id.id == moduloID);
+
+    for (const classroom of classrooms) {
+        document.querySelector('#teacherClasses' + elementID).innerHTML += `
+        <option value="${classroom.aula_id.id}" id="${classroom.aula_id.name + elementID}">${classroom.aula_id.name}</option>
+        `;
     }
 }
 
