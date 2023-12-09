@@ -14,5 +14,11 @@ class AulaModulo extends Model
         'modulo_id',
     ];
 
+    public function aulas() {
+        return $this->belongsTo(Aula::class, 'aula_id');
+    }
 
+    public function modulos() {
+        return $this->belongsTo(Modulo::class, 'modulo_id');
+    }
 }

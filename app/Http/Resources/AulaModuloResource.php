@@ -13,9 +13,9 @@ class AulaModuloResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'aula' => new  AulaResource($this->aulas),
+            'aula_id' => new AulaResource($this->aulas()->first()),
             
-            'modulo' =>  new ModuloResource($this->modulos),
+            'modulo_id' =>  new ModuloResource($this->modulos()->first()),
         ];
     }
 }

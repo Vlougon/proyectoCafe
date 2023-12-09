@@ -1,4 +1,5 @@
 let modules = [];
+let classRoomsByModules = [];
 let rowsNumber = 1;
 const currentAcademicYear = `${new Date().getFullYear()}/${new Date().getFullYear() + 1}`;
 
@@ -41,6 +42,21 @@ async function loadFirstContentPage() {
 
     setUserData();
     setMainSelectors();
+
+    fetch(location.origin + '/api/V1/aulamodulos', {
+        method: "GET",
+        mode: "cors",
+        cache: "no-cache",
+        credentials: "same-origin",
+        headers: {
+            Authorization: "Bearer " + token,
+            Accept: "application/json",
+        },
+        redirect: "follow",
+        referrerPolicy: "no-referrer",
+    })
+        .then(respuesta => respuesta.json())
+        .then(datos => classRoomsByModules = datos.data);
 }
 
 function setLocalData() {
@@ -107,6 +123,22 @@ function setMainSelectors() {
 
 
 
+/* ####################################################################################################################### */
+/* ################################################### FETCH FUNCTIONS ################################################### */
+/* ####################################################################################################################### */
+async function updateModuleClassrooms(moduloID, elementID) {
+    document.querySelector('#teacherClasses' + elementID).innerHTML = null;
+    let classrooms = classRoomsByModules.filter(modulo => modulo.modulo_id.id == moduloID);
+
+    for (const classroom of classrooms) {
+        document.querySelector('#teacherClasses' + elementID).innerHTML += `
+        <option value="${classroom.aula_id.id}" id="${classroom.aula_id.name + elementID}">${classroom.aula_id.name}</option>
+        `;
+    }
+}
+
+
+
 /* ##################################################################################################################### */
 /* ################################################### DOM FUNCTIONS ################################################### */
 /* ##################################################################################################################### */
@@ -123,6 +155,8 @@ function loadModuleData(target) {
         document.querySelector('#horas' + selectedRow).textContent = selectedModule[0].hours_per_week;
 
         updateWeeklyDistribution(parseInt(selectedModule[0].hours_per_week), selectedRow);
+        updateModuleClassrooms(selectedModule[0].id, selectedRow);
+
         updateTotalHours();
     }
 }
@@ -210,7 +244,7 @@ function updateWeeklyDistribution(totalHours, elementID) {
         distribution = distribution.join(' + ');
 
         document.querySelector('#teacherHoursWeek' + elementID).innerHTML += `
-        <option value="${distribution}" id="${distribution}">${distribution}</option>
+        <option value="${distribution}" id="${distribution.split(' ').join('') + '/' + elementID}">${distribution}</option>
         `;
     }
 }
