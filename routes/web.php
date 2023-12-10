@@ -17,6 +17,6 @@ Route::get('/', function () {
     return view('html.login');
 });
 
-Route::get('teacherSheets', function () {
+Route::get('teacherSheets/{id?}', function (?string $id = null) {
     return view('html.teacherSheets');
 });

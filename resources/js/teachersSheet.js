@@ -3,48 +3,24 @@ let classRoomsByModules = [];
 let rowsNumber = 1;
 const currentAcademicYear = `${new Date().getFullYear()}/${new Date().getFullYear() + 1}`;
 
+// Upper Schedule DOM Elements
 const department = document.querySelector('#department span');
 const specialization = document.querySelector('#specialization span');
 const teacher = document.querySelector('#teacher span');
 const teachersName = document.querySelector('#teachersName');
 
+// Local DOM Elements
 const schoolYear = document.querySelector('#schoolYear span');
 const totalHoursCell = document.querySelector('#totalCell');
 const finalRow = document.querySelector('#totalRow');
 
-const addRowButton = document.querySelector('#addRow');
-const removeRowButton = document.querySelector('#removeRow');
-
 const token = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).token : null;
-const userData = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).data : null;
+let userData = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).data : null;
 
 window.addEventListener('load', setLocalData);
 window.addEventListener('load', loadFirstContentPage);
 
-console.log(location.href)
-
-addRowButton.addEventListener('click', addTableRow);
-removeRowButton.addEventListener('click', removeTableRow);
-
 async function loadFirstContentPage() {
-    await fetch(location.origin + '/api/V1/modulos', {
-        method: "GET",
-        mode: "cors",
-        cache: "no-cache",
-        credentials: "same-origin",
-        headers: {
-            Authorization: "Bearer " + token,
-            Accept: "application/json",
-        },
-        redirect: "follow",
-        referrerPolicy: "no-referrer",
-    })
-        .then(respuesta => respuesta.json())
-        .then(datos => modules = datos.data);
-
-    setUserData();
-    setMainSelectors();
-
     fetch(location.origin + '/api/V1/aulamodulos', {
         method: "GET",
         mode: "cors",
@@ -59,6 +35,51 @@ async function loadFirstContentPage() {
     })
         .then(respuesta => respuesta.json())
         .then(datos => classRoomsByModules = datos.data);
+
+    if (isNaN(parseInt(location.href.split('/').pop()))) {
+
+        await fetch(location.origin + '/api/V1/modulos', {
+            method: "GET",
+            mode: "cors",
+            cache: "no-cache",
+            credentials: "same-origin",
+            headers: {
+                Authorization: "Bearer " + token,
+                Accept: "application/json",
+            },
+            redirect: "follow",
+            referrerPolicy: "no-referrer",
+        })
+            .then(respuesta => respuesta.json())
+            .then(datos => modules = datos.data);
+
+        setUserData();
+        setMainSelectors();
+        loadRemoveButton();
+        loadAddButton();
+        loadSaveButton();
+        loadSendButton();
+
+    } else {
+        await fetch(location.origin + '/api/V1/users/' + parseInt(location.href.split('/').pop()), {
+            method: "GET",
+            mode: "cors",
+            cache: "no-cache",
+            credentials: "same-origin",
+            headers: {
+                Authorization: "Bearer " + token,
+                Accept: "application/json",
+            },
+            redirect: "follow",
+            referrerPolicy: "no-referrer",
+        })
+            .then(respuesta => respuesta.json())
+            .then(datos => userData = datos.data);
+        setUserData();
+        setMainSelectors();
+        loadEndButton();
+        loadDiscardButton();
+    }
 }
 
 function setLocalData() {
@@ -128,9 +149,13 @@ function setMainSelectors() {
 
         // Insert options with the modules code
         for (const modulo of modulesFiltered) {
-            document.querySelector('#teacherModules' + rowsNumber).innerHTML += `
-            <option value="${modulo.subject}" id="${modulo.code + rowsNumber}">${modulo.code}</option>
-            `;
+            const moduleOption = document.createElement('option');
+
+            moduleOption.setAttribute('value', modulo.subject);
+            moduleOption.setAttribute('id', modulo.code + rowsNumber);
+            moduleOption.textContent = modulo.code;
+
+            document.querySelector('#teacherModules' + rowsNumber).insertAdjacentElement('beforeend', moduleOption);
         }
 
         document.querySelector('#teacherModules' + rowsNumber).addEventListener('change', loadModuleData);
@@ -169,55 +194,24 @@ function loadModuleData(target) {
 }
 
 
-function addTableRow() {
-    rowsNumber++;
-
-    const newRow = `
-    <tr id="tableRow${rowsNumber}">
-        <td id="turno${rowsNumber}"></td>
-        <td id="curso${rowsNumber}"></td>
-        <td class="selectCell">
-                <select class="listadoDeModulos" name="teacherModules${rowsNumber}" id="teacherModules${rowsNumber}">
-                <option value="Select Module">Seleccionar Modulo</option>
-            </select>
-        </td>
-        <td id="horas${rowsNumber}" class="horasPorModulo"></td>
-        <td class="selectCell">
-                <select name="teacherHoursWeek${rowsNumber}" id="teacherHoursWeek${rowsNumber}">
-            </select>
-        </td>
-        <td class="selectCell">
-            <select name="teacherClasses${rowsNumber}" id="teacherClasses${rowsNumber}">
-            </select>
-        </td>
-    </tr>
-    `;
-
-    finalRow.insertAdjacentHTML('beforebegin', newRow);
-
-    setMainSelectors();
-}
-
-
-function removeTableRow() {
-    if (rowsNumber > 1) {
-        document.querySelector('#tableRow' + rowsNumber).remove();
-        updateTotalHours();
-        rowsNumber--;
-    } else {
-        console.error('¡No puedes hacer eso!');
-    }
-}
-
-
 async function updateModuleClassrooms(moduloID, elementID) {
-    document.querySelector('#teacherClasses' + elementID).innerHTML = null;
+    let actualClassrooms = document.querySelector('#teacherClasses' + elementID).querySelectorAll('option');
     let classrooms = classRoomsByModules.filter(modulo => modulo.modulo_id.id == moduloID);
 
+    // Delete all classrooms on the select element
+    for (const actualClassroom of actualClassrooms) {
+        actualClassroom.remove();
+    }
+
+    // Set the new classrooms on the select element
     for (const classroom of classrooms) {
-        document.querySelector('#teacherClasses' + elementID).innerHTML += `
-        <option value="${classroom.aula_id.id}" id="${classroom.aula_id.name + elementID}">${classroom.aula_id.name}</option>
-        `;
+        const classroomOption = document.createElement('option');
+
+        classroomOption.setAttribute('value', classroom.aula_id.id);
+        classroomOption.setAttribute('id', classroom.aula_id.name + elementID);
+        classroomOption.textContent = classroom.aula_id.name;
+
+        document.querySelector('#teacherClasses' + elementID).insertAdjacentElement('beforeend', classroomOption);
     }
 }
 
@@ -243,15 +237,178 @@ function updateTotalHours() {
     totalHoursCell.textContent = totalHoursValue;
 }
 
+function loadAddButton() {
+    const addButton = document.createElement('button');
+
+    addButton.setAttribute('type', 'button');
+    addButton.className = 'btn btn-success';
+    addButton.textContent = 'Agregar Fila';
+
+    addButton.addEventListener('click', addTableRow);
+
+    document.querySelector('#principalButtonsBox').insertAdjacentElement('afterbegin', addButton);
+}
+
+function loadRemoveButton() {
+    const removeButton = document.createElement('button');
+
+    removeButton.setAttribute('type', 'button');
+    removeButton.className = 'btn btn-danger';
+    removeButton.textContent = 'Eliminar Última Fila';
+
+    removeButton.addEventListener('click', removeTableRow);
+
+    document.querySelector('#principalButtonsBox').insertAdjacentElement('afterbegin', removeButton);
+}
+
+function loadSaveButton() {
+    const saveButton = document.createElement('button');
+
+    saveButton.setAttribute('type', 'button');
+    saveButton.className = 'btn btn-primary';
+    saveButton.textContent = 'Guardar Cambios';
+
+    saveButton.addEventListener('click', saveScheduleData);
+
+    document.querySelector('#principalButtonsBox').insertAdjacentElement('beforeend', saveButton);
+}
+
+function loadSendButton() {
+    const sendButton = document.createElement('button');
+
+    sendButton.setAttribute('type', 'button');
+    sendButton.className = 'btn btn-dark';
+    sendButton.textContent = 'Enviar Horario';
+
+    sendButton.addEventListener('click', sendScheduleForRevision);
+
+    document.querySelector('#teacherSendButtonBox').insertAdjacentElement('beforeend', sendButton);
+}
+
+function loadEndButton() {
+    const endButton = document.createElement('button');
+
+    endButton.setAttribute('type', 'button');
+    endButton.className = 'btn btn-success';
+    endButton.textContent = 'Finalizar Horario';
+
+    endButton.addEventListener('click', finalizeSchedule);
+
+    document.querySelector('#departmentButtonsBox').insertAdjacentElement('beforeend', endButton);
+}
+
+function loadDiscardButton() {
+    const discardButton = document.createElement('button');
+
+    discardButton.setAttribute('type', 'button');
+    discardButton.className = 'btn btn-danger';
+    discardButton.textContent = 'Descartar Horario';
+
+    discardButton.addEventListener('click', discardScheudle);
+
+    document.querySelector('#departmentButtonsBox').insertAdjacentElement('beforeend', discardButton);
+}
+
+
+
+/* ######################################################################################################################### */
+/* ################################################### BUTTONS FUNCTIONS ################################################### */
+/* ######################################################################################################################### */
+function addTableRow() {
+    rowsNumber++;
+
+    const newTableRow = document.createElement('tr');
+
+    const turnTD = document.createElement('td');
+    const schoolYearTD = document.createElement('td');
+    const modulesListTD = document.createElement('td');
+    const hoursTD = document.createElement('td');
+    const weeklyDistributionTD = document.createElement('td');
+    const classroomsListTD = document.createElement('td');
+
+    const modulesListSelect = document.createElement('select');
+    const weeklyDistributionSelect = document.createElement('select');
+    const classroomsListSelect = document.createElement('select');
+
+    const modulesListOption = document.createElement('option');
+
+    newTableRow.setAttribute('id', 'tableRow' + rowsNumber);
+
+    turnTD.setAttribute('id', 'turno' + rowsNumber);
+    schoolYearTD.setAttribute('id', 'curso' + rowsNumber);
+    modulesListTD.className = 'selectCell';
+    hoursTD.setAttribute('id', 'horas' + rowsNumber);
+    hoursTD.className = 'horasPorModulo'
+    weeklyDistributionTD.className = 'selectCell';
+    classroomsListTD.className = 'selectCell';
+
+    modulesListSelect.setAttribute('id', 'teacherModules' + rowsNumber);
+    modulesListSelect.setAttribute('name', 'teacherModules' + rowsNumber);
+    modulesListSelect.className = 'listadoDeModulos';
+    weeklyDistributionSelect.setAttribute('id', 'teacherHoursWeek' + rowsNumber);
+    weeklyDistributionSelect.setAttribute('name', 'teacherHoursWeek' + rowsNumber);
+    classroomsListSelect.setAttribute('id', 'teacherClasses' + rowsNumber);
+    classroomsListSelect.setAttribute('name', 'teacherClasses' + rowsNumber);
+
+    modulesListOption.setAttribute('value', 'Select Module');
+    modulesListOption.textContent = 'Seleccionar Modulo';
+
+    modulesListSelect.insertAdjacentElement('beforeend', modulesListOption);
+
+    modulesListTD.insertAdjacentElement('beforeend', modulesListSelect);
+    weeklyDistributionTD.insertAdjacentElement('beforeend', weeklyDistributionSelect);
+    classroomsListTD.insertAdjacentElement('beforeend', classroomsListSelect);
+
+    newTableRow.insertAdjacentElement('beforeend', turnTD);
+    newTableRow.insertAdjacentElement('beforeend', schoolYearTD);
+    newTableRow.insertAdjacentElement('beforeend', modulesListTD);
+    newTableRow.insertAdjacentElement('beforeend', hoursTD);
+    newTableRow.insertAdjacentElement('beforeend', weeklyDistributionTD);
+    newTableRow.insertAdjacentElement('beforeend', classroomsListTD);
+
+    finalRow.insertAdjacentElement('beforebegin', newTableRow);
+
+    setMainSelectors();
+}
+
+
+function removeTableRow() {
+    if (rowsNumber > 1) {
+        document.querySelector('#tableRow' + rowsNumber).remove();
+        updateTotalHours();
+        rowsNumber--;
+    }
+}
+
+function saveScheduleData() {
+
+}
+
+function sendScheduleForRevision() {
+
+}
+
+function finalizeSchedule() {
+
+}
+
+function discardScheudle() {
+
+}
+
 
 
 /* ###################################################################################################################################### */
 /* ################################################### WEEKLY DISTRIBUTIOON FUNCTIONS ################################################### */
 /* ###################################################################################################################################### */
 function updateWeeklyDistribution(totalHours, elementID) {
-    document.querySelector('#teacherHoursWeek' + elementID).innerHTML = null;
-
+    let actualWeeklyDistributions = document.querySelector('#teacherHoursWeek' + elementID).querySelectorAll('option');
     let hoursPerWeek = getWeeklyDistribution([1, 2, 3], totalHours);
+
+    // Delete all weekly distributions on the select element
+    for (const actualWD of actualWeeklyDistributions) {
+        actualWD.remove();
+    }
 
     // If the hours are too much, filter the hours per week
     if (totalHours >= 6) {
@@ -262,9 +419,13 @@ function updateWeeklyDistribution(totalHours, elementID) {
     for (let distribution of hoursPerWeek) {
         distribution = distribution.join(' + ');
 
-        document.querySelector('#teacherHoursWeek' + elementID).innerHTML += `
-        <option value="${distribution}" id="${distribution.split(' ').join('') + '/' + elementID}">${distribution}</option>
-        `;
+        const wdOption = document.createElement('option');
+
+        wdOption.setAttribute('value', distribution);
+        wdOption.setAttribute('id', distribution.split(' ').join('') + '/' + elementID);
+        wdOption.textContent = distribution;
+
+        document.querySelector('#teacherHoursWeek' + elementID).insertAdjacentElement('beforeend', wdOption);
     }
 }
 

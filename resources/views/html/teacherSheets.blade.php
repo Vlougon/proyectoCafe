@@ -99,12 +99,9 @@
                     </table>
                 </div>
 
-                <div class="mainButtonsBox">
-                    <button id="addRow" type="button" class="btn btn-success">Agregar Fila</button>
-                    <button id="removeRow" type="button" class="btn btn-danger">Eliminar Última Fila</button>
+                <div class="mainButtonsBox" id="principalButtonsBox">
                     <div class="w-100"></div>
                     <button id="downloadPDF" type="button" class="btn btn-warning">Imprimir en PDF</button>
-                    <button id="saveChanges" type="button" class="btn btn-primary">Guardar Cambios</button>
                 </div>
 
                 <label for="teacherObservations">Observaciones: </label>
@@ -112,14 +109,11 @@
                 </textarea>
             </div>
 
-            <div class="mainButtonsBox">
-                <button id="sendSchedule" type="button" class="btn btn-dark">Enviar Horario</button>
+            <div class="mainButtonsBox" id="teacherSendButtonBox">
             </div>
         </div>
 
-        <div class="mainButtonsBox">
-            <button id="closeSchedule" type="button" class="btn btn-success">Finalizar Horario</button>
-            <button id="rollbackSchedule" type="button" class="btn btn-danger">Descartar Horario</button>
+        <div class="mainButtonsBox" id="departmentButtonsBox">
         </div>
     </main>
 
