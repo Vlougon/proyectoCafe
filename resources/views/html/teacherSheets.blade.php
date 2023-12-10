@@ -34,6 +34,11 @@
                         <img src="{{ asset('images/defaultUserIcon.png') }}" alt="Icono de Perfil del Profesor" class="d-inline-block">
                         <span id="teachersName"></span>
                     </button>
+
+                    <form id="logoutForm" action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <button>Cerrar sesión</button>
+                    </form>
                 </div>
             </div>
         </nav>
@@ -101,7 +106,7 @@
 
                 <div class="mainButtonsBox" id="principalButtonsBox">
                     <div class="w-100"></div>
-                    <button id="downloadPDF" type="button" class="btn btn-warning">Imprimir en PDF</button>
+                    <button id="downloadPDF" type="button" class="btn btn-warning">Descargar en PDF</button>
                 </div>
 
                 <label for="teacherObservations">Observaciones: </label>

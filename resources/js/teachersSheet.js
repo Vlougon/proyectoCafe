@@ -13,12 +13,15 @@ const teachersName = document.querySelector('#teachersName');
 const schoolYear = document.querySelector('#schoolYear span');
 const totalHoursCell = document.querySelector('#totalCell');
 const finalRow = document.querySelector('#totalRow');
+const logoutForm = document.querySelector('#logoutForm');
 
 const token = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).token : null;
 let userData = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).data : null;
 
 window.addEventListener('load', setLocalData);
 window.addEventListener('load', loadFirstContentPage);
+
+logoutForm.addEventListener('submit', logoutUser);
 
 async function loadFirstContentPage() {
     fetch(location.origin + '/api/V1/aulamodulos', {
@@ -474,4 +477,39 @@ function findDistribution(hours, totalHours, i, currentDistribution, weeklyDistr
         // Remove the last element from the current array, to avoid duplicates
         currentDistribution.pop();
     }
+}
+
+
+
+/* ####################################################################################################################### */
+/* ################################################### LOGOUT FUNCTION ################################################### */
+/* ####################################################################################################################### */
+function logoutUser(event) {
+    event.preventDefault();
+
+    fetch(location.origin + '/api/logout', {
+        method: "POST",
+        mode: "cors",
+        cache: "no-cache",
+        credentials: "same-origin",
+        headers: {
+            Authorization: "Bearer " + token,
+            Accept: "application/json",
+        },
+        redirect: "follow",
+        referrerPolicy: "no-referrer",
+    })
+        .then((respuesta) => respuesta.status === 200 ? respuesta.json() : '')
+        .then((datos) => {
+
+            // Check if the user was able to login
+            if (datos.status === "success") {
+
+                // Remove the User Data and Token from the localStorage
+                localStorage.removeItem('user');
+
+                // Submit to logout the user
+                logoutForm.submit();
+            }
+        })
 }

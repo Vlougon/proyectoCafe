@@ -14,9 +14,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('html.login');
-});
+    return view('auth.login');
+})->name('home')->middleware('guest');
 
 Route::get('teacherSheets/{id?}', function (?string $id = null) {
     return view('html.teacherSheets');
-});
+})->middleware('auth');

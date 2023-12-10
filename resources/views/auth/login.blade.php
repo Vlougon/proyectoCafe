@@ -24,6 +24,9 @@
             <img src="images/logoMajada.png" alt="Logo del CIFP Majada Marcial">
 
             <form id="professorsForm" method="POST">
+
+                @csrf
+                
                 <div id="nameBox">
                     <span>
                         <svg viewBox="0 0 448 512" title="Icono de una Persona de Frente">

@@ -44,14 +44,14 @@ function redirectToTeachersView(profesorEmail, professorPassword) {
                 // Store User Data and Token
                 localStorage.setItem('user', JSON.stringify(user));
 
-                // Redirect to the teacher's Route
-                window.location.href = "http://proyectocafe.test/teacherSheets";
+                // Submit to login the user and sent him to the teacher's view
+                professorLogInForm.submit();
             }
         })
 }
 
 function setFormAction() {
-    professorLogInForm.setAttribute('action', location.origin + '/api/login');
+    professorLogInForm.setAttribute('action', location.origin + '/login');
 }
 
 
