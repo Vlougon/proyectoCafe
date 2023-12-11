@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UserForm;
 use App\Http\Resources\UserResource;
 use App\Models\Especialidad;
 use App\Models\User;
@@ -75,9 +76,24 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, User $user)
     {
-        //
+        if (is_null($user)) {
+            return response()->json([
+                'status' => 'failed',
+                'message' => '¡No se ha encontrado el usuario Indicado!',
+            ], 200);
+        }
+
+        $user->update($request->all());
+
+        $response = [
+            'status' => 'success',
+            'message' => '¡Se ha actualizado exitosamente el Usuario!',
+            'data' => new UserResource($user),
+        ];
+
+        return response()->json($response, 200);
     }
 
     /**

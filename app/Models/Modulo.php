@@ -14,6 +14,9 @@ class Modulo extends Model
         'subject',
         'hours_per_week',
         'total_hours',
+        'weekly_distribution',
+        'classroom',
+        'user_id',
         'especialidad_id',
         'curso_id',
     ];
@@ -28,6 +31,10 @@ class Modulo extends Model
 
     public function aulas() {
         return $this->belongsToMany(Aula::class);
+    }
+
+    public function user() {
+        return $this->belongsTo(User::class);
     }
 
 }

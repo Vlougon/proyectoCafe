@@ -82,7 +82,7 @@ class ModuloController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(ModuloForm $request, Modulo $modulo)
+    public function update(Request $request, Modulo $modulo)
     {
         if (is_null($modulo)) {
             return response()->json([

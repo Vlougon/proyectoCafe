@@ -1,5 +1,6 @@
 import { jsPDF } from "jspdf";
 
+let selectedModules = [];
 let modules = [];
 let classRoomsByModules = [];
 let rowsNumber = 1;
@@ -62,7 +63,7 @@ async function loadFirstContentPage() {
             referrerPolicy: "no-referrer",
         })
             .then(respuesta => respuesta.json())
-            .then(datos => modules = datos.data);
+            .then(datos => modules = datos.data.filter(modulo => modulo.especialidad_id.id === userData.especialidad_id.id));
 
         setUserData();
         setMainSelectors();
@@ -70,6 +71,8 @@ async function loadFirstContentPage() {
         loadAddButton();
         loadSaveButton();
         loadSendButton();
+
+        // console.log(modules.filter(modulo => modulo.user_id.id !== null));
 
     } else {
         await fetch(location.origin + '/api/V1/users/' + parseInt(location.href.split('/').pop()), {
@@ -220,6 +223,75 @@ function logoutUser(event) {
 }
 
 
+function updateUserTotalHours(status = 'started') {
+    let data = {};
+
+    if (status !== 'started') {
+        data = {
+            'schedule_status': status,
+        };
+    } else {
+        data = {
+            'total_hours': totalHoursCell.textContent,
+            'observatioins': document.querySelector('#teacherObservations').value.match(/^[\s]*$/) ? 'null' : document.querySelector('#teacherObservations').value,
+        };
+    }
+
+
+    let formBody = [];
+    for (const property in data) {
+        var encodedKey = encodeURIComponent(property);
+        var encodedValue = encodeURIComponent(data[property]);
+        formBody.push(encodedKey + "=" + encodedValue);
+    };
+    formBody = formBody.join("&");
+
+    fetch(location.origin + '/api/V1/users/' + userData.id, {
+        method: "PUT",
+        headers: {
+            'Authorization': "Bearer " + token,
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Accept': 'application/json',
+        },
+        body: formBody,
+    });
+}
+
+
+function updateUserModules() {
+    if (selectedModules.length >= 1) {
+
+        for (const modules of selectedModules) {
+
+            const data = {
+                'weekly_distribution': modules.weekly_distribution,
+                'classroom': modules.classroom,
+                'user_id': userData.id,
+            };
+
+            let formBody = [];
+            for (const property in data) {
+                var encodedKey = encodeURIComponent(property);
+                var encodedValue = encodeURIComponent(data[property]);
+                formBody.push(encodedKey + "=" + encodedValue);
+            };
+            formBody = formBody.join("&");
+
+            fetch(location.origin + '/api/V1/modulos/' + modules.id, {
+                method: "PUT",
+                headers: {
+                    'Authorization': "Bearer " + token,
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Accept': 'application/json',
+                },
+                body: formBody,
+            });
+        }
+
+    }
+}
+
+
 
 /* ##################################################################################################################### */
 /* ################################################### DOM FUNCTIONS ################################################### */
@@ -240,6 +312,36 @@ function loadModuleData(target) {
         updateModuleClassrooms(selectedModule[0].id, selectedRow);
 
         updateTotalHours();
+
+        if (selectedModules.some(moduleSelected => moduleSelected.optionID === selectedRow)) {
+            const index = selectedModules.findIndex(moduleSelected => moduleSelected.optionID === selectedRow);
+
+            selectedModules[index].id = selectedModule[0].id;
+            selectedModules[index].code = selectedModule[0].code;
+            selectedModules[index].subject = selectedModule[0].subject;
+            selectedModules[index].hours_per_week = selectedModule[0].hours_per_week;
+            selectedModules[index].total_hours = selectedModule[0].total_hours;
+            selectedModules[index].weekly_distribution = document.querySelector('#teacherHoursWeek' + selectedRow).selectedOptions[0].textContent;
+            selectedModules[index].classroom = document.querySelector('#teacherClasses' + selectedRow).selectedOptions[0].value;
+            selectedModules[index].user_id = userData.id;
+            selectedModules[index].especialidad_id = selectedModule[0].especialidad_id.id;
+            selectedModules[index].curso_id = selectedModule[0].curso_id.id;
+
+        } else {
+            selectedModules.push({
+                'optionID': selectedRow,
+                'id': selectedModule[0].id,
+                'code': selectedModule[0].code,
+                'subject': selectedModule[0].subject,
+                'hours_per_week': selectedModule[0].hours_per_week,
+                'total_hours': selectedModule[0].total_hours,
+                'weekly_distribution': document.querySelector('#teacherHoursWeek' + selectedRow).selectedOptions[0].textContent,
+                'classroom': document.querySelector('#teacherClasses' + selectedRow).selectedOptions[0].value,
+                'user_id': userData.id,
+                'especialidad_id': selectedModule[0].especialidad_id.id,
+                'curso_id': selectedModule[0].curso_id.id,
+            });
+        }
     }
 }
 
@@ -440,11 +542,12 @@ function displayLogout() {
 
 
 function saveScheduleData() {
-
+    updateUserTotalHours();
+    updateUserModules();
 }
 
 function sendScheduleForRevision() {
-
+    updateUserTotalHours('sent');
 }
 
 function finalizeSchedule() {
@@ -501,7 +604,7 @@ function updateWeeklyDistribution(totalHours, elementID) {
 
     // If the hours are too much, filter the hours per week
     if (totalHours >= 6) {
-        hoursPerWeek = hoursPerWeek.filter(distribution => distribution.reduce((sum, number) => { number === 1 ? sum++ : ''; return sum }, 0) < 2);
+        hoursPerWeek = hoursPerWeek.filter(distribution => distribution.length <= 5 && distribution.reduce((sum, number) => { number === 1 ? sum++ : ''; return sum }, 0) < 2);
     }
 
     // Brush Up the results and show them to the user

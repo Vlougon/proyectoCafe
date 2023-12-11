@@ -23,6 +23,9 @@ class User extends Authenticatable
         'email',
         'password',
         'rol',
+        'total_hours',
+        'schedule_status',
+        'observatioins',
         'especialidad_id',
         'departamento_id',
     ];
