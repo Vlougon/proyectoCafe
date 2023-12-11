@@ -22,9 +22,17 @@ class UserForm extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string',
-            'email' => 'required|string',
-            'especialidad_id' => 'required|integer',
+            'name' => 'required|string|max:255',
+
+            'email' => 'required|email|unique:users,email|max:255',
+
+            'password' => 'required|string|min:8',
+
+            'rol' => 'required|in:teacher,head_of_department,study_manager',
+
+            'especialidad_id' => 'required|exists:especialidades,id',
+            
+            'departamento_id' => 'required|exists:departamentos,id',
         ];
     }
 }

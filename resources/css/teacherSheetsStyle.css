@@ -1,0 +1,225 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #f4f4f4 !important;
+}
+
+header,
+footer {
+    background-color: #1D2333;
+    color: white;
+}
+
+header {
+    padding: 15px;
+    text-align: end;
+}
+
+main {
+    background-color: #f4f4f4;
+    min-height: calc(100vh - 97px - 77px);
+    margin: 20px 0;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    text-align: center;
+}
+
+table td,
+table th {
+    border: 2px solid #000;
+    height: 29px;
+    padding: 5px;
+    vertical-align: middle;
+}
+
+footer {
+    padding: 10px;
+    text-align: center;
+}
+
+footer p {
+    display: inline-block;
+}
+
+footer p a {
+    display: inline-block;
+    color: #c4eafa
+}
+
+footer p a img {
+    width: 118px !important;
+    height: 41px !important;
+    margin-left: 3px;
+    vertical-align: middle;
+}
+
+footer img {
+    display: inline-block;
+    width: 118px !important;
+    height: 41px !important;
+    margin-top: 5px;
+    vertical-align: middle;
+}
+
+label {
+    margin-top: 10px;
+}
+
+textarea {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 10px;
+}
+
+#container {
+    background-color: white;
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid black;
+    overflow-x: auto;
+}
+
+#profileBox {
+    background: none;
+    padding: 5px;
+    border: none;
+}
+
+#profileBox img {
+    background-color: white;
+    border-radius: 50%;
+}
+
+#profileBox span {
+    color: white;
+    text-decoration: underline;
+    vertical-align: middle;
+}
+
+#logoutForm {
+    position: absolute;
+    right: 0;
+    bottom: -10px;
+}
+
+#logoutForm input {
+    background: none;
+    border: none;
+    color: red;
+}
+
+#logoutForm input:hover {
+    text-shadow: 0 0 7px rgba(255, 0, 0, 0.9);
+}
+
+#teachersNavbar ul {
+    text-align: start;
+}
+
+#teacherDataBox span {
+    font-weight: normal;
+}
+
+#totalCell {
+    font-weight: 900;
+}
+
+.btn-success {
+    margin-right: 2px;
+}
+
+.btn-danger {
+    margin-left: 2px;
+}
+
+td.selectCell {
+    padding: 0 !important;
+}
+
+td.selectCell select {
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 0;
+    text-align: center;
+    appearance: none;
+}
+
+.blindfolded {
+    display: none;
+}
+
+.nav-item {
+    background-color: white;
+    border-radius: 15px;
+    margin: 0 10px;
+}
+
+.nav-item:hover {
+    background-color: rgb(212, 212, 212);
+}
+
+.nav-item a.nav-link {
+    color: black !important;
+    font-weight: bold;
+}
+
+.navbar-toggler {
+    background-color: white !important;
+}
+
+.mainButtonsBox {
+    text-align: center;
+}
+
+.mainButtonsBox button {
+    margin-top: 15px;
+}
+
+.nav-link {
+    color: white !important;
+}
+
+.teacherInlineData {
+    padding-bottom: 3px;
+    border-bottom: 2px dashed black;
+}
+
+.blankCells {
+    border: none !important;
+}
+
+.totalCell {
+    text-align: start;
+}
+
+#totalCell.idealHours {
+    background-color: #c6ffc9;
+    color: #005004;
+}
+
+#totalCell.inRangeHours {
+    background-color: #fdeab5;
+    color: #574000;
+}
+
+#totalCell.undesideredHours {
+    background-color: #ffc6c6;
+    color: #4b0000;
+}
+
+@media (max-width: 767px) {
+    .nav-item {
+        max-width: fit-content;
+        padding: 8px;
+        margin: 10px 0;
+    }
+}

@@ -16,11 +16,10 @@ class CursoResource extends JsonResource
     {
         return[
             'id' => $this->id,
-            'name' => $this->name,
-            'group' => $this->group,
+
+            'course' => $this->course,
+            
             'turn' => $this->turn,
-            'year' => $this->year,
-            'modulos' => new ModuloResource($this->modulos),
         ];
     }
 }

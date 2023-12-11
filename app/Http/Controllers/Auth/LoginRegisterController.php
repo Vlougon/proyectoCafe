@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UserForm;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -16,26 +18,23 @@ class LoginRegisterController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function register(Request $request)
+    public function register(UserForm $request)
     {
-        $validate = Validator::make($request->all(), [
-            'name' => 'required|string|max:250',
-            'email' => 'required|string|email:rfc,dns|max:250|unique:users,email',
-            'password' => 'required|string|min:8|'
-        ]);
-
-        if ($validate->fails()) {
-            return response()->json([
-                'status' => 'failed',
-                'message' => 'Validation Error!',
-                'data' => $validate->errors(),
-            ], 403);
-        }
+        // if ($request->fails()) {
+        //     return response()->json([
+        //         'status' => 'failed',
+        //         'message' => 'Validation Error!',
+        //         'data' => $request->errors(),
+        //     ], 403);
+        // }
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password)
+            'password' => Hash::make($request->password),
+            'rol' => $request->rol,
+            'especialidad_id' => $request->especialidad_id,
+            'departamento_id' => $request->departamento_id,
         ]);
 
         $response = [
@@ -62,24 +61,29 @@ class LoginRegisterController extends Controller
         if ($validate->fails()) {
             return response()->json([
                 'status' => 'failed',
-                'message' => 'Validation Error!',
-                'data' => $validate->errors(),
-            ], 403);
+                'message' => '¡No se pudo validar al usuario!'
+            ], 401);
         }
 
         // Check email exist
         $user = User::where('email', $request->email)->first();
-
-        // Check password
-        if (!$user || !Hash::check($request->password, $user->password)) {
+        if (!$user) {
             return response()->json([
                 'status' => 'failed',
-                'message' => 'Invalid credentials'
+                'message' => '¡Email Inválido!'
+            ], 401);
+        }
+
+        // Check password
+        if (!Hash::check($request->password, $user->password)) {
+            return response()->json([
+                'status' => 'failed',
+                'message' => '¡Contraseña Incorrecta!'
             ], 401);
         }
 
         $data['token'] = $user->createToken($request->email)->plainTextToken;
-        $data['user'] = $user;
+        $data['user'] = new UserResource($user);
 
         $response = [
             'status' => 'success',

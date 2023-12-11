@@ -16,8 +16,8 @@ class EspecialidadResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'nombre' => $this->nombre,
-            'modulos' => new ModuloResource($this->modulos),
+            
+            'name' => $this->name,
         ];
     }
 }

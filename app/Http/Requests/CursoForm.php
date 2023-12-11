@@ -22,10 +22,9 @@ class CursoForm extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string',
-            'group' => 'required',
-            'turn' => 'required',
-            'year' => 'required|integer',
+            'course' => 'required|string|max:255',
+            
+            'turn' => 'required|in:M,T',
         ];
     }
 }

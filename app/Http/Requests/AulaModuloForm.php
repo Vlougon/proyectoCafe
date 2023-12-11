@@ -14,8 +14,9 @@ class AulaModuloForm extends FormRequest
     public function rules(): array
     {
         return [
-            'aula_id' => 'required',
-            'modulo_id' => 'required',
+            'aula_id' => 'required|exists:aulas,id',
+            
+            'modulo_id' => 'required|exists:modulos,id',
         ];
     }
 }

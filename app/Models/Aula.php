@@ -10,7 +10,7 @@ class Aula extends Model
     use HasFactory;
 
     protected $fillable = [
-        'nombre'
+        'name'
     ];
 
     public function modulos(){

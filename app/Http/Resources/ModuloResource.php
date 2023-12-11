@@ -17,15 +17,15 @@ class ModuloResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'codigo' => $this->codigo,
-            'materia' => $this->materia,
-            'h_semanales' => $this->h_semanales,
-            'h_totales' => $this->h_totales,
-            'user_id' => $this->user_id,
+            'code' => $this->code,
+            'subject' => $this->subject,
+            'hours_per_week' => $this->hours_per_week,
+            'total_hours' => $this->total_hours,
+            'weekly_distribution' => $this->weekly_distribution,
+            'classroom' => $this->classroom,
+            'user_id' => new UserResource($this->user_id),
             'especialidad_id' => new EspecialidadResource($this->especialidad),
-            'curso_id' => $this->curso_id,
-            // 'created_at' => $this->created_at,
-            // 'updated_at' => $this->updated_at,
+            'curso_id' => new CursoResource($this->curso),
         ];
     }
 }

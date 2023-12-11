@@ -40,7 +40,23 @@ class AulaModuloController extends Controller
 
     public function index()
     {
-        //
+        // $aulaModulos = AulaModuloResource::collection(AulaModulo::latest()->get());
+        $aulaModulos = AulaModulo::latest()->get();
+
+        if (is_null($aulaModulos->first())) {
+            return response()->json([
+                'status' => 'failed',
+                'message' => '¡No hay Aulas por Modulos que mostrar!',
+            ], 404);
+        }
+
+        $response = [
+            'status' => 'success',
+            'message' => '¡Se ha conseguido extraer las Aulas Por Modulos!.',
+            'data' => AulaModuloResource::collection($aulaModulos),
+        ];
+
+        return response()->json($response, 200);
     }
 
     /**

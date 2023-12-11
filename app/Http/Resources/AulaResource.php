@@ -10,7 +10,9 @@ class AulaResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'nombre' => $this->nombre,
+            'name' => $this->name,
+            
+            'schedule_load' => $this->schedule_load,
         ];
     }
 }

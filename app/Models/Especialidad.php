@@ -12,9 +12,7 @@ class Especialidad extends Model
     protected $table = 'especialidades';
 
     protected $fillable = [
-        'nombre',
-        'modulos',
-        'users',
+        'name',
     ];
 
     public function modulos() //Relación 1:N

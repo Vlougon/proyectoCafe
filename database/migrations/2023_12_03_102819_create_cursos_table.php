@@ -13,10 +13,8 @@ return new class extends Migration
     {
         Schema::create('cursos', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->enum('group', ['1º', '2º']);
-            $table->enum('turn', ['morning', 'evening']);
-            $table->integer('year');
+            $table->tinyText('course');
+            $table->enum('turn', ['M', 'T']);
             $table->timestamps();
         });
     }
