@@ -20,3 +20,7 @@ Route::get('/', function () {
 Route::get('teacherSheets/{id?}', function (?string $id = null) {
     return view('html.teacherSheets');
 })->middleware('auth');
+
+Route::get('departament', function (?string $id = null) {
+    return view('html.departament');
+})->middleware('auth');
