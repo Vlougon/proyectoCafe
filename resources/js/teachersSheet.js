@@ -17,12 +17,15 @@ const totalHoursCell = document.querySelector('#totalCell');
 const finalRow = document.querySelector('#totalRow');
 const logoutForm = document.querySelector('#logoutForm');
 const pdfButton = document.querySelector('#downloadPDF');
+const profileBox = document.querySelector('#profileBox');
 
 const token = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).token : null;
 let userData = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).data : null;
 
 window.addEventListener('load', setLocalData);
 window.addEventListener('load', loadFirstContentPage);
+
+profileBox.addEventListener('click', displayLogout);
 
 pdfButton.addEventListener('click', htmlToPDF);
 
@@ -91,7 +94,7 @@ async function loadFirstContentPage() {
 }
 
 function setLocalData() {
-    if (userData) {
+    if (userData && isNaN(parseInt(location.href.split('/').pop()))) {
         const navbarLiElement = document.createElement('li');
         const navbarLinkEelement = document.createElement('a');
 
@@ -117,6 +120,10 @@ function setLocalData() {
 
             document.querySelector('#teachersNavbar ul').insertAdjacentElement('beforeend', navbarLiElement);
         }
+    } else {
+        // Delete the Profile elements
+        profileBox.remove();
+        logoutForm.remove();
     }
 
     schoolYear.textContent = currentAcademicYear;
@@ -125,7 +132,12 @@ function setLocalData() {
 
 function setUserData() {
     teacher.textContent = userData.name ? userData.name.charAt(0).toUpperCase() + userData.name.slice(1) : 'Anon';
-    teachersName.textContent = teacher.textContent;
+
+    // If it is the original teacher view, show it's profile name
+    if (isNaN(parseInt(location.href.split('/').pop()))) {
+        teachersName.textContent = teacher.textContent;
+    }
+
     document.querySelector('title').textContent += ' ' + teacher.textContent;
 
     if (userData.departamento_id) {
@@ -161,6 +173,7 @@ function setMainSelectors() {
             const moduleOption = document.createElement('option');
 
             moduleOption.setAttribute('value', modulo.subject);
+            moduleOption.setAttribute('title', modulo.subject);
             moduleOption.setAttribute('id', modulo.code + rowsNumber);
             moduleOption.textContent = modulo.code;
 
@@ -417,6 +430,15 @@ function removeTableRow() {
     }
 }
 
+function displayLogout() {
+    if (document.querySelector('#logoutForm').className === 'blindfolded') {
+        document.querySelector('#logoutForm').className = 'showed';
+    } else {
+        document.querySelector('#logoutForm').className = 'blindfolded';
+    }
+}
+
+
 function saveScheduleData() {
 
 }
@@ -443,28 +465,24 @@ function htmlToPDF() {
     const doc = new jsPDF('portrait', 'pt', 'a4');
 
     // Create variables to store the schedule data
-    const schedule = document.querySelector('#tableBox');
-    const observation = document.querySelector('#teacherObservations');
+    const scheduleContainer = document.querySelector('#container');
 
     // Create Necesary attributes
-    const scheduleCopy = schedule;
-    const observationCopy = observation;
-    const fullSchedule = scheduleCopy.outerHTML + 'Observaciones:' + observationCopy.value;
+    const fullSchedule = scheduleContainer;
 
     const margin = 15;
     const scale = (doc.internal.pageSize.width - margin * 2) / document.body.scrollWidth;
 
-    doc.html(scheduleCopy, {
+    doc.html(fullSchedule, {
         x: margin,
         y: margin,
         html2canvas: {
             scale: scale,
         },
         callback: function (doc) {
-            doc.output('dataurlnewwindow', { filename: 'Horario de ' + userData.name + '.pdf' });
+            doc.save('Horario de ' + userData.name + '.pdf');
         }
     });
-    // doc.save('Horario de ' + userData.name + '.pdf');
 }
 
 

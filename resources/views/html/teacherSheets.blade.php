@@ -35,9 +35,9 @@
                         <span id="teachersName"></span>
                     </button>
 
-                    <form id="logoutForm" action="{{ route('logout') }}" method="POST">
+                    <form id="logoutForm" class="blindfolded" action="{{ route('logout') }}" method="POST">
                         @csrf
-                        <button>Cerrar sesión</button>
+                        <input type="submit" value="Cerrar sesión"></button>
                     </form>
                 </div>
             </div>

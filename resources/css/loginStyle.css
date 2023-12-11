@@ -57,7 +57,7 @@ footer img {
     display: inline-block;
     width: 118px !important;
     height: 41px !important;
-    margin-left: 10px;
+    margin-top: 10px;
     vertical-align: middle;
 }
 
@@ -276,7 +276,30 @@ input::placeholder {
     }
 
     #container {
+        display: grid;
+        grid-template-rows: 1fr;
+        grid-template-columns: 2fr 1fr;
+        grid-template-areas: 
+        'form img';
         width: 60%;
+    }
+
+    #imageContainer {
+        grid-area: img;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #imageContainer img {
+        width: 100%;
+        height: auto;
+    }
+
+    #container form {
+        grid-area: form;
+        border-top: none;
+        padding-top: 0;
     }
 }
 
@@ -304,7 +327,30 @@ input::placeholder {
     }
 
     #container {
+        display: grid;
+        grid-template-rows: 1fr;
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas: 
+        'form img';
         width: 55%;
+    }
+
+    #imageContainer {
+        grid-area: img;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #imageContainer img {
+        width: 70%;
+        height: auto;
+    }
+
+    #container form {
+        grid-area: form;
+        border-top: none;
+        padding-top: 0;
     }
 }
 
@@ -332,6 +378,29 @@ input::placeholder {
     }
 
     #container {
+        display: grid;
+        grid-template-rows: 1fr;
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas: 
+        'form img';
         width: 45%;
+    }
+
+    #imageContainer {
+        grid-area: img;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #imageContainer img {
+        width: 70%;
+        height: auto;
+    }
+
+    #container form {
+        grid-area: form;
+        border-top: none;
+        padding-top: 0;
     }
 }

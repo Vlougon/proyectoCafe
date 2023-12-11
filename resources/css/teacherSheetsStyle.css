@@ -64,7 +64,7 @@ footer img {
     display: inline-block;
     width: 118px !important;
     height: 41px !important;
-    margin-left: 10px;
+    margin-top: 5px;
     vertical-align: middle;
 }
 
@@ -104,6 +104,22 @@ textarea {
     vertical-align: middle;
 }
 
+#logoutForm {
+    position: absolute;
+    right: 0;
+    bottom: -10px;
+}
+
+#logoutForm input {
+    background: none;
+    border: none;
+    color: red;
+}
+
+#logoutForm input:hover {
+    text-shadow: 0 0 7px rgba(255, 0, 0, 0.9);
+}
+
 #teachersNavbar ul {
     text-align: start;
 }
@@ -114,6 +130,14 @@ textarea {
 
 #totalCell {
     font-weight: 900;
+}
+
+.btn-success {
+    margin-right: 2px;
+}
+
+.btn-danger {
+    margin-left: 2px;
 }
 
 td.selectCell {
@@ -127,6 +151,10 @@ td.selectCell select {
     border-radius: 0;
     text-align: center;
     appearance: none;
+}
+
+.blindfolded {
+    display: none;
 }
 
 .nav-item {
