@@ -1,3 +1,5 @@
+import { jsPDF } from "jspdf";
+
 let modules = [];
 let classRoomsByModules = [];
 let rowsNumber = 1;
@@ -14,12 +16,15 @@ const schoolYear = document.querySelector('#schoolYear span');
 const totalHoursCell = document.querySelector('#totalCell');
 const finalRow = document.querySelector('#totalRow');
 const logoutForm = document.querySelector('#logoutForm');
+const pdfButton = document.querySelector('#downloadPDF');
 
 const token = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).token : null;
 let userData = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).data : null;
 
 window.addEventListener('load', setLocalData);
 window.addEventListener('load', loadFirstContentPage);
+
+pdfButton.addEventListener('click', htmlToPDF);
 
 logoutForm.addEventListener('submit', logoutUser);
 
@@ -119,6 +124,10 @@ function setLocalData() {
 }
 
 function setUserData() {
+    teacher.textContent = userData.name ? userData.name.charAt(0).toUpperCase() + userData.name.slice(1) : 'Anon';
+    teachersName.textContent = teacher.textContent;
+    document.querySelector('title').textContent += ' ' + teacher.textContent;
+
     if (userData.departamento_id) {
         department.textContent = userData.departamento_id.name;
     } else {
@@ -130,9 +139,6 @@ function setUserData() {
     } else {
         specialization.textContent = 'No Especificado';
     }
-
-    teacher.textContent = userData.name ? userData.name.charAt(0).toUpperCase() + userData.name.slice(1) : 'Anon';
-    teachersName.textContent = teacher.textContent;
 }
 
 function setMainSelectors() {
@@ -170,7 +176,35 @@ function setMainSelectors() {
 /* ################################################################################################################################ */
 /* ################################################### FETCH/REDIRECT FUNCTIONS ################################################### */
 /* ################################################################################################################################ */
+function logoutUser(event) {
+    event.preventDefault();
 
+    fetch(location.origin + '/api/logout', {
+        method: "POST",
+        mode: "cors",
+        cache: "no-cache",
+        credentials: "same-origin",
+        headers: {
+            Authorization: "Bearer " + token,
+            Accept: "application/json",
+        },
+        redirect: "follow",
+        referrerPolicy: "no-referrer",
+    })
+        .then((respuesta) => respuesta.status === 200 ? respuesta.json() : '')
+        .then((datos) => {
+
+            // Check if the user was able to login
+            if (datos.status === "success") {
+
+                // Remove the User Data and Token from the localStorage
+                localStorage.removeItem('user');
+
+                // Submit to logout the user
+                logoutForm.submit();
+            }
+        })
+}
 
 
 
@@ -401,6 +435,40 @@ function discardScheudle() {
 
 
 
+/* #################################################################################################################### */
+/* ################################################### PDF FUNCTION ################################################### */
+/* #################################################################################################################### */
+function htmlToPDF() {
+    // Create the jsPDF object
+    const doc = new jsPDF('portrait', 'pt', 'a4');
+
+    // Create variables to store the schedule data
+    const schedule = document.querySelector('#tableBox');
+    const observation = document.querySelector('#teacherObservations');
+
+    // Create Necesary attributes
+    const scheduleCopy = schedule;
+    const observationCopy = observation;
+    const fullSchedule = scheduleCopy.outerHTML + 'Observaciones:' + observationCopy.value;
+
+    const margin = 15;
+    const scale = (doc.internal.pageSize.width - margin * 2) / document.body.scrollWidth;
+
+    doc.html(scheduleCopy, {
+        x: margin,
+        y: margin,
+        html2canvas: {
+            scale: scale,
+        },
+        callback: function (doc) {
+            doc.output('dataurlnewwindow', { filename: 'Horario de ' + userData.name + '.pdf' });
+        }
+    });
+    // doc.save('Horario de ' + userData.name + '.pdf');
+}
+
+
+
 /* ###################################################################################################################################### */
 /* ################################################### WEEKLY DISTRIBUTIOON FUNCTIONS ################################################### */
 /* ###################################################################################################################################### */
@@ -477,39 +545,4 @@ function findDistribution(hours, totalHours, i, currentDistribution, weeklyDistr
         // Remove the last element from the current array, to avoid duplicates
         currentDistribution.pop();
     }
-}
-
-
-
-/* ####################################################################################################################### */
-/* ################################################### LOGOUT FUNCTION ################################################### */
-/* ####################################################################################################################### */
-function logoutUser(event) {
-    event.preventDefault();
-
-    fetch(location.origin + '/api/logout', {
-        method: "POST",
-        mode: "cors",
-        cache: "no-cache",
-        credentials: "same-origin",
-        headers: {
-            Authorization: "Bearer " + token,
-            Accept: "application/json",
-        },
-        redirect: "follow",
-        referrerPolicy: "no-referrer",
-    })
-        .then((respuesta) => respuesta.status === 200 ? respuesta.json() : '')
-        .then((datos) => {
-
-            // Check if the user was able to login
-            if (datos.status === "success") {
-
-                // Remove the User Data and Token from the localStorage
-                localStorage.removeItem('user');
-
-                // Submit to logout the user
-                logoutForm.submit();
-            }
-        })
 }

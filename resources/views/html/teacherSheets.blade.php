@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Hojas de profesores</title>
+    <title>Horario de</title>
 
     <!-- Agrega Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -63,7 +63,7 @@
                 </div>
 
                 <div class="table-responsive">
-                    <table class="table">
+                    <table id="tableBox" class="table">
                         <thead>
                             <tr>
                                 <th>Turno (M/T)</th>
@@ -106,7 +106,7 @@
 
                 <div class="mainButtonsBox" id="principalButtonsBox">
                     <div class="w-100"></div>
-                    <button id="downloadPDF" type="button" class="btn btn-warning">Descargar en PDF</button>
+                    <button id="downloadPDF" type="button" class="btn btn-warning">Descargar PDF</button>
                 </div>
 
                 <label for="teacherObservations">Observaciones: </label>
