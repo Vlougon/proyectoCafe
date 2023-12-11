@@ -24,9 +24,13 @@ class UserForm extends FormRequest
         return [
             'name' => 'required|string|max:255',
 
-            'email' => 'required|email|unique:users,email|max:255',
+            'email' => 'required|email|max:255',
 
-            'password' => 'required|string|min:8',
+            'total_hours' => 'required|string',
+
+            'schedule_status' => 'required|string',
+
+            'observatioins' => 'required|string',
 
             'rol' => 'required|in:teacher,head_of_department,study_manager',
 
