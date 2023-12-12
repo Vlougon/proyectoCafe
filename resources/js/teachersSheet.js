@@ -107,7 +107,8 @@ function setLocalData() {
 
         if (userData.rol === 'head_of_department') {
 
-            navbarLinkEelement.setAttribute('href', '#');
+            navbarLinkEelement.setAttribute('href', location.origin + '/departament');
+            navbarLinkEelement.setAttribute('target', '_blank');
             navbarLinkEelement.textContent = 'Vista de Departamento';
 
             navbarLiElement.insertAdjacentElement('beforeend', navbarLinkEelement);

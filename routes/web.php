@@ -21,6 +21,6 @@ Route::get('teacherSheets/{id?}', function (?string $id = null) {
     return view('html.teacherSheets');
 })->middleware('auth');
 
-Route::get('departament', function (?string $id = null) {
+Route::get('departament/{id?}', function (?string $id = null) {
     return view('html.departament');
-})->middleware('auth');
+})->middleware('auth')->middleware('can:viewDepartment,App\Models\User');
