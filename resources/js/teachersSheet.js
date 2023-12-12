@@ -65,10 +65,20 @@ async function loadFirstContentPage() {
             referrerPolicy: "no-referrer",
         })
             .then(respuesta => respuesta.json())
-            .then(datos => modules = datos.data.filter(modulo => modulo.especialidad_id.id === userData.especialidad_id.id));
+            .then((datos) => {
+                const modulosEspecialidad = datos.data.filter(modulo => modulo.especialidad_id.id === userData.especialidad_id.id);
 
-        if (modules.filter(modulo => modulo.user_id !== null).length >= 1) {
-            const userModules = modules.filter(modulo => modulo.user_id !== null);
+                if (modulosEspecialidad.some(modulo => modulo.user_id !== null && modulo.user_id.id === userData.id)) {
+                    modules = modulosEspecialidad.filter(modulo => modulo.user_id === null || modulo.user_id !== null && modulo.user_id.id === userData.id);
+                } else {
+                    modules = modulosEspecialidad.filter(modulo => modulo.user_id === null);
+                }
+
+                return modules;
+            });
+
+        if (modules.some(modulo => modulo.user_id !== null && modulo.user_id.id === userData.id)) {
+            const userModules = modules.filter(modulo => modulo.user_id !== null && modulo.user_id.id === userData.id);
 
             for (const module of userModules) {
                 addTableRow();
@@ -80,7 +90,6 @@ async function loadFirstContentPage() {
 
         } else {
             addTableRow();
-            setMainSelectors();
         }
 
         loadRemoveButton();
@@ -272,15 +281,15 @@ function updateUserTotalHours(status = 'started') {
 }
 
 
-function updateUserModules() {
+async function updateUserModules() {
     if (selectedModules.length >= 1) {
 
-        for (const modules of selectedModules) {
+        for (const descarted of modules) {
 
             const data = {
-                'weekly_distribution': modules.weekly_distribution,
-                'classroom': modules.classroom,
-                'user_id': userData.id,
+                'weekly_distribution': '',
+                'classroom': 0,
+                'user_id': 0,
             };
 
             let formBody = [];
@@ -291,7 +300,34 @@ function updateUserModules() {
             };
             formBody = formBody.join("&");
 
-            fetch(location.origin + '/api/V1/modulos/' + modules.id, {
+            await fetch(location.origin + '/api/V1/modulos/' + descarted.id, {
+                method: "PUT",
+                headers: {
+                    'Authorization': "Bearer " + token,
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Accept': 'application/json',
+                },
+                body: formBody,
+            });
+        }
+
+        for (const modules of selectedModules) {
+
+            const data = {
+                'weekly_distribution': modules.weekly_distribution,
+                'classroom': modules.classroom,
+                'user_id': modules.user_id,
+            };
+
+            let formBody = [];
+            for (const property in data) {
+                var encodedKey = encodeURIComponent(property);
+                var encodedValue = encodeURIComponent(data[property]);
+                formBody.push(encodedKey + "=" + encodedValue);
+            };
+            formBody = formBody.join("&");
+
+            await fetch(location.origin + '/api/V1/modulos/' + modules.id, {
                 method: "PUT",
                 headers: {
                     'Authorization': "Bearer " + token,
@@ -582,6 +618,11 @@ function addTableRow() {
 
 function removeTableRow() {
     if (rowsNumber > 1) {
+
+        if (selectedModules.some(modulo => modulo.optionID === rowsNumber)) {
+            selectedModules.pop();
+        }
+
         document.querySelector('#tableRow' + rowsNumber).remove();
         updateTotalHours();
         rowsNumber--;
@@ -628,8 +669,6 @@ function updateSelectOption(target) {
             selectedModules[index].classroom = parseInt(target.srcElement.selectedOptions[0].value);
         }
     }
-
-    console.log(selectedModules);
 }
 
 
@@ -700,7 +739,7 @@ function updateWeeklyDistribution(totalHours, elementID) {
 
 function getWeeklyDistribution(hours, totalHours) {
     // Create an array to store the possible weekly hours combinations
-    let weeklyDistribution = []
+    let weeklyDistribution = [];
 
     // If hours isn't set, stop the script
     if (hours === null || hours.length === 0 || totalHours === null) {
@@ -711,7 +750,7 @@ function getWeeklyDistribution(hours, totalHours) {
     hours.sort((a, b) => a - b);
 
     // Create an array to store the current subset of weekly hours
-    let currentDistribution = []
+    let currentDistribution = [];
 
     // Call the findDistribution function and store the result in the weeklyDistribution array
     findDistribution(hours, totalHours, 0, currentDistribution, weeklyDistribution);
