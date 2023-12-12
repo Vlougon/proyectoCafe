@@ -3,7 +3,7 @@ import { jsPDF } from "jspdf";
 let selectedModules = [];
 let modules = [];
 let classRoomsByModules = [];
-let rowsNumber = 1;
+let rowsNumber = 0;
 const currentAcademicYear = `${new Date().getFullYear()}/${new Date().getFullYear() + 1}`;
 
 // Upper Schedule DOM Elements
@@ -66,13 +66,13 @@ async function loadFirstContentPage() {
             .then(datos => modules = datos.data.filter(modulo => modulo.especialidad_id.id === userData.especialidad_id.id));
 
         setUserData();
-        setMainSelectors();
+        addTableRow();
         loadRemoveButton();
         loadAddButton();
         loadSaveButton();
         loadSendButton();
 
-        // console.log(modules.filter(modulo => modulo.user_id.id !== null));
+        console.log(modules.filter(modulo => modulo.user_id !== null));
 
     } else {
         await fetch(location.origin + '/api/V1/users/' + parseInt(location.href.split('/').pop()), {
@@ -365,6 +365,8 @@ async function updateModuleClassrooms(moduloID, elementID) {
 
         document.querySelector('#teacherClasses' + elementID).insertAdjacentElement('beforeend', classroomOption);
     }
+
+    document.querySelector('#teacherClasses' + elementID).addEventListener('change', updateSelectOption);
 }
 
 
@@ -464,7 +466,7 @@ function loadDiscardButton() {
 
 
 /* ######################################################################################################################### */
-/* ################################################### BUTTONS FUNCTIONS ################################################### */
+/* ################################################### BUTTONS/SELECT FUNCTIONS ################################################### */
 /* ######################################################################################################################### */
 function addTableRow() {
     rowsNumber++;
@@ -559,6 +561,22 @@ function discardScheudle() {
 }
 
 
+function updateSelectOption(target) {
+    const targetID = target.srcElement.id;
+    const idNumber = targetID.charAt(targetID.length - 1);
+
+    if (selectedModules.some(modulo => modulo.optionID === idNumber)) {
+        const index = selectedModules.findIndex(modulo => modulo.optionID === idNumber);
+
+        if (targetID.includes('Hours')) {
+            selectedModules[index].weekly_distribution = target.srcElement.selectedOptions[0].textContent;
+        } else {
+            selectedModules[index].classroom = target.srcElement.selectedOptions[0].value;
+        }
+    }
+}
+
+
 
 /* #################################################################################################################### */
 /* ################################################### PDF FUNCTION ################################################### */
@@ -619,6 +637,8 @@ function updateWeeklyDistribution(totalHours, elementID) {
 
         document.querySelector('#teacherHoursWeek' + elementID).insertAdjacentElement('beforeend', wdOption);
     }
+
+    document.querySelector('#teacherHoursWeek' + elementID).addEventListener('change', updateSelectOption);
 }
 
 

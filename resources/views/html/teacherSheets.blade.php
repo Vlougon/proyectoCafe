@@ -50,25 +50,6 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr id="tableRow1">
-                                <td id="turno1"></td>
-                                <td id="curso1"></td>
-                                <td class="selectCell">
-                                    <select class="listadoDeModulos" name="teacherModules1" id="teacherModules1">
-                                        <option value="Select Module">Seleccionar Modulo</option>
-                                    </select>
-                                </td>
-                                <td id="horas1" class="horasPorModulo"></td>
-                                <td class="selectCell">
-                                    <select name="teacherHoursWeek1" id="teacherHoursWeek1">
-                                    </select>
-                                </td>
-                                <td class="selectCell">
-                                    <select name="teacherClasses1" id="teacherClasses1">
-                                    </select>
-                                </td>
-                            </tr>
-
                             <tr id="totalRow">
                                 <td colspan="2" class="blankCells"></td>
                                 <td class="totalCell"><strong>Total:</strong></td>
