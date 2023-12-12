@@ -1,0 +1,147 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #f4f4f4 !important;
+}
+
+header,
+footer {
+    background-color: #1D2333;
+    color: white;
+}
+
+header {
+    margin-bottom: 10px;
+    padding: 15px;
+    text-align: end;
+}
+
+main {
+    background-color: #f4f4f4;
+    min-height: calc(100vh - 97px - 77px);
+    margin: 20px 0;
+}
+
+footer {
+    margin-top: 10px;
+    padding: 10px;
+    text-align: center;
+}
+
+footer p {
+    display: inline-block;
+}
+
+footer p a {
+    display: inline-block;
+    color: #c4eafa
+}
+
+footer p a img {
+    width: 118px !important;
+    height: 41px !important;
+    margin-left: 3px;
+    vertical-align: middle;
+}
+
+footer img {
+    display: inline-block;
+    width: 118px !important;
+    height: 41px !important;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+textarea {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 30px;
+    padding: 10px;
+}
+
+#profileBox {
+    background: none;
+    padding: 5px;
+    border: none;
+}
+
+#profileBox img {
+    background-color: white;
+    border-radius: 50%;
+}
+
+#profileBox span {
+    color: white;
+    text-decoration: underline;
+    vertical-align: middle;
+}
+
+#teachersNavbar ul {
+    text-align: start;
+}
+
+#container {
+    width: 90%;
+}
+
+#container h1 {
+    margin-bottom: 10px;
+}
+
+.nav-item {
+    background-color: white;
+    border-radius: 15px;
+    margin: 0 10px;
+}
+
+.nav-item:hover {
+    background-color: rgb(212, 212, 212);
+}
+
+.nav-item a.nav-link {
+    color: black !important;
+    font-weight: bold;
+}
+
+.navbar-toggler {
+    background-color: white !important;
+}
+
+.nav-link {
+    color: white !important;
+}
+
+.departmentCard {
+    background-color: white;
+    margin: 30px 0;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid black;
+    box-shadow: 0 0 5px 5px rgb(0, 0, 0, .3);
+
+    overflow: hidden;
+    white-space: wrap;
+}
+
+.departmentCard h2 {
+    text-overflow: ellipsis ellipsis;
+}
+
+@media (max-width: 576px) {
+    .departmentCard h2 {
+        font-size: x-large;
+    }
+}
+
+@media (max-width: 767px) {
+    .nav-item {
+        max-width: fit-content;
+        padding: 8px;
+        margin: 10px 0;
+    }
+}

@@ -34,5 +34,5 @@ Route::get('departament/{id}', function (string $id) {
 })->middleware('auth')->middleware('can:viewStudy,App\Models\User');
 
 Route::get('studyManager', function () {
-    return view('html.studyManager');
+    return view('html.managerStudy');
 })->middleware('auth')->middleware('can:viewStudy,App\Models\User');

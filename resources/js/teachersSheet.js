@@ -139,7 +139,7 @@ function setLocalData() {
 
         } else if (userData.rol === 'study_manager') {
 
-            navbarLinkEelement.setAttribute('href', '#');
+            navbarLinkEelement.setAttribute('href', location.origin + '/studyManager');
             navbarLinkEelement.textContent = 'Vista de Estudio';
 
             navbarLiElement.insertAdjacentElement('beforeend', navbarLinkEelement);
@@ -555,9 +555,9 @@ function loadDiscardButton() {
 
 
 
-/* ######################################################################################################################### */
+/* ################################################################################################################################ */
 /* ################################################### BUTTONS/SELECT FUNCTIONS ################################################### */
-/* ######################################################################################################################### */
+/* ################################################################################################################################ */
 function addTableRow() {
     rowsNumber++;
 
