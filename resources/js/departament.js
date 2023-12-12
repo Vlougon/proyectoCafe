@@ -1,7 +1,7 @@
 
 
 let usuariospordepartamento = []; //Tendremos que tener un lugar donde ir añadiendo los departamentos
-
+const userNavbar = document.querySelector('#teachersNavbar ul');
 /*
 Con el sessionStorage necesito obtener el id del usuario
 
@@ -20,7 +20,7 @@ window.addEventListener('load', CargarUsuarios);
 //Ahora procedemos ha hacer el FECHT  a nuestra base de datos
 async function CargarUsuarios() {
 
-    document.querySelector('#backToSchedule').setAttribute('href', location.origin + '/teacherSheets');
+    loadUserNavBarButtons();
 
     await fetch(location.origin + '/api/V1/users', {
         method: 'GET',
@@ -34,8 +34,8 @@ async function CargarUsuarios() {
         redirect: 'follow',
         referrerPolicy: 'no-referrer'
     })
-            .then(respuesta => respuesta.json())
-            .then(datos => usuariospordepartamento = datos.data)
+        .then(respuesta => respuesta.json())
+        .then(datos => usuariospordepartamento = datos.data)
 
 
     ComprobarDepartamentoID(usuariospordepartamento);
@@ -116,4 +116,19 @@ function CrearCardUser(usuario) {
 
     // Añadir departmentContainer al lugar donde quieras mostrar estos bloques en tu página
     document.body.appendChild(departmentContainer);
+}
+
+function loadUserNavBarButtons() {
+    const liElement = document.createElement('li');
+    const aElement = document.createElement('a');
+
+    liElement.className = 'nav-item';
+    aElement.className = 'nav-link';
+
+    aElement.setAttribute('href', location.origin + '/teacherSheets');
+    aElement.textContent = 'Mi Horario';
+
+    liElement.insertAdjacentElement('beforeend', aElement);
+
+    userNavbar.insertAdjacentElement('beforeend', liElement);
 }
