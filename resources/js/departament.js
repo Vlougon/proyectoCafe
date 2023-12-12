@@ -3,7 +3,7 @@
 let usuariospordepartamento = []; //Tendremos que tener un lugar donde ir añadiendo los departamentos
 
 /*
-Con el localstorage necesito obtener el id del usuario
+Con el sessionStorage necesito obtener el id del usuario
 
 Necesito filtar los usuarios con el departamento igual al del jefe de departamento y que su 
 schedule_status = send
@@ -11,14 +11,17 @@ schedule_status = send
 */
 
 // Con esto opotenemos datos del usuario que se logea, en concreto, necesitoamos obtener su id
-const token = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).token : null;
-let userData = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).data : null;
+const token = sessionStorage.getItem('user') ? JSON.parse(sessionStorage.getItem('user')).token : null;
+let userData = sessionStorage.getItem('user') ? JSON.parse(sessionStorage.getItem('user')).data : null;
 
 //Para que al cargar meta los usuarios
 window.addEventListener('load', CargarUsuarios);
 
 //Ahora procedemos ha hacer el FECHT  a nuestra base de datos
 async function CargarUsuarios() {
+
+    document.querySelector('#backToSchedule').setAttribute('href', location.origin + '/teacherSheets');
+
     await fetch(location.origin + '/api/V1/users', {
         method: 'GET',
         mode: 'cors',
@@ -31,8 +34,8 @@ async function CargarUsuarios() {
         redirect: 'follow',
         referrerPolicy: 'no-referrer'
     })
-        .then(respuesta => respuesta.json())
-        .then(datos =>  usuariospordepartamento = datos.data)
+            .then(respuesta => respuesta.json())
+            .then(datos => usuariospordepartamento = datos.data)
 
 
     ComprobarDepartamentoID(usuariospordepartamento);

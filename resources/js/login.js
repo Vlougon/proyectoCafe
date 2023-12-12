@@ -42,7 +42,7 @@ function redirectToTeachersView(profesorEmail, professorPassword) {
                 const user = { 'token': token, 'data': data };
 
                 // Store User Data and Token
-                localStorage.setItem('user', JSON.stringify(user));
+                sessionStorage.setItem('user', JSON.stringify(user));
 
                 // Submit to login the user and sent him to the teacher's view
                 professorLogInForm.submit();

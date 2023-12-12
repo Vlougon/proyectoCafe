@@ -20,8 +20,8 @@ const logoutForm = document.querySelector('#logoutForm');
 const pdfButton = document.querySelector('#downloadPDF');
 const profileBox = document.querySelector('#profileBox');
 
-const token = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).token : null;
-let userData = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).data : null;
+const token = sessionStorage.getItem('user') ? JSON.parse(sessionStorage.getItem('user')).token : null;
+let userData = sessionStorage.getItem('user') ? JSON.parse(sessionStorage.getItem('user')).data : null;
 
 window.addEventListener('load', setLocalData);
 window.addEventListener('load', loadFirstContentPage);
@@ -108,7 +108,6 @@ function setLocalData() {
         if (userData.rol === 'head_of_department') {
 
             navbarLinkEelement.setAttribute('href', location.origin + '/departament');
-            navbarLinkEelement.setAttribute('target', '_blank');
             navbarLinkEelement.textContent = 'Vista de Departamento';
 
             navbarLiElement.insertAdjacentElement('beforeend', navbarLinkEelement);
@@ -214,8 +213,8 @@ function logoutUser(event) {
             // Check if the user was able to login
             if (datos.status === "success") {
 
-                // Remove the User Data and Token from the localStorage
-                localStorage.removeItem('user');
+                // Remove the User Data and Token from the sessionStorage
+                sessionStorage.removeItem('user');
 
                 // Submit to logout the user
                 logoutForm.submit();

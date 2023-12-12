@@ -29,13 +29,13 @@
                 <div class="collapse navbar-collapse" id="teachersNavbar">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Mi Horario</a>
+                            <a class="nav-link" id="backToSchedule">Mi Horario</a>
                         </li>
                     </ul>
                     <button id="profileBox">
                         <img src="../images/defaultUserIcon.png" alt="Icono de Perfil del Profesor"
                             class="d-inline-block">
-                        <span id="NombreProfesor">Nombre Profesor</span>
+                        <span id="NombreProfesor"></span>
                     </button>
                 </div>
             </div>

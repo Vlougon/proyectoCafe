@@ -17,10 +17,22 @@ Route::get('/', function () {
     return view('auth.login');
 })->name('home')->middleware('guest');
 
-Route::get('teacherSheets/{id?}', function (?string $id = null) {
+Route::get('teacherSheets', function () {
     return view('html.teacherSheets');
 })->middleware('auth');
 
-Route::get('departament/{id?}', function (?string $id = null) {
+Route::get('teacherSheets/{id}', function (string $id) {
+    return view('html.teacherSheets');
+})->middleware('auth')->middleware('can:viewDepartment,App\Models\User');
+
+Route::get('departament', function () {
     return view('html.departament');
 })->middleware('auth')->middleware('can:viewDepartment,App\Models\User');
+
+Route::get('departament/{id}', function (string $id) {
+    return view('html.departament');
+})->middleware('auth')->middleware('can:viewStudy,App\Models\User');
+
+Route::get('studyManager', function () {
+    return view('html.studyManager');
+})->middleware('auth')->middleware('can:viewStudy,App\Models\User');
