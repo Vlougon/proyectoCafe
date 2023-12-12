@@ -33,7 +33,7 @@ pdfButton.addEventListener('click', htmlToPDF);
 logoutForm.addEventListener('submit', logoutUser);
 
 async function loadFirstContentPage() {
-    fetch(location.origin + '/api/V1/aulamodulos', {
+    await fetch(location.origin + '/api/V1/aulamodulos', {
         method: "GET",
         mode: "cors",
         cache: "no-cache",
@@ -47,6 +47,8 @@ async function loadFirstContentPage() {
     })
         .then(respuesta => respuesta.json())
         .then(datos => classRoomsByModules = datos.data);
+
+    setUserData();
 
     if (isNaN(parseInt(location.href.split('/').pop()))) {
 
@@ -65,14 +67,26 @@ async function loadFirstContentPage() {
             .then(respuesta => respuesta.json())
             .then(datos => modules = datos.data.filter(modulo => modulo.especialidad_id.id === userData.especialidad_id.id));
 
-        setUserData();
-        addTableRow();
+        if (modules.filter(modulo => modulo.user_id !== null).length >= 1) {
+            const userModules = modules.filter(modulo => modulo.user_id !== null);
+
+            for (const module of userModules) {
+                addTableRow();
+                updateWeeklyDistribution(parseInt(module.hours_per_week), rowsNumber);
+                updateModuleClassrooms(module.id, rowsNumber);
+                setModuleData(module.curso_id.turn, module.curso_id.course, module.code, module.hours_per_week, module.weekly_distribution, module.classroom);
+                updateSelectedModuels(module, rowsNumber)
+            }
+
+        } else {
+            addTableRow();
+            setMainSelectors();
+        }
+
         loadRemoveButton();
         loadAddButton();
         loadSaveButton();
         loadSendButton();
-
-        console.log(modules.filter(modulo => modulo.user_id !== null));
 
     } else {
         await fetch(location.origin + '/api/V1/users/' + parseInt(location.href.split('/').pop()), {
@@ -298,7 +312,7 @@ function updateUserModules() {
 /* ##################################################################################################################### */
 function loadModuleData(target) {
     const targetID = target.srcElement.getAttribute('id');
-    const selectedRow = targetID.charAt(targetID.length - 1);
+    const selectedRow = parseInt(targetID.charAt(targetID.length - 1));
     const moduleCode = target.srcElement.selectedOptions[0].textContent;
 
     if (moduleCode !== 'Seleccionar Modulo') {
@@ -313,41 +327,81 @@ function loadModuleData(target) {
 
         updateTotalHours();
 
-        if (selectedModules.some(moduleSelected => moduleSelected.optionID === selectedRow)) {
-            const index = selectedModules.findIndex(moduleSelected => moduleSelected.optionID === selectedRow);
-
-            selectedModules[index].id = selectedModule[0].id;
-            selectedModules[index].code = selectedModule[0].code;
-            selectedModules[index].subject = selectedModule[0].subject;
-            selectedModules[index].hours_per_week = selectedModule[0].hours_per_week;
-            selectedModules[index].total_hours = selectedModule[0].total_hours;
-            selectedModules[index].weekly_distribution = document.querySelector('#teacherHoursWeek' + selectedRow).selectedOptions[0].textContent;
-            selectedModules[index].classroom = document.querySelector('#teacherClasses' + selectedRow).selectedOptions[0].value;
-            selectedModules[index].user_id = userData.id;
-            selectedModules[index].especialidad_id = selectedModule[0].especialidad_id.id;
-            selectedModules[index].curso_id = selectedModule[0].curso_id.id;
-
-        } else {
-            selectedModules.push({
-                'optionID': selectedRow,
-                'id': selectedModule[0].id,
-                'code': selectedModule[0].code,
-                'subject': selectedModule[0].subject,
-                'hours_per_week': selectedModule[0].hours_per_week,
-                'total_hours': selectedModule[0].total_hours,
-                'weekly_distribution': document.querySelector('#teacherHoursWeek' + selectedRow).selectedOptions[0].textContent,
-                'classroom': document.querySelector('#teacherClasses' + selectedRow).selectedOptions[0].value,
-                'user_id': userData.id,
-                'especialidad_id': selectedModule[0].especialidad_id.id,
-                'curso_id': selectedModule[0].curso_id.id,
-            });
-        }
+        updateSelectedModuels(selectedModule[0], selectedRow);
     }
 }
 
 
+function updateSelectedModuels(modulo, id) {
+    if (selectedModules.some(moduleSelected => moduleSelected.optionID === id)) {
+        const index = selectedModules.findIndex(moduleSelected => moduleSelected.optionID === id);
+
+        selectedModules[index].id = modulo.id;
+        selectedModules[index].code = modulo.code;
+        selectedModules[index].subject = modulo.subject;
+        selectedModules[index].hours_per_week = modulo.hours_per_week;
+        selectedModules[index].total_hours = modulo.total_hours;
+        selectedModules[index].weekly_distribution = document.querySelector('#teacherHoursWeek' + id).selectedOptions[0].textContent;
+        selectedModules[index].classroom = document.querySelector('#teacherClasses' + id).selectedOptions[0].value;
+        selectedModules[index].user_id = userData.id;
+        selectedModules[index].especialidad_id = modulo.especialidad_id.id;
+        selectedModules[index].curso_id = modulo.curso_id.id;
+
+    } else {
+        selectedModules.push({
+            'optionID': id,
+            'id': modulo.id,
+            'code': modulo.code,
+            'subject': modulo.subject,
+            'hours_per_week': modulo.hours_per_week,
+            'total_hours': modulo.total_hours,
+            'weekly_distribution': document.querySelector('#teacherHoursWeek' + id).selectedOptions[0].textContent,
+            'classroom': document.querySelector('#teacherClasses' + id).selectedOptions[0].value,
+            'user_id': userData.id,
+            'especialidad_id': modulo.especialidad_id.id,
+            'curso_id': modulo.curso_id.id,
+        });
+    }
+}
+
+
+function setModuleData(turn, academicYear, moduleCode, moduelHours, weeklyDistribution, classRoom) {
+    const listOfModules = document.querySelectorAll('#teacherModules' + rowsNumber + ' option');
+    const listOfPossibleDistributions = document.querySelectorAll('#teacherHoursWeek' + rowsNumber + ' option');
+    const listOfClassrooms = document.querySelectorAll('#teacherClasses' + rowsNumber + ' option');
+
+    document.querySelector('#turno' + rowsNumber).textContent = turn;
+    document.querySelector('#curso' + rowsNumber).textContent = academicYear;
+
+    for (const moduleOption of listOfModules) {
+
+        if (moduleOption.textContent === moduleCode) {
+            moduleOption.setAttribute('selected', 'selected');
+        }
+    }
+
+    document.querySelector('#horas' + rowsNumber).textContent = moduelHours;
+
+    for (const wdOption of listOfPossibleDistributions) {
+
+        if (wdOption.textContent === weeklyDistribution) {
+            wdOption.setAttribute('selected', 'selected');
+        }
+    }
+
+    for (const classroomOption of listOfClassrooms) {
+
+        if (parseInt(classroomOption.getAttribute('value')) === classRoom) {
+            classroomOption.setAttribute('selected', 'selected');
+        }
+    }
+
+    updateTotalHours();
+}
+
+
 async function updateModuleClassrooms(moduloID, elementID) {
-    let actualClassrooms = document.querySelector('#teacherClasses' + elementID).querySelectorAll('option');
+    let actualClassrooms = document.querySelectorAll('#teacherClasses' + elementID + ' option');
     let classrooms = classRoomsByModules.filter(modulo => modulo.modulo_id.id == moduloID);
 
     // Delete all classrooms on the select element
@@ -563,7 +617,7 @@ function discardScheudle() {
 
 function updateSelectOption(target) {
     const targetID = target.srcElement.id;
-    const idNumber = targetID.charAt(targetID.length - 1);
+    const idNumber = parseInt(targetID.charAt(targetID.length - 1));
 
     if (selectedModules.some(modulo => modulo.optionID === idNumber)) {
         const index = selectedModules.findIndex(modulo => modulo.optionID === idNumber);
@@ -571,9 +625,11 @@ function updateSelectOption(target) {
         if (targetID.includes('Hours')) {
             selectedModules[index].weekly_distribution = target.srcElement.selectedOptions[0].textContent;
         } else {
-            selectedModules[index].classroom = target.srcElement.selectedOptions[0].value;
+            selectedModules[index].classroom = parseInt(target.srcElement.selectedOptions[0].value);
         }
     }
+
+    console.log(selectedModules);
 }
 
 
