@@ -1,12 +1,22 @@
 
 
+const container = document.querySelector('#container')
+const header = document.querySelector('#header')
+
+
+
 let usuariospordepartamento = []; //Tendremos que tener un lugar donde ir añadiendo los departamentos
 const userNavbar = document.querySelector('#teachersNavbar ul');
+
 /*
 Con el sessionStorage necesito obtener el id del usuario
 
 Necesito filtar los usuarios con el departamento igual al del jefe de departamento y que su 
 schedule_status = send
+
+
+Ahora tengo que implemetar la funcionalidad de los botones de finalizar y descartar 
+denntro de la vista de teacherSheets
 
 */
 
@@ -38,16 +48,21 @@ async function CargarUsuarios() {
         .then(datos => usuariospordepartamento = datos.data)
 
 
+    CambiarTitulo();
     ComprobarDepartamentoID(usuariospordepartamento);
 
 }
 
+function CambiarTitulo() {
+    header.textContent = `Departamento de ${userData.departamento_id.name}`;
+}
+
+
 //Queremos filtar por Departamento_id y si su schedule_status=send
 function ComprobarDepartamentoID(usuariospordepartamento) {
-    console.log('g');
-    console.log(userData.departamento_id);
+    console.log(userData.departamento_id); //&& user.schedule_status == 'send'
     for (let user of usuariospordepartamento) {
-        if (userData.departamento_id.id === user.departamento_id.id) {
+        if (userData.departamento_id.id === user.departamento_id.id && userData.id !== user.id) {
             CrearCardUser(user);
             console.log(user);
         }
@@ -56,16 +71,9 @@ function ComprobarDepartamentoID(usuariospordepartamento) {
 
 function CrearCardUser(usuario) {
 
-    const departmentContainer = document.createElement("div");
-    departmentContainer.classList.add("container", "my-4");
-
-    const titleRow = document.createElement("div");
-    titleRow.classList.add("row", "text-center", "my-4");
-
-    const title = document.createElement("h3");
-    title.innerHTML = `Departamento de <span id="NombreDepartamento">${usuario.departamento_id.name}</span>`;
-
-    titleRow.appendChild(title);
+    // ---------------------------------------------
+    // --------------- CARD PROFESOR ---------------
+    // ---------------------------------------------
 
     const cardRow = document.createElement("div");
     cardRow.classList.add("row", "row-cols-1", "row-cols-sm-2", "row-cols-md-2", "row-cols-lg-2", "g-4");
@@ -86,36 +94,38 @@ function CrearCardUser(usuario) {
 
     const cardTitle = document.createElement("h5");
     cardTitle.classList.add("card-title");
-    cardTitle.innerHTML = `Profesor: <span id="NombreProfesor">${usuario.name}</span>`;
+    cardTitle.textContent = `Profesor: ${usuario.name}`;
 
     const especialidad = document.createElement("p");
     especialidad.classList.add("card-text");
-    especialidad.innerHTML = `Especialidad: <span id="EspecialidadProfesor">${usuario.especialidad_id.name}</span>`;
-
+    especialidad.textContent = `Especialidad: ${usuario.especialidad_id.name}`;
     const horas = document.createElement("p");
     horas.classList.add("card-text");
-    horas.innerHTML = `Horas Totales: <span id="HorasProfesor">${usuario.total_hours}</span>`;
+    horas.textContent = `Horas Totales: ${usuario.total_hours}`;
 
     const enlace = document.createElement("a");
-    enlace.href = "#";
+    enlace.setAttribute('href', location.origin + '/teacherSheets/' + usuario.id);
     enlace.classList.add("btn", "btn-primary", "mt-2", "mt-md-0");
     enlace.textContent = "Ver";
 
-    cardBody.appendChild(img);
-    cardBody.appendChild(cardTitle);
-    cardBody.appendChild(especialidad);
-    cardBody.appendChild(horas);
-    cardBody.appendChild(enlace);
+    // ---------------------------------------------
+    // --------------- CARD PROFESOR ---------------
+    // ---------------------------------------------
 
-    card.appendChild(cardBody);
-    col.appendChild(card);
-    cardRow.appendChild(col);
+    cardBody.insertAdjacentElement('beforeend', img);
+    cardBody.insertAdjacentElement('beforeend', cardTitle);
+    cardBody.insertAdjacentElement('beforeend', especialidad);
+    cardBody.insertAdjacentElement('beforeend', horas);
+    cardBody.insertAdjacentElement('beforeend', enlace);
 
-    departmentContainer.appendChild(titleRow);
-    departmentContainer.appendChild(cardRow);
+    card.insertAdjacentElement('beforeend', cardBody);
+    col.insertAdjacentElement('beforeend', card);
+    cardRow.insertAdjacentElement('beforeend', col);
 
+    departmentContainer.insertAdjacentElement('beforeend', cardRow);
+    console.log(departmentContainer);
     // Añadir departmentContainer al lugar donde quieras mostrar estos bloques en tu página
-    document.body.appendChild(departmentContainer);
+    header.insertAdjacentElement('afterend', departmentContainer);
 }
 
 function loadUserNavBarButtons() {
