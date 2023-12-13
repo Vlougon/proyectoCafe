@@ -1,0 +1,196 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #f4f4f4 !important;
+}
+
+header,
+footer {
+    background-color: #1D2333;
+    color: white;
+}
+
+header {
+    margin-bottom: 10px;
+    padding: 15px;
+    text-align: end;
+}
+
+main {
+    background-color: #f4f4f4;
+    min-height: calc(100vh - 97px - 77px);
+    margin: 20px 0;
+}
+
+footer {
+    margin-top: 10px;
+    padding: 10px;
+    text-align: center;
+}
+
+footer p {
+    display: inline-block;
+}
+
+footer p a {
+    display: inline-block;
+    color: #c4eafa
+}
+
+footer p a img {
+    width: 118px !important;
+    height: 41px !important;
+    margin-left: 3px;
+    vertical-align: middle;
+}
+
+footer img {
+    display: inline-block;
+    width: 118px !important;
+    height: 41px !important;
+    margin-top: 5px;
+    vertical-align: middle;
+}
+
+#profileBox {
+    background: none;
+    padding: 5px;
+    border: none;
+}
+
+#profileBox img {
+    background-color: white;
+    border-radius: 50%;
+}
+
+#profileBox span {
+    color: white;
+    text-decoration: underline;
+    vertical-align: middle;
+}
+
+#logoutForm {
+    position: absolute;
+    right: 0;
+    bottom: -10px;
+}
+
+#logoutForm input {
+    background: none;
+    border: none;
+    color: red;
+}
+
+#logoutForm input:hover {
+    text-shadow: 0 0 7px rgba(255, 0, 0, 0.9);
+}
+
+#teachersNavbar ul {
+    text-align: start;
+}
+
+#sendSchedule {
+    display: block;
+    margin: 0 auto;
+}
+
+.blindfolded {
+    display: none;
+}
+
+.nav-item {
+    background-color: white;
+    border-radius: 15px;
+    margin: 0 10px;
+}
+
+.nav-item:hover {
+    background-color: rgb(212, 212, 212);
+}
+
+.nav-item a.nav-link {
+    color: black !important;
+    font-weight: bold;
+}
+
+.navbar-toggler {
+    background-color: white !important;
+}
+
+.nav-link {
+    color: white !important;
+}
+
+.departmentCard {
+    background-color: white;
+    margin: 15px;
+    padding: 13px;
+    border-radius: 7px;
+    border: 1px solid black;
+}
+
+.departmentCard p {
+    margin: 1px 0;
+}
+
+.idealHours,
+.inRangeHours,
+.undesideredHours {
+    padding: 3px;
+    width: fit-content;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.idealHours {
+    background-color: #c6ffc9;
+    color: #005004;
+}
+
+.inRangeHours {
+    background-color: #fdeab5;
+    color: #574000;
+}
+
+.undesideredHours {
+    background-color: #ffc6c6;
+    color: #4b0000;
+}
+
+.idealBox {
+    box-shadow: 0 0 10px 10px rgba(0, 80, 4, .7);
+}
+
+.inRangeBox {
+    box-shadow: 0 0 10px 10px rgba(87, 64, 0, .7);
+}
+
+.undesiredBox {
+    box-shadow: 0 0 10px 10px rgba(75, 0, 0, .7);
+}
+
+@media (max-width: 576px) {
+    .departmentCard {
+        text-align: center;
+        width: fit-content;
+    }
+
+    .idealHours,
+    .inRangeHours,
+    .undesideredHours {
+        margin: 1px auto !important;
+    }
+}
+
+
+@media (max-width: 767px) {
+    .nav-item {
+        max-width: fit-content;
+        padding: 8px;
+        margin: 10px 0;
+    }
+}

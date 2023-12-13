@@ -1,5 +1,6 @@
 import { jsPDF } from "jspdf";
 
+let previosUserData = {};
 let selectedModules = [];
 let modules = [];
 let classRoomsByModules = [];
@@ -52,6 +53,8 @@ async function loadFirstContentPage() {
 
     if (isNaN(parseInt(location.href.split('/').pop()))) {
 
+        setNavBArButtons();
+
         await fetch(location.origin + '/api/V1/modulos', {
             method: "GET",
             mode: "cors",
@@ -85,7 +88,7 @@ async function loadFirstContentPage() {
                 updateWeeklyDistribution(parseInt(module.hours_per_week), rowsNumber);
                 updateModuleClassrooms(module.id, rowsNumber);
                 setModuleData(module.curso_id.turn, module.curso_id.course, module.code, module.hours_per_week, module.weekly_distribution, module.classroom);
-                updateSelectedModuels(module, rowsNumber)
+                updateSelectedModuels(module, rowsNumber);
             }
 
         } else {
@@ -98,6 +101,8 @@ async function loadFirstContentPage() {
         loadSendButton();
 
     } else {
+        previosUserData = userData;
+
         await fetch(location.origin + '/api/V1/users/' + parseInt(location.href.split('/').pop()), {
             method: "GET",
             mode: "cors",
@@ -112,49 +117,98 @@ async function loadFirstContentPage() {
         })
             .then(respuesta => respuesta.json())
             .then(datos => userData = datos.data);
+
         setUserData();
-        setMainSelectors();
-        loadEndButton();
-        loadDiscardButton();
+        setNavBArButtons();
+
+        await fetch(location.origin + '/api/V1/modulos', {
+            method: "GET",
+            mode: "cors",
+            cache: "no-cache",
+            credentials: "same-origin",
+            headers: {
+                Authorization: "Bearer " + token,
+                Accept: "application/json",
+            },
+            redirect: "follow",
+            referrerPolicy: "no-referrer",
+        })
+            .then(respuesta => respuesta.json())
+            .then((datos) => {
+                const modulosEspecialidad = datos.data.filter(modulo => modulo.especialidad_id.id === userData.especialidad_id.id);
+
+                if (modulosEspecialidad.some(modulo => modulo.user_id !== null && modulo.user_id.id === userData.id)) {
+                    modules = modulosEspecialidad.filter(modulo => modulo.user_id === null || modulo.user_id !== null && modulo.user_id.id === userData.id);
+                } else {
+                    modules = modulosEspecialidad.filter(modulo => modulo.user_id === null);
+                }
+
+                return modules;
+            });
+
+        modules = modules.filter(modulo => modulo.user_id !== null && modulo.user_id.id === userData.id);
+
+        for (const module of modules) {
+            addTableRow();
+            setModuleData(module.curso_id.turn, module.curso_id.course, module.code, module.hours_per_week, module.weekly_distribution, module.classroom);
+        }
+
+        if (previosUserData && previosUserData.rol === 'head_of_department') {
+            loadEndButton();
+            loadDiscardButton();
+        }
     }
 }
 
+
 function setLocalData() {
+    schoolYear.textContent = currentAcademicYear;
+    totalHoursCell.textContent = 0;
+}
+
+
+function setNavBArButtons() {
+    const navbarLiElement = document.createElement('li');
+    const navbarLinkEelement = document.createElement('a');
+
+    navbarLiElement.className = 'nav-item';
+
+    navbarLinkEelement.className = 'nav-link';
+
     if (userData && isNaN(parseInt(location.href.split('/').pop()))) {
-        const navbarLiElement = document.createElement('li');
-        const navbarLinkEelement = document.createElement('a');
-
-        navbarLiElement.className = 'nav-item';
-
-        navbarLinkEelement.className = 'nav-link';
-
         if (userData.rol === 'head_of_department') {
 
             navbarLinkEelement.setAttribute('href', location.origin + '/departament');
             navbarLinkEelement.textContent = 'Vista de Departamento';
 
-            navbarLiElement.insertAdjacentElement('beforeend', navbarLinkEelement);
-
-            document.querySelector('#teachersNavbar ul').insertAdjacentElement('beforeend', navbarLiElement);
-
         } else if (userData.rol === 'study_manager') {
 
-            navbarLinkEelement.setAttribute('href', '#');
+            navbarLinkEelement.setAttribute('href', location.origin + '/studyManager');
             navbarLinkEelement.textContent = 'Vista de Estudio';
-
-            navbarLiElement.insertAdjacentElement('beforeend', navbarLinkEelement);
-
-            document.querySelector('#teachersNavbar ul').insertAdjacentElement('beforeend', navbarLiElement);
         }
+
     } else {
         // Delete the Profile elements
         profileBox.remove();
         logoutForm.remove();
+
+        if (previosUserData && previosUserData.rol === 'head_of_department') {
+
+            navbarLinkEelement.setAttribute('href', location.origin + '/departament');
+            navbarLinkEelement.textContent = 'Mi Departamento';
+
+        } else if (previosUserData && previosUserData.rol === 'study_manager') {
+
+            navbarLinkEelement.setAttribute('href', location.origin + '/studyManager');
+            navbarLinkEelement.textContent = 'Jefatura';
+        }
     }
 
-    schoolYear.textContent = currentAcademicYear;
-    totalHoursCell.textContent = 0;
+    navbarLiElement.insertAdjacentElement('beforeend', navbarLinkEelement);
+
+    document.querySelector('#teachersNavbar ul').insertAdjacentElement('beforeend', navbarLiElement);
 }
+
 
 function setUserData() {
     teacher.textContent = userData.name ? userData.name.charAt(0).toUpperCase() + userData.name.slice(1) : 'Anon';
@@ -178,6 +232,7 @@ function setUserData() {
         specialization.textContent = 'No Especificado';
     }
 }
+
 
 function setMainSelectors() {
     if (modules.some(modulo => modulo.especialidad_id)) {
@@ -408,28 +463,40 @@ function setModuleData(turn, academicYear, moduleCode, moduelHours, weeklyDistri
 
     document.querySelector('#turno' + rowsNumber).textContent = turn;
     document.querySelector('#curso' + rowsNumber).textContent = academicYear;
-
-    for (const moduleOption of listOfModules) {
-
-        if (moduleOption.textContent === moduleCode) {
-            moduleOption.setAttribute('selected', 'selected');
-        }
-    }
-
     document.querySelector('#horas' + rowsNumber).textContent = moduelHours;
 
-    for (const wdOption of listOfPossibleDistributions) {
+    if (userData && isNaN(parseInt(location.href.split('/').pop()))) {
+        for (const moduleOption of listOfModules) {
 
-        if (wdOption.textContent === weeklyDistribution) {
-            wdOption.setAttribute('selected', 'selected');
+            if (moduleOption.textContent === moduleCode) {
+                moduleOption.setAttribute('selected', 'selected');
+            }
         }
-    }
 
-    for (const classroomOption of listOfClassrooms) {
+        for (const wdOption of listOfPossibleDistributions) {
 
-        if (parseInt(classroomOption.getAttribute('value')) === classRoom) {
-            classroomOption.setAttribute('selected', 'selected');
+            if (wdOption.textContent === weeklyDistribution) {
+                wdOption.setAttribute('selected', 'selected');
+            }
         }
+
+        for (const classroomOption of listOfClassrooms) {
+
+            if (parseInt(classroomOption.getAttribute('value')) === classRoom) {
+                classroomOption.setAttribute('selected', 'selected');
+            }
+        }
+
+    } else {
+
+        document.querySelector('#teacherModules' + rowsNumber).remove();
+        document.querySelector('#listadoModulos' + rowsNumber).textContent = moduleCode;
+
+        document.querySelector('#teacherHoursWeek' + rowsNumber).remove();
+        document.querySelector('#listadoDistribucion' + rowsNumber).textContent = weeklyDistribution;
+
+        document.querySelector('#teacherClasses' + rowsNumber).remove();
+        document.querySelector('#listadoClases' + rowsNumber).textContent = classRoom;
     }
 
     updateTotalHours();
@@ -486,7 +553,7 @@ function loadAddButton() {
 
     addButton.setAttribute('type', 'button');
     addButton.className = 'btn btn-success';
-    addButton.textContent = 'Agregar Fila';
+    addButton.textContent = 'Agregar Módulo';
 
     addButton.addEventListener('click', addTableRow);
 
@@ -498,7 +565,7 @@ function loadRemoveButton() {
 
     removeButton.setAttribute('type', 'button');
     removeButton.className = 'btn btn-danger';
-    removeButton.textContent = 'Eliminar Última Fila';
+    removeButton.textContent = 'Eliminar Último Módulo';
 
     removeButton.addEventListener('click', removeTableRow);
 
@@ -555,9 +622,9 @@ function loadDiscardButton() {
 
 
 
-/* ######################################################################################################################### */
+/* ################################################################################################################################ */
 /* ################################################### BUTTONS/SELECT FUNCTIONS ################################################### */
-/* ######################################################################################################################### */
+/* ################################################################################################################################ */
 function addTableRow() {
     rowsNumber++;
 
@@ -581,10 +648,13 @@ function addTableRow() {
     turnTD.setAttribute('id', 'turno' + rowsNumber);
     schoolYearTD.setAttribute('id', 'curso' + rowsNumber);
     modulesListTD.className = 'selectCell';
+    modulesListTD.setAttribute('id', 'listadoModulos' + rowsNumber);
     hoursTD.setAttribute('id', 'horas' + rowsNumber);
     hoursTD.className = 'horasPorModulo'
     weeklyDistributionTD.className = 'selectCell';
+    weeklyDistributionTD.setAttribute('id', 'listadoDistribucion' + rowsNumber);
     classroomsListTD.className = 'selectCell';
+    classroomsListTD.setAttribute('id', 'listadoClases' + rowsNumber);
 
     modulesListSelect.setAttribute('id', 'teacherModules' + rowsNumber);
     modulesListSelect.setAttribute('name', 'teacherModules' + rowsNumber);

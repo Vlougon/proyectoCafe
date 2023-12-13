@@ -14,7 +14,22 @@ class DepartamentoController extends Controller
      */
     public function index()
     {
-        //
+        $departamentos = DepartamentoResource::collection(Departamento::latest()->get());
+
+        if (is_null($departamentos->first())) {
+            return response()->json([
+                'status' => 'failed',
+                'message' => '¡No hay Modulos que enseñar!',
+            ], 200);
+        }
+
+        $response = [
+            'status' => 'success',
+            'message' => '¡Se ha conseguido extraer los modulos!.',
+            'data' => $departamentos,
+        ];
+
+        return response()->json($response, 200);
     }
 
     /**
