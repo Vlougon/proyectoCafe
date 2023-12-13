@@ -56,14 +56,6 @@ footer img {
     vertical-align: middle;
 }
 
-textarea {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 30px;
-    padding: 10px;
-}
-
 #profileBox {
     background: none;
     padding: 5px;
@@ -81,8 +73,29 @@ textarea {
     vertical-align: middle;
 }
 
+#logoutForm {
+    position: absolute;
+    right: 0;
+    bottom: -10px;
+}
+
+#logoutForm input {
+    background: none;
+    border: none;
+    color: red;
+}
+
+#logoutForm input:hover {
+    text-shadow: 0 0 7px rgba(255, 0, 0, 0.9);
+}
+
 #teachersNavbar ul {
     text-align: start;
+}
+
+#sendSchedule {
+    display: block;
+    margin: 0 auto;
 }
 
 #container {
@@ -91,6 +104,10 @@ textarea {
 
 #container h1 {
     margin-bottom: 10px;
+}
+
+.blindfolded {
+    display: none;
 }
 
 .nav-item {

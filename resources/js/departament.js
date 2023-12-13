@@ -61,7 +61,7 @@ function CambiarTitulo() {
 function ComprobarDepartamentoID(usuariospordepartamento) {
     // console.log(userData.departamento_id); //&& user.schedule_status == 'send'
     for (let user of usuariospordepartamento) {
-        if (userData.departamento_id.id === user.departamento_id.id && userData.id !== user.id) {
+        if (user.departamento_id.id === userData.departamento_id.id && user.id !== userData.id && user.schedule_status === 'sent') {
             CrearCardUser(user);
         }
     }
@@ -90,7 +90,7 @@ function CrearCardUser(usuario) {
     img.alt = `Icono de Perfil del Profesor: ${usuario.name}`;
 
     const cardTitle = document.createElement("h5");
-    cardTitle.textContent = `Profesor: ${usuario.name}`;
+    cardTitle.textContent = `Profesor: ${usuario.name.charAt(0).toUpperCase() + usuario.name.slice(1)}`;
 
     const especialidad = document.createElement("p");
     especialidad.textContent = `Especialidad: ${usuario.especialidad_id.name}`;

@@ -22,24 +22,6 @@
     <main>
         <div id="container" class="container-fluid text-center">
             <h1>Listado de Departamentos</h1>
-
-            <div class="departmentCard">
-                <div class="d-block d-sm-flex justify-content-between">
-                    <div>
-                        <h2>Nombre Departamento</h2>
-                    </div>
-                    <a class="btn btn-info">Ver</a>
-                </div>
-            </div>
-
-            <div class="departmentCard">
-                <div class="d-block d-sm-flex justify-content-between">
-                    <div>
-                        <h2>Nombre Departamento</h2>
-                    </div>
-                    <a class="btn btn-info">Ver</a>
-                </div>
-            </div>
         </div>
     </main>
 
