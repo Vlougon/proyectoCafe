@@ -1,0 +1,52 @@
+/* Estilos para centrar y estilizar las tarjetas de profesores */
+
+/* Centrar las tarjetas horizontalmente y aplicar algunos estilos */
+.card {
+    width: 300px;
+    /* Ancho deseado */
+    margin: 0 auto;
+    /* Centrar horizontalmente */
+    border: 1px solid #ccc;
+    /* Borde */
+    border-radius: 8px;
+    /* Esquinas redondeadas */
+    padding: 20px;
+    /* Espaciado interno */
+    text-align: center;
+    /* Alinear texto al centro */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* Sombra */
+}
+
+/* Estilos adicionales según sea necesario */
+.card-title {
+    font-size: 1.2rem;
+    /* Tamaño del título */
+    margin-bottom: 10px;
+    /* Espaciado inferior del título */
+}
+
+.card-text {
+    font-size: 1rem;
+    /* Tamaño del texto */
+    color: #666;
+    /* Color del texto */
+}
+
+.btn {
+    display: inline-block;
+    /* Convertir en bloque para centrar */
+    padding: 8px 16px;
+    /* Espaciado del botón */
+    text-decoration: none;
+    /* Quitar decoración de texto */
+    border-radius: 4px;
+    /* Esquinas redondeadas del botón */
+    background-color: #007bff;
+    /* Color de fondo del botón */
+    color: #fff;
+    /* Color del texto del botón */
+}
+
+/* Estilos para mostrar las tarjetas en filas */
+

@@ -76,7 +76,7 @@ function CrearCardUser(usuario) {
     // ---------------------------------------------
 
     const cardRow = document.createElement("div");
-    cardRow.classList.add("row", "row-cols-1", "row-cols-sm-2", "row-cols-md-2", "row-cols-lg-2", "g-4");
+    cardRow.classList.add("row");
 
     const col = document.createElement("div");
     col.classList.add("col");

@@ -648,11 +648,25 @@ function sendScheduleForRevision() {
 }
 
 function finalizeSchedule() {
+    //if para id en url y cambiar con updateUserTotalHours('finalized')
+    let ruta = location.href; //devuelve la ruta completa
+    let userId = parseInt(ruta.charAt(ruta.length - 1));//Esto nol devuleve el id pero como string
+
+
+    if (Number.isInteger(userId)) {
+
+        console.log('entero');
+        // if (userId) {
+        //     updateUserTotalHours('finalized')
+        // }
+    }
+
+
 
 }
 
 function discardScheudle() {
-
+    //if para verificar si le esta llegando id del user por url y cambiar con updateUserTotalHours('descarted')
 }
 
 
