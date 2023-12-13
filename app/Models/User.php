@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -21,6 +22,12 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'rol',
+        'total_hours',
+        'schedule_status',
+        'observatioins',
+        'especialidad_id',
+        'departamento_id',
     ];
 
     /**
@@ -42,4 +49,13 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function especialidad() //Relación 1:N
+    {
+        return $this->belongsTo(Especialidad::class);
+    }
+    public function departamento() //Relación 1:N
+    {
+        return $this->belongsTo(Departamento::class);
+    }
 }
