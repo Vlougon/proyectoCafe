@@ -22,30 +22,35 @@
     <main>
         <div class="container">
             <div class="table-responsive">
-                <table class="table table-light table-striped table-hover align-middle text-center">
+                <h2 class="text-center">Aulas del Turno de Mañana</h2>
+
+                <table class="table table-light table-striped table-hover align-middle text-center mb-5 mt-2">
                     <thead class="table-dark">
                         <tr>
-                            <th scope="col">Aulas</th>
-                            <th scope="col">Carga Horaria</th>
-                            <th scope="col">Turno</th>
+                            <th scope="col" class="align-middle">Aulas</th>
+                            <th scope="col" class="align-middle">Carga Horaria del Aula</th>
+                            <th scope="col" class="align-middle">Turno</th>
+                            <th scope="col" class="limitCell align-middle">No Supera el Límite de Horas (Máx. 30)</th>
                         </tr>
                     </thead>
-                    <tbody class="table-group-divider">
+                    <tbody id="morningBody" class="table-group-divider">
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table-responsive">
+                <h2 class="text-center">Aulas del Turno de Tarde</h2>
+
+                <table class="table table-light table-striped table-hover align-middle text-center mt-2">
+                    <thead class="table-dark">
                         <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
+                            <th scope="col" class="align-middle">Aulas</th>
+                            <th scope="col" class="align-middle">Carga Horaria del Aula</th>
+                            <th scope="col" class="align-middle">Turno</th>
+                            <th scope="col" class="limitCell align-middle">No Supera el Límite de Horas (Máx. 30)</th>
                         </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td>@twitter</td>
-                            <td>@twitter</td>
-                        </tr>
+                    </thead>
+                    <tbody id="eveningBody" class="table-group-divider">
                     </tbody>
                 </table>
             </div>

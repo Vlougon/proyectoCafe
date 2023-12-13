@@ -15,7 +15,7 @@ footer {
 }
 
 header {
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     padding: 15px;
     text-align: end;
 }
@@ -27,7 +27,7 @@ main {
 }
 
 footer {
-    margin-top: 10px;
+    margin-top: 20px;
     padding: 10px;
     text-align: center;
 }
@@ -126,6 +126,25 @@ footer img {
 
 .nav-link {
     color: white !important;
+}
+
+th.limitCell {
+    width: 11em !important;
+}
+
+tbody tr td.idealHours {
+    color: #005004;
+    font-weight: bold;
+}
+
+tbody tr td.inRangeHours {
+    color: #574000;
+    font-weight: bold;
+}
+
+tbody tr td.undesideredHours {
+    color: #4b0000;
+    font-weight: bold;
 }
 
 @media (max-width: 767px) {
