@@ -30,7 +30,7 @@
             </div>
 
             <div>
-                <button id="sendSchedule" type="button" class="btn btn-dark">Finalizar Departamentos</button>
+                <button id="finishSchedules" type="button" class="btn btn-dark">Finalizar Departamentos</button>
             </div>
         </div>
     </main>

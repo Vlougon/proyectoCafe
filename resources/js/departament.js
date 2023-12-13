@@ -1,8 +1,10 @@
 let usuariospordepartamento = []; //Tendremos que tener un lugar donde ir añadiendo los departamentos
+let currentDepartment = 0;
 const header = document.querySelector('#header');
 const userNavbar = document.querySelector('#teachersNavbar ul');
 const logoutForm = document.querySelector('#logoutForm');
 const profileBox = document.querySelector('#profileBox');
+const finishSchedules = document.querySelector('#finishSchedules');
 
 /*
 Con el sessionStorage necesito obtener el id del usuario
@@ -29,6 +31,25 @@ logoutForm.addEventListener('submit', logoutUser);
 //Ahora procedemos ha hacer el FECHT  a nuestra base de datos
 async function CargarUsuarios() {
 
+    if (!isNaN(parseInt(location.href.charAt(location.href.length - 1)))) {
+        await fetch(location.origin + '/api/V1/departamentos/' + parseInt(location.href.charAt(location.href.length - 1)), {
+            method: 'GET',
+            mode: 'cors',
+            cache: 'no-cache',
+            credentials: 'same-origin',
+            headers: {
+                Authorization: 'Bearer ' + token,
+                Accept: 'application/json',
+            },
+            redirect: 'follow',
+            referrerPolicy: 'no-referrer'
+        })
+            .then(respuesta => respuesta.json())
+            .then(datos => currentDepartment = datos.data)
+    } else {
+        currentDepartment = userData.departamento_id;
+    }
+
     loadUserNavBarButtons();
 
     await fetch(location.origin + '/api/V1/users', {
@@ -53,15 +74,21 @@ async function CargarUsuarios() {
 }
 
 function CambiarTitulo() {
-    header.textContent = `Departamento de ${userData.departamento_id.name}`;
+    header.textContent = `Departamento de ${currentDepartment.name}`;
+
+    if (!isNaN(parseInt(location.href.charAt(location.href.length - 1)))) {
+        finishSchedules.remove();
+    }
 }
 
 
 //Queremos filtar por Departamento_id y si su schedule_status=send
 function ComprobarDepartamentoID(usuariospordepartamento) {
+    const id = isNaN(parseInt(location.href.charAt(location.href.length - 1))) ? currentDepartment.id : parseInt(location.href.charAt(location.href.length - 1));
+
     // console.log(userData.departamento_id); //&& user.schedule_status == 'send'
     for (let user of usuariospordepartamento) {
-        if (user.departamento_id.id === userData.departamento_id.id && user.schedule_status === 'sent') {
+        if (user.departamento_id.id === id && user.schedule_status === 'sent') {
             CrearCardUser(user);
         }
     }
@@ -145,7 +172,24 @@ function loadUserNavBarButtons() {
     userNavbar.insertAdjacentElement('beforeend', liElement);
 
     document.querySelector('#teachersName').textContent = userData.name.charAt(0).toUpperCase() + userData.name.slice(1);
-    document.querySelector('title').textContent += ' ' + userData.departamento_id.name;
+    document.querySelector('title').textContent += ' ' + currentDepartment.name;
+
+    if (!isNaN(location.href.charAt(location.href.length - 1))) {
+        const departamentElement = document.createElement('li');
+        const linkElement = document.createElement('a');
+
+        departamentElement.className = 'nav-item';
+        linkElement.className = 'nav-link';
+
+        linkElement.setAttribute('href', location.origin + '/studyManager');
+        linkElement.textContent = 'Jefatura';
+
+        departamentElement.insertAdjacentElement('beforeend', linkElement);
+
+        userNavbar.insertAdjacentElement('beforeend', departamentElement);
+
+        document.querySelector('#teachersName').textContent = userData.name.charAt(0).toUpperCase() + userData.name.slice(1);
+    }
 }
 
 function logoutUser(event) {
