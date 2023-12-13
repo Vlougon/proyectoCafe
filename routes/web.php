@@ -21,16 +21,25 @@ Route::get('teacherSheets', function () {
     return view('html.teacherSheets');
 })->middleware('auth');
 
-Route::get('teacherSheets/{id}', function (string $id) {
-    return view('html.teacherSheets');
+Route::get('teacherSheets/{id}', function ($id) {
+    if (ctype_digit($id)) {
+        return view('html.teacherSheets');
+    } else {
+        return back();
+    }
 })->middleware('auth')->middleware('can:viewDepartment,App\Models\User');
+
 
 Route::get('departament', function () {
     return view('html.departament');
 })->middleware('auth')->middleware('can:viewDepartment,App\Models\User');
 
-Route::get('departament/{id}', function (string $id) {
-    return view('html.departament');
+Route::get('departament/{id}', function ($id) {
+    if (ctype_digit($id)) {
+        return view('html.departament');
+    } else {
+        return back();
+    }
 })->middleware('auth')->middleware('can:viewStudy,App\Models\User');
 
 Route::get('studyManager', function () {
