@@ -73,7 +73,7 @@ function loadUserNavBarButtons() {
     aClassrooms.className = 'nav-link';
 
     aSchedule.setAttribute('href', location.origin + '/teacherSheets');
-    aClassrooms.setAttribute('href', '#');
+    aClassrooms.setAttribute('href', location.origin + '/classrooms');
     aSchedule.textContent = 'Mi Horario';
     aClassrooms.textContent = 'Ver Aulas';
 

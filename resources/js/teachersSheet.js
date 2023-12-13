@@ -553,7 +553,7 @@ function loadAddButton() {
 
     addButton.setAttribute('type', 'button');
     addButton.className = 'btn btn-success';
-    addButton.textContent = 'Agregar Fila';
+    addButton.textContent = 'Agregar Módulo';
 
     addButton.addEventListener('click', addTableRow);
 
@@ -565,7 +565,7 @@ function loadRemoveButton() {
 
     removeButton.setAttribute('type', 'button');
     removeButton.className = 'btn btn-danger';
-    removeButton.textContent = 'Eliminar Última Fila';
+    removeButton.textContent = 'Eliminar Último Módulo';
 
     removeButton.addEventListener('click', removeTableRow);
 
