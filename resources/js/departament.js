@@ -61,7 +61,7 @@ function CambiarTitulo() {
 function ComprobarDepartamentoID(usuariospordepartamento) {
     // console.log(userData.departamento_id); //&& user.schedule_status == 'send'
     for (let user of usuariospordepartamento) {
-        if (user.departamento_id.id === userData.departamento_id.id && user.id !== userData.id && user.schedule_status === 'sent') {
+        if (user.departamento_id.id === userData.departamento_id.id && user.schedule_status === 'sent') {
             CrearCardUser(user);
         }
     }
@@ -144,7 +144,7 @@ function loadUserNavBarButtons() {
 
     userNavbar.insertAdjacentElement('beforeend', liElement);
 
-    document.querySelector('#teachersName').textContent = userData.name;
+    document.querySelector('#teachersName').textContent = userData.name.charAt(0).toUpperCase() + userData.name.slice(1);
     document.querySelector('title').textContent += ' ' + userData.departamento_id.name;
 }
 
