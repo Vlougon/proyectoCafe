@@ -963,5 +963,28 @@ function readSelectedElement(event) {
         }
 
         window.speechSynthesis.speak(message);
+
+    } else if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+        window.speechSynthesis.cancel();
+
+        let message = new SpeechSynthesisUtterance();
+
+        message.lang = 'es-ES';
+
+        switch (document.activeElement.tagName) {
+            case 'SELECT':
+
+                if (document.activeElement.id.includes('Modules')) {
+                    message.text += 'El módulo seleccionado es ' + document.activeElement.selectedOptions[0].value;
+                } else if (document.activeElement.id.includes('Hours')) {
+                    message.text += 'La distribución semanal seleccionada es ' + document.activeElement.selectedOptions[0].textContent;
+                } else if (document.activeElement.id.includes('Classes')) {
+                    message.text += 'El aula seleccionada es ' + document.activeElement.selectedOptions[0].textContent;
+                }
+
+                window.speechSynthesis.speak(message);
+
+                break;
+        }
     }
 }
