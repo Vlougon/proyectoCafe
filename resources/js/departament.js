@@ -33,27 +33,13 @@ logoutForm.addEventListener('submit', logoutUser);
 async function CargarUsuarios() {
 
     if (!isNaN(parseInt(location.href.charAt(location.href.length - 1)))) {
-        await fetch(location.origin + '/api/V1/departamentos/' + parseInt(location.href.charAt(location.href.length - 1)), {
-            method: 'GET',
-            mode: 'cors',
-            cache: 'no-cache',
-            credentials: 'same-origin',
-            headers: {
-                Authorization: 'Bearer ' + token,
-                Accept: 'application/json',
-            },
-            redirect: 'follow',
-            referrerPolicy: 'no-referrer'
-        })
-            .then(respuesta => respuesta.json())
-            .then(datos => currentDepartment = datos.data)
+        currentDepartment = parseInt(location.href.charAt(location.href.length - 1));
     } else {
-        currentDepartment = userData.departamento_id;
+        currentDepartment = userData.departamento_id.id;
     }
 
-    loadUserNavBarButtons();
-
-    await fetch(location.origin + '/api/V1/users', {
+    
+    await fetch(location.origin + '/api/V1/departamento/' + currentDepartment, {
         method: 'GET',
         mode: 'cors',
         cache: 'no-cache',
@@ -65,17 +51,23 @@ async function CargarUsuarios() {
         redirect: 'follow',
         referrerPolicy: 'no-referrer'
     })
-        .then(respuesta => respuesta.json())
-        .then(datos => usuariospordepartamento = datos.data)
-
-
+    .then(respuesta => respuesta.json())
+        .then((datos) => {
+            usuariospordepartamento = datos.data;
+            currentDepartment = datos.departamento;
+        })
+    
+    console.log(currentDepartment);
+    console.log(usuariospordepartamento);
+    
+    
+    loadUserNavBarButtons();
     CambiarTitulo();
-    ComprobarDepartamentoID(usuariospordepartamento);
     checkDepartments();
 }
 
 function CambiarTitulo() {
-    header.textContent = `Departamento de ${currentDepartment.name}`;
+    header.textContent = `Departamento de ${currentDepartment[0].name}`;
 
     if (isNaN(parseInt(location.href.charAt(location.href.length - 1)))) {
         const finishButton = document.createElement('button');
@@ -91,27 +83,26 @@ function CambiarTitulo() {
 
 
 function checkDepartments() {
-    const numberOfDepartments = document.querySelectorAll('#departmentContainer div').length;
 
-    if (numberOfDepartments < 1) {
+    if (usuariospordepartamento.length < 1) {
         const noFoundText = document.createElement('h1');
 
         noFoundText.textContent = '¡No se ha encontrado ningún horario! \uD83D\uDCCE';
 
         document.querySelector('#departmentContainer').insertAdjacentElement('beforeend', noFoundText);
+    } else {
+        CardsForUsers();
     }
 }
 
 
 //Queremos filtar por Departamento_id y si su schedule_status=send
-function ComprobarDepartamentoID(usuariospordepartamento) {
-    const id = isNaN(parseInt(location.href.charAt(location.href.length - 1))) ? currentDepartment.id : parseInt(location.href.charAt(location.href.length - 1));
-
+function CardsForUsers() {
     // console.log(userData.departamento_id); //&& user.schedule_status == 'send'
     for (let user of usuariospordepartamento) {
-        if (user.departamento_id.id === id && user.schedule_status === 'sent') {
+        console.log(user);
             CrearCardUser(user);
-        }
+        
     }
 }
 
@@ -141,7 +132,7 @@ function CrearCardUser(usuario) {
     cardTitle.textContent = `Profesor: ${usuario.name.charAt(0).toUpperCase() + usuario.name.slice(1)}`;
 
     const especialidad = document.createElement("p");
-    especialidad.textContent = `Especialidad: ${usuario.especialidad_id.name}`;
+    especialidad.textContent = `Especialidad: ${usuario.nombre_especialidad}`;
     const horas = document.createElement("p");
     horas.textContent = `Horas Totales: ${usuario.total_hours}`;
 
@@ -193,7 +184,7 @@ function loadUserNavBarButtons() {
     userNavbar.insertAdjacentElement('beforeend', liElement);
 
     document.querySelector('#teachersName').textContent = userData.name.charAt(0).toUpperCase() + userData.name.slice(1);
-    document.querySelector('title').textContent += ' ' + currentDepartment.name;
+    document.querySelector('title').textContent += ' ' + currentDepartment[0].name;
 
     if (!isNaN(location.href.charAt(location.href.length - 1))) {
         const departamentElement = document.createElement('li');
