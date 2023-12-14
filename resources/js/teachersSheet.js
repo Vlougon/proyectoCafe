@@ -26,11 +26,10 @@ let userData = sessionStorage.getItem('user') ? JSON.parse(sessionStorage.getIte
 
 window.addEventListener('load', setLocalData);
 window.addEventListener('load', loadFirstContentPage);
+window.addEventListener('keyup', readSelectedElement);
 
 profileBox.addEventListener('click', displayLogout);
-
 pdfButton.addEventListener('click', htmlToPDF);
-
 logoutForm.addEventListener('submit', logoutUser);
 
 async function loadFirstContentPage() {
@@ -275,6 +274,7 @@ function setMainSelectors() {
         }
 
         document.querySelector('#teacherModules' + rowsNumber).addEventListener('change', loadModuleData);
+        document.querySelector('#teacherModules' + rowsNumber).addEventListener('menu', readSelectedElement);
     }
 }
 
@@ -580,6 +580,7 @@ function loadAddButton() {
     const addButton = document.createElement('button');
 
     addButton.setAttribute('type', 'button');
+    addButton.setAttribute('name', 'Botón para agregar un nuevo Módulo');
     addButton.className = 'btn btn-success';
     addButton.textContent = 'Agregar Módulo';
 
@@ -592,6 +593,7 @@ function loadRemoveButton() {
     const removeButton = document.createElement('button');
 
     removeButton.setAttribute('type', 'button');
+    removeButton.setAttribute('name', 'Botón para eliminar el último módulo añadido');
     removeButton.className = 'btn btn-danger';
     removeButton.textContent = 'Eliminar Último Módulo';
 
@@ -604,6 +606,7 @@ function loadSaveButton() {
     const saveButton = document.createElement('button');
 
     saveButton.setAttribute('type', 'button');
+    saveButton.setAttribute('name', 'Botón para guardar los cambios realizados');
     saveButton.className = 'btn btn-primary';
     saveButton.textContent = 'Guardar Cambios';
 
@@ -615,7 +618,9 @@ function loadSaveButton() {
 function loadSendButton() {
     const sendButton = document.createElement('button');
 
+    sendButton.setAttribute('id', 'sendButton');
     sendButton.setAttribute('type', 'button');
+    sendButton.setAttribute('name', 'Botón para enviar el horario a revisión');
     sendButton.className = 'btn btn-dark';
     sendButton.textContent = 'Enviar Horario';
 
@@ -627,7 +632,9 @@ function loadSendButton() {
 function loadEndButton() {
     const endButton = document.createElement('button');
 
+    endButton.setAttribute('id', 'endButton');
     endButton.setAttribute('type', 'button');
+    endButton.setAttribute('name', 'Botón para finalizar el horario');
     endButton.className = 'btn btn-success';
     endButton.textContent = 'Finalizar Horario';
 
@@ -640,6 +647,7 @@ function loadDiscardButton() {
     const discardButton = document.createElement('button');
 
     discardButton.setAttribute('type', 'button');
+    discardButton.setAttribute('name', 'Botón para descartar el horario');
     discardButton.className = 'btn btn-danger';
     discardButton.textContent = 'Descartar Horario';
 
@@ -842,6 +850,8 @@ function updateWeeklyDistribution(totalHours, elementID) {
         wdOption.setAttribute('id', distribution.split(' ').join('') + '/' + elementID);
         wdOption.textContent = distribution;
 
+        wdOption.addEventListener('keyup', readSelectedElement);
+
         document.querySelector('#teacherHoursWeek' + elementID).insertAdjacentElement('beforeend', wdOption);
     }
 
@@ -892,5 +902,66 @@ function findDistribution(hours, totalHours, i, currentDistribution, weeklyDistr
 
         // Remove the last element from the current array, to avoid duplicates
         currentDistribution.pop();
+    }
+}
+
+
+
+/* ############################################################################################################################### */
+/* ################################################### ACCESSIBILITY FUNCTIONS ################################################### */
+/* ############################################################################################################################### */
+function readSelectedElement(event) {
+    if (event.key === 'Tab') {
+        window.speechSynthesis.cancel();
+
+        let message = new SpeechSynthesisUtterance();
+
+        message.lang = 'es-ES';
+
+        switch (document.activeElement.tagName) {
+            case 'SELECT':
+
+                if (document.activeElement.id.includes('Modules')) {
+                    message.text += 'El módulo seleccionado es ' + document.activeElement.selectedOptions[0].value;
+                } else if (document.activeElement.id.includes('Hours')) {
+                    message.text += 'La distribución semanal seleccionada es ' + document.activeElement.selectedOptions[0].textContent;
+                } else if (document.activeElement.id.includes('Classes')) {
+                    message.text += 'El aula seleccionada es ' + document.activeElement.selectedOptions[0].textContent;
+                }
+
+                break;
+
+            case 'BUTTON':
+                message.text += document.activeElement.getAttribute('name');
+
+                if (document.activeElement.id === 'sendButton') {
+                    message.text += '... El Total de Horas de los Módulos Seleccionados es ' + totalHoursCell.textContent;
+                }
+
+                if (document.activeElement.id === 'endButton') {
+                    message.text += '... El Total de Horas de los Módulos Seleccionados por el profesor' + userData.name + ' es ' + totalHoursCell.textContent;
+                }
+
+                break;
+
+            case 'INPUT':
+                message.text += document.activeElement.getAttribute('value');
+                break;
+
+            case 'OPTION':
+                message.text += document.activeElement.getAttribute('value');
+                break;
+
+            case 'TEXTAREA':
+                message.text += 'Observaciones escritas por ti: ';
+                message.text += document.activeElement.value !== null ? document.activeElement.value : 'Nada aún.';
+                break;
+
+            default:
+                message.text += document.activeElement.textContent;
+                break;
+        }
+
+        window.speechSynthesis.speak(message);
     }
 }

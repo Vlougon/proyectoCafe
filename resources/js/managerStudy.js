@@ -7,6 +7,7 @@ const token = sessionStorage.getItem('user') ? JSON.parse(sessionStorage.getItem
 let userData = sessionStorage.getItem('user') ? JSON.parse(sessionStorage.getItem('user')).data : null;
 
 window.addEventListener('load', loadDepartments);
+window.addEventListener('keyup', readSelectedElement);
 
 profileBox.addEventListener('click', displayLogout);
 logoutForm.addEventListener('submit', logoutUser);
@@ -121,5 +122,36 @@ function displayLogout() {
         document.querySelector('#logoutForm').className = 'showed';
     } else {
         document.querySelector('#logoutForm').className = 'blindfolded';
+    }
+}
+
+/* ############################################################################################################################### */
+/* ################################################### ACCESSIBILITY FUNCTIONS ################################################### */
+/* ############################################################################################################################### */
+function readSelectedElement(event) {
+    if (event.key === 'Tab') {
+        window.speechSynthesis.cancel();
+
+        let message = new SpeechSynthesisUtterance();
+
+        message.lang = 'es-ES';
+
+        switch (document.activeElement.tagName) {
+            case 'INPUT':
+                message.text += document.activeElement.value;
+                break;
+
+            default:
+
+                if (document.activeElement.classList.contains('btn')) {
+                    message.text += 'Ver departamento de ' + document.activeElement.previousElementSibling.querySelector('h2').textContent;
+                } else {
+                    message.text += document.activeElement.textContent;
+                }
+
+                break;
+        }
+
+        window.speechSynthesis.speak(message);
     }
 }

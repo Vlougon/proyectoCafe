@@ -24,6 +24,7 @@ let userData = sessionStorage.getItem('user') ? JSON.parse(sessionStorage.getIte
 
 //Para que al cargar meta los usuarios
 window.addEventListener('load', CargarUsuarios);
+window.addEventListener('keyup', readSelectedElement);
 
 profileBox.addEventListener('click', displayLogout);
 logoutForm.addEventListener('submit', logoutUser);
@@ -247,5 +248,46 @@ function displayLogout() {
         document.querySelector('#logoutForm').className = 'showed';
     } else {
         document.querySelector('#logoutForm').className = 'blindfolded';
+    }
+}
+
+
+
+/* ############################################################################################################################### */
+/* ################################################### ACCESSIBILITY FUNCTIONS ################################################### */
+/* ############################################################################################################################### */
+function readSelectedElement(event) {
+    if (event.key === 'Tab') {
+        window.speechSynthesis.cancel();
+
+        let message = new SpeechSynthesisUtterance();
+
+        message.lang = 'es-ES';
+
+        switch (document.activeElement.tagName) {
+            case 'INPUT':
+                message.text += document.activeElement.getAttribute('value');
+                break;
+
+            case 'BUTTON':
+                message.text += document.activeElement.textContent;
+                break;
+
+            default:
+                message.text += document.activeElement.textContent;
+
+                if (document.activeElement.classList.contains('btn')) {
+                    const professorName = document.activeElement.parentElement.previousElementSibling.querySelector('h5').textContent.split(' ')[1];
+                    const totalHoursText = document.activeElement.parentElement.previousElementSibling.querySelectorAll('p')[1].textContent;
+                    const totalHours = totalHoursText.charAt(totalHoursText.length - 1);
+                    
+                    message.text += ' Horario de ' + professorName + '...';
+                    message.text += 'Quien tiene un total de ' + totalHours + ' horas asignadas.'
+                }
+
+                break;
+        }
+
+        window.speechSynthesis.speak(message);
     }
 }

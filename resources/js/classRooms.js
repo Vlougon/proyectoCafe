@@ -9,6 +9,7 @@ const token = sessionStorage.getItem('user') ? JSON.parse(sessionStorage.getItem
 let userData = sessionStorage.getItem('user') ? JSON.parse(sessionStorage.getItem('user')).data : null;
 
 window.addEventListener('load', loadClassroomsLoad);
+window.addEventListener('keyup', readSelectedElement);
 
 profileBox.addEventListener('click', displayLogout);
 logoutForm.addEventListener('submit', logoutUser);
@@ -36,6 +37,8 @@ async function loadClassroomsLoad() {
 
 function showTime() {
     if (classrooms.length >= 1) {
+        let index = 1;
+
         for (const classr of classrooms) {
 
             const tableRow = document.createElement('tr');
@@ -44,6 +47,7 @@ function showTime() {
             const turnCell = document.createElement('td');
             const limitCell = document.createElement('td');
 
+            tableRow.setAttribute('tabindex', index);
             classroomCell.textContent = classr.name;
             classroomCell.setAttribute('scope', 'row');
             scheduleLoadCell.textContent = classr.scheudleLoad;
@@ -74,6 +78,7 @@ function showTime() {
                 eveningTable.insertAdjacentElement('beforeend', tableRow);
             }
 
+            index++;
         }
     }
 }
@@ -138,5 +143,57 @@ function displayLogout() {
         document.querySelector('#logoutForm').className = 'showed';
     } else {
         document.querySelector('#logoutForm').className = 'blindfolded';
+    }
+}
+
+
+
+/* ############################################################################################################################### */
+/* ################################################### ACCESSIBILITY FUNCTIONS ################################################### */
+/* ############################################################################################################################### */
+function readSelectedElement(event) {
+    if (event.key === 'Tab') {
+        window.speechSynthesis.cancel();
+
+        let message = new SpeechSynthesisUtterance();
+
+        message.lang = 'es-ES';
+
+        switch (document.activeElement.tagName) {
+            case 'INPUT':
+                message.text += document.activeElement.value;
+                break;
+
+            case 'BUTTON':
+                message.text += document.activeElement.getAttribute('name');
+                break;
+
+            case 'TR':
+                const cols = document.activeElement.querySelectorAll('td');
+
+                for (const col of cols) {
+                    if (col.textContent === '\u2713') {
+                        message.text += 'No supera el límite de 30 horas;';
+                    } else if (col.textContent === 'X') {
+                        message.text += 'Supera el límite de 30 horas;';
+                    } else if (col.textContent === 'M') {
+                        message.text += 'Se usa en el Turno de Mañana;';
+                    } else if (col.textContent === 'T') {
+                        message.text += 'Se usa en el Turno de Tarde;';
+                    } else if (!isNaN(parseInt(col.textContent))) {
+                        message.text += 'La Carga Horaria del Aula es de ' + col.textContent + ' horas;'
+                    } else {
+                        message.text += 'Se ha seleccionado el aula' + col.textContent + ';';
+                    }
+                }
+
+                break;
+
+            default:
+                message.text += document.activeElement.textContent;
+                break;
+        }
+
+        window.speechSynthesis.speak(message);
     }
 }

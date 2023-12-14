@@ -62,7 +62,7 @@
 
                 <div class="mainButtonsBox" id="principalButtonsBox">
                     <div class="w-100"></div>
-                    <button id="downloadPDF" type="button" class="btn btn-warning">Descargar PDF</button>
+                    <button id="downloadPDF" type="button" class="btn btn-warning" name="Botón para Descargar el Horario en PDF">Descargar PDF</button>
                 </div>
 
                 <label for="teacherObservations">Observaciones: </label>
