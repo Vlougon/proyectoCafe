@@ -70,14 +70,34 @@ async function CargarUsuarios() {
 
     CambiarTitulo();
     ComprobarDepartamentoID(usuariospordepartamento);
-
+    checkDepartments();
 }
 
 function CambiarTitulo() {
     header.textContent = `Departamento de ${currentDepartment.name}`;
 
-    if (!isNaN(parseInt(location.href.charAt(location.href.length - 1)))) {
-        finishSchedules.remove();
+    if (isNaN(parseInt(location.href.charAt(location.href.length - 1)))) {
+        const finishButton = document.createElement('button');
+
+        finishButton.setAttribute('id', 'finishSchedules');
+        finishButton.setAttribute('type', 'button');
+        finishButton.className = 'btn btn-dark';
+        finishButton.textContent = 'Finalizar Departamentos';
+
+        document.querySelector('#finishBox').insertAdjacentElement('beforeend', finishButton);
+    }
+}
+
+
+function checkDepartments() {
+    const numberOfDepartments = document.querySelectorAll('#departmentContainer div').length;
+
+    if (numberOfDepartments < 1) {
+        const noFoundText = document.createElement('h1');
+
+        noFoundText.textContent = '¡No se ha encontrado ningún horario! \uD83D\uDCCE';
+
+        document.querySelector('#departmentContainer').insertAdjacentElement('beforeend', noFoundText);
     }
 }
 

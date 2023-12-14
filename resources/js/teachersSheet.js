@@ -176,7 +176,6 @@ function setNavBArButtons() {
     const navbarLinkEelement = document.createElement('a');
 
     navbarLiElement.className = 'nav-item';
-
     navbarLinkEelement.className = 'nav-link';
 
     if (userData && isNaN(parseInt(location.href.split('/').pop()))) {
@@ -202,6 +201,17 @@ function setNavBArButtons() {
             navbarLinkEelement.textContent = 'Mi Departamento';
 
         } else if (previosUserData && previosUserData.rol === 'study_manager') {
+            const managerButton = document.createElement('li');
+            const managerLink = document.createElement('a');
+
+            managerButton.className = 'nav-item';
+            managerLink.className = 'nav-link';
+
+            managerLink.setAttribute('href', location.origin + '/departament/' + userData.departamento_id.id);
+            managerLink.textContent = 'Departamento de ' + userData.departamento_id.name;
+
+            managerButton.insertAdjacentElement('beforeend', managerLink);
+            document.querySelector('#teachersNavbar ul').insertAdjacentElement('beforeend', managerButton);
 
             navbarLinkEelement.setAttribute('href', location.origin + '/studyManager');
             navbarLinkEelement.textContent = 'Jefatura';
@@ -209,7 +219,6 @@ function setNavBArButtons() {
     }
 
     navbarLiElement.insertAdjacentElement('beforeend', navbarLinkEelement);
-
     document.querySelector('#teachersNavbar ul').insertAdjacentElement('beforeend', navbarLiElement);
 }
 

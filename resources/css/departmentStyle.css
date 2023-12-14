@@ -93,6 +93,10 @@ footer img {
     text-align: start;
 }
 
+#departmentContainer {
+    text-align: center;
+}
+
 #finishSchedules {
     display: block;
     margin: 0 auto;

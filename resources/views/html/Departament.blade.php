@@ -29,8 +29,7 @@
 
             </div>
 
-            <div>
-                <button id="finishSchedules" type="button" class="btn btn-dark">Finalizar Departamentos</button>
+            <div id="finishBox">
             </div>
         </div>
     </main>
