@@ -135,6 +135,7 @@ footer img {
     padding: 13px;
     border-radius: 7px;
     border: 1px solid black;
+    text-align: start;
 }
 
 .departmentCard p {

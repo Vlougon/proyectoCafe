@@ -150,7 +150,6 @@ td.selectCell select {
     border: none;
     border-radius: 0;
     text-align: center;
-    appearance: none;
 }
 
 .blindfolded {
