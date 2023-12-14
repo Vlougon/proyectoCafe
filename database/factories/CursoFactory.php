@@ -16,10 +16,8 @@ class CursoFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->sentence(1),
-            'group' => $this->faker->randomElement(['1º', '2º']),
-            'turn' => $this->faker->randomElement(['morning', 'evening']),
-            'year' => $this->faker->year,
+            'course' => $this->faker->sentence(2),
+            'turn' => $this->faker->randomElement(['M', 'T']),
         ];
     }
 }
