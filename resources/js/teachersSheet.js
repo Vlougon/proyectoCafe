@@ -103,6 +103,7 @@ async function loadFirstContentPage() {
 
     } else {
         previosUserData = userData;
+        document.querySelector('#leyendBox').remove();
 
         await fetch(location.origin + '/api/V1/users/' + parseInt(location.href.split('/').pop()), {
             method: "GET",
@@ -328,7 +329,6 @@ function updateUserTotalHours(status = 'started') {
         };
     }
 
-
     let formBody = [];
     for (const property in data) {
         var encodedKey = encodeURIComponent(property);
@@ -345,12 +345,39 @@ function updateUserTotalHours(status = 'started') {
             'Accept': 'application/json',
         },
         body: formBody,
-    });
+    })
+        .then(respuesta => respuesta.json())
+        .then((datos) => {
+            if (datos.status === 'success') {
+
+                if (status !== 'started') {
+                    generateFeedBack(datos.status, datos.message);
+                }
+
+            } else {
+
+                switch (status) {
+                    case 'started':
+                        generateFeedBack(datos.status, '¡Fallo al Guardar los datos del Profesor!');
+                        break;
+                    case 'sent':
+                        generateFeedBack(datos.status, '¡Fallo al Enviar el horario del Profesor!');
+                        break;
+                    case 'finalized':
+                        generateFeedBack(datos.status, '¡Fallo al Finalizar el horario del Profesor!');
+                        break;
+                    case 'discardted':
+                        generateFeedBack(datos.status, '¡Fallo al Descartar el horario del Profesor!');
+                        break;
+                }
+            }
+        });
 }
 
 
 async function updateUserModules() {
     if (selectedModules.length >= 1) {
+        let failed = false;
 
         for (const descarted of modules) {
 
@@ -403,9 +430,20 @@ async function updateUserModules() {
                     'Accept': 'application/json',
                 },
                 body: formBody,
-            });
+            })
+                .then(respuesta => respuesta.json())
+                .then((datos) => {
+                    if (datos.status !== 'success') {
+                        failed = true;
+                    }
+                });
         }
 
+        if (!failed) {
+            generateFeedBack('success', '¡Horario Actualizado Exitosamente!');
+        } else {
+            generateFeedBack('failed', 'Erorr al actualizar el Horario!');
+        }
     }
 }
 
@@ -758,21 +796,19 @@ function finalizeSchedule() {
     let ruta = location.href; //devuelve la ruta completa
     let userId = parseInt(ruta.charAt(ruta.length - 1));//Esto nol devuleve el id pero como string
 
-
     if (Number.isInteger(userId)) {
-
-        console.log('entero');
-        // if (userId) {
-        //     updateUserTotalHours('finalized')
-        // }
+        updateUserTotalHours('finalized')
     }
-
-
-
 }
 
 function discardScheudle() {
-    //if para verificar si le esta llegando id del user por url y cambiar con updateUserTotalHours('descarted')
+    //if para id en url y cambiar con updateUserTotalHours('finalized')
+    let ruta = location.href; //devuelve la ruta completa
+    let userId = parseInt(ruta.charAt(ruta.length - 1));//Esto nol devuleve el id pero como string
+
+    if (Number.isInteger(userId)) {
+        updateUserTotalHours('discardted')
+    }
 }
 
 
@@ -819,6 +855,33 @@ function htmlToPDF() {
             doc.save('Horario de ' + userData.name + '.pdf');
         }
     });
+}
+
+
+
+/* ###################################################################################################################### */
+/* ################################################### FLASH MESSAGES ################################################### */
+/* ###################################################################################################################### */
+function generateFeedBack(status, message) {
+    const messageContainer = document.createElement('div');
+    const messageText = document.createElement('strong');
+    const closeButton = document.createElement('button');
+    const messageType = status === 'success' ? 'success' : 'danger';
+
+    messageContainer.className = `alert alert-${messageType} alert-dismissible fade show position-absolute`;
+    messageContainer.setAttribute('role', 'alert');
+
+    messageText.textContent = message;
+
+    closeButton.className = 'btn-close';
+    closeButton.setAttribute('type', 'button');
+    closeButton.setAttribute('data-bs-dismiss', 'alert');
+    closeButton.setAttribute('aria-label', 'Close');
+
+    messageContainer.insertAdjacentElement('beforeend', messageText);
+    messageContainer.insertAdjacentElement('beforeend', closeButton);
+
+    document.querySelector('main').insertAdjacentElement('beforeend', messageContainer);
 }
 
 

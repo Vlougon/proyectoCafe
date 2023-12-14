@@ -226,6 +226,13 @@ td.selectCell select {
     margin: 10px auto;
 }
 
+.alert {
+    width: 80%;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
 @media (max-width: 767px) {
     #leyendBox {
         display: block;
