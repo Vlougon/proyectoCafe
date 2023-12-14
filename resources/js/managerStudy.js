@@ -48,7 +48,7 @@ function showDepartmentCards() {
         responsiveBox.className = 'd-block d-sm-flex justify-content-between';
         departmentName.textContent = department.name;
         linkToDepartment.setAttribute('href', location.origin + '/departament/' + department.id);
-        linkToDepartment.className = 'btn btn-info';
+        linkToDepartment.className = 'btn btn-primary';
         linkToDepartment.textContent = 'Ver';
 
         nameBox.insertAdjacentElement('beforeend', departmentName);
