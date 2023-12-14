@@ -215,7 +215,32 @@ td.selectCell select {
     color: #4b0000;
 }
 
+#leyendBox {
+    display: block;
+    width: fit-content;
+    max-width: 50%;
+    margin: 10px auto;
+}
+
+#leyendBox div {
+    margin: 10px auto;
+}
+
+.alert {
+    width: 80%;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
 @media (max-width: 767px) {
+    #leyendBox {
+        display: block;
+        width: fit-content;
+        max-width: 90%;
+        margin: 10px auto;
+    }
+
     .nav-item {
         max-width: fit-content;
         padding: 8px;

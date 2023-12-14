@@ -87,7 +87,7 @@ class LoginRegisterController extends Controller
 
         $response = [
             'status' => 'success',
-            'message' => 'User is logged in successfully.',
+            'message' => '¡Inicio de Sesión Exitoso!',
             'data' => $data,
         ];
 
@@ -105,7 +105,7 @@ class LoginRegisterController extends Controller
         auth()->user()->tokens()->delete();
         return response()->json([
             'status' => 'success',
-            'message' => 'User is logged out successfully'
+            'message' => '¡Cierre de Sesión Exitoso!'
         ], 200);
     }
 }

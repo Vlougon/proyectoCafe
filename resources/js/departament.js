@@ -38,7 +38,7 @@ async function CargarUsuarios() {
         currentDepartment = userData.departamento_id.id;
     }
 
-    
+
     await fetch(location.origin + '/api/V1/departamento/' + currentDepartment, {
         method: 'GET',
         mode: 'cors',
@@ -51,16 +51,12 @@ async function CargarUsuarios() {
         redirect: 'follow',
         referrerPolicy: 'no-referrer'
     })
-    .then(respuesta => respuesta.json())
+        .then(respuesta => respuesta.json())
         .then((datos) => {
             usuariospordepartamento = datos.data;
             currentDepartment = datos.departamento;
         })
-    
-    console.log(currentDepartment);
-    console.log(usuariospordepartamento);
-    
-    
+
     loadUserNavBarButtons();
     CambiarTitulo();
     checkDepartments();
@@ -100,9 +96,7 @@ function checkDepartments() {
 function CardsForUsers() {
     // console.log(userData.departamento_id); //&& user.schedule_status == 'send'
     for (let user of usuariospordepartamento) {
-        console.log(user);
-            CrearCardUser(user);
-        
+        CrearCardUser(user);
     }
 }
 
@@ -271,7 +265,7 @@ function readSelectedElement(event) {
                     const professorName = document.activeElement.parentElement.previousElementSibling.querySelector('h5').textContent.split(' ')[1];
                     const totalHoursText = document.activeElement.parentElement.previousElementSibling.querySelectorAll('p')[1].textContent;
                     const totalHours = totalHoursText.charAt(totalHoursText.length - 1);
-                    
+
                     message.text += ' Horario de ' + professorName + '...';
                     message.text += 'Quien tiene un total de ' + totalHours + ' horas asignadas.'
                 }
