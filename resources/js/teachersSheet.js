@@ -91,6 +91,8 @@ async function loadFirstContentPage() {
                 updateSelectedModuels(module, rowsNumber);
             }
 
+            loadObservations();
+
         } else {
             addTableRow();
         }
@@ -152,6 +154,8 @@ async function loadFirstContentPage() {
             addTableRow();
             setModuleData(module.curso_id.turn, module.curso_id.course, module.code, module.hours_per_week, module.weekly_distribution, module.classroom);
         }
+
+        loadObservations();
 
         if (previosUserData && previosUserData.rol === 'head_of_department') {
             loadEndButton();
@@ -500,6 +504,21 @@ function setModuleData(turn, academicYear, moduleCode, moduelHours, weeklyDistri
     }
 
     updateTotalHours();
+}
+
+
+function loadObservations() {
+    let observations = modules.filter(modulo => modulo.user_id !== null);
+
+    observations = observations.length >= 1 ? observations[0].user_id.observatioins : null;
+
+    if (observations && observations !== 'null') {
+        document.querySelector('#teacherObservations').value = observations;
+    }
+
+    if (!isNaN(parseInt(location.href.split('/').pop()))) {
+        document.querySelector('#teacherObservations').disabled = true;
+    }
 }
 
 
