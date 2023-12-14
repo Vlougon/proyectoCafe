@@ -30,11 +30,13 @@ function redirectToTeachersView(profesorEmail, professorPassword) {
             password: professorPassword,
         }),
     })
-        .then((respuesta) => respuesta.status === 200 ? respuesta.json() : '')
+        .then((respuesta) => respuesta.json())
         .then((datos) => {
 
             // Check if the user was able to login
             if (datos.status === "success") {
+
+                generateFeedBack(datos.status, datos.message);
 
                 // Get both the user data and it's token
                 const token = datos.data.token;
@@ -46,12 +48,42 @@ function redirectToTeachersView(profesorEmail, professorPassword) {
 
                 // Submit to login the user and sent him to the teacher's view
                 professorLogInForm.submit();
+
+            } else {
+                generateFeedBack(datos.status, datos.message);
             }
         })
 }
 
 function setFormAction() {
     professorLogInForm.setAttribute('action', location.origin + '/login');
+}
+
+
+
+/* ###################################################################################################################### */
+/* ################################################### FLASH MESSAGES ################################################### */
+/* ###################################################################################################################### */
+function generateFeedBack(status, message) {
+    const messageContainer = document.createElement('div');
+    const messageText = document.createElement('strong');
+    const closeButton = document.createElement('button');
+    const messageType = status === 'success' ? 'success' : 'danger';
+
+    messageContainer.className = `alert alert-${messageType} alert-dismissible fade show position-absolute`;
+    messageContainer.setAttribute('role', 'alert');
+
+    messageText.textContent = message;
+
+    closeButton.className = 'btn-close';
+    closeButton.setAttribute('type', 'button');
+    closeButton.setAttribute('data-bs-dismiss', 'alert');
+    closeButton.setAttribute('aria-label', 'Close');
+
+    messageContainer.insertAdjacentElement('beforeend', messageText);
+    messageContainer.insertAdjacentElement('beforeend', closeButton);
+
+    document.querySelector('main').insertAdjacentElement('beforeend', messageContainer);
 }
 
 

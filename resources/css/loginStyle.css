@@ -75,7 +75,7 @@ form p {
 
 input[type=email],
 input[type=password] {
-    padding: 10px 5px;
+    padding: 7.5px 5px;
     border-top-right-radius: 9px;
     border-bottom-right-radius: 9px;
 }
@@ -196,6 +196,11 @@ input::placeholder {
     border: none;
 }
 
+.alert {
+    width: 80%;
+    top: 5%;
+}
+
 /* #################################################################################################### */
 /* ####################################### EXTRA SMALL (MOBILE) ####################################### */
 /* #################################################################################################### */
@@ -208,6 +213,7 @@ input::placeholder {
     input[type=email],
     input[type=password] {
         width: 80%;
+        vertical-align: -1px;
     }
 
     input::placeholder {
@@ -236,6 +242,7 @@ input::placeholder {
     input[type=email],
     input[type=password] {
         width: 70%;
+        vertical-align: -1px;
     }
 
     input::placeholder {
@@ -279,8 +286,8 @@ input::placeholder {
         display: grid;
         grid-template-rows: 1fr;
         grid-template-columns: 2fr 1fr;
-        grid-template-areas: 
-        'form img';
+        grid-template-areas:
+            'form img';
         width: 60%;
     }
 
@@ -330,8 +337,8 @@ input::placeholder {
         display: grid;
         grid-template-rows: 1fr;
         grid-template-columns: 1fr 1fr;
-        grid-template-areas: 
-        'form img';
+        grid-template-areas:
+            'form img';
         width: 55%;
     }
 
@@ -381,8 +388,8 @@ input::placeholder {
         display: grid;
         grid-template-rows: 1fr;
         grid-template-columns: 1fr 1fr;
-        grid-template-areas: 
-        'form img';
+        grid-template-areas:
+            'form img';
         width: 45%;
     }
 
