@@ -369,26 +369,20 @@ function updateUserTotalHours(status = 'started') {
     })
         .then(respuesta => respuesta.json())
         .then((datos) => {
-            if (datos.status === 'success') {
-
-                if (status !== 'started') {
-                    generateFeedBack(datos.status, datos.message);
-                }
-
-            } else {
+            if (datos.status !== 'success') {
 
                 switch (status) {
                     case 'started':
-                        generateFeedBack(datos.status, '¡Fallo al Guardar los datos del Profesor!');
+                        generateFeedBack('danger', '¡Fallo al Guardar los datos del Profesor!');
                         break;
                     case 'sent':
-                        generateFeedBack(datos.status, '¡Fallo al Enviar el horario del Profesor!');
+                        generateFeedBack('danger', '¡Fallo al Enviar el horario del Profesor!');
                         break;
                     case 'finalized':
-                        generateFeedBack(datos.status, '¡Fallo al Finalizar el horario del Profesor!');
+                        generateFeedBack('danger', '¡Fallo al Finalizar el horario del Profesor!');
                         break;
                     case 'discardted':
-                        generateFeedBack(datos.status, '¡Fallo al Descartar el horario del Profesor!');
+                        generateFeedBack('danger', '¡Fallo al Descartar el horario del Profesor!');
                         break;
                 }
             }
@@ -465,7 +459,7 @@ async function updateUserModules() {
         if (!failed) {
             generateFeedBack('success', '¡Horario Actualizado Exitosamente!');
         } else {
-            generateFeedBack('failed', 'Erorr al actualizar el Horario!');
+            generateFeedBack('danger', 'Erorr al actualizar el Horario!');
         }
     }
 }
@@ -815,7 +809,19 @@ function saveScheduleData() {
 
 
 function sendScheduleForRevision() {
-    updateUserTotalHours('sent');
+
+    if (userData.schedule_status !== 'sent') {
+        updateUserTotalHours('sent');
+
+        if (parseInt(totalHoursCell.textContent) >= 17 || parseInt(totalHoursCell.textContent) <= 20) {
+            generateFeedBack('warning', '¡Se ha enviado el horario, pero no cumples con los requisitos de horas!');
+        } else {
+            generateFeedBack('success', '¡Se ha enviado el horario para revisión!');
+        }
+
+    } else {
+        generateFeedBack('warning', '¡Ya has enviado tu horario para revisión!');
+    }
 }
 
 
@@ -895,9 +901,8 @@ function generateFeedBack(status, message) {
     const messageContainer = document.createElement('div');
     const messageText = document.createElement('strong');
     const closeButton = document.createElement('button');
-    const messageType = status === 'success' ? 'success' : 'danger';
 
-    messageContainer.className = `alert alert-${messageType} alert-dismissible fade show position-absolute`;
+    messageContainer.className = `alert alert-${status} alert-dismissible fade show position-absolute`;
     messageContainer.setAttribute('role', 'alert');
 
     messageText.textContent = message;

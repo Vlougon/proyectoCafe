@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->enum('rol',['teacher', 'head_of_department', 'study_manager']);
+            $table->enum('rol',['teacher', 'head_of_department', 'study_manager', 'admin']);
             $table->tinyInteger('total_hours')->default(0);
             $table->string('schedule_status')->default("started");
             $table->text('observatioins')->nullable();

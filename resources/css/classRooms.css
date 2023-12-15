@@ -56,6 +56,10 @@ footer img {
     vertical-align: middle;
 }
 
+table tr {
+    border-bottom: 2px solid black;
+}
+
 #profileBox {
     background: none;
     padding: 5px;
