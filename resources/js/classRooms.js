@@ -5,6 +5,7 @@ const profileBox = document.querySelector('#profileBox');
 const morningTable = document.querySelector('#morningBody');
 const eveningTable = document.querySelector('#eveningBody');
 
+// Get loged user data and token
 const token = sessionStorage.getItem('user') ? JSON.parse(sessionStorage.getItem('user')).token : null;
 let userData = sessionStorage.getItem('user') ? JSON.parse(sessionStorage.getItem('user')).data : null;
 
@@ -17,6 +18,7 @@ logoutForm.addEventListener('submit', logoutUser);
 async function loadClassroomsLoad() {
     loadUserNavBarButtons();
 
+    // Fetch to get the schedule load of all the classroom
     await fetch(location.origin + '/api/V1/cargahorariaaulas', {
         method: 'GET',
         mode: 'cors',
@@ -39,6 +41,7 @@ function showTime() {
     if (classrooms.length >= 1) {
         let index = 1;
 
+        // For each classroom stored, we will add a new tr (table row) element
         for (const classr of classrooms) {
 
             const tableRow = document.createElement('tr');
@@ -72,6 +75,7 @@ function showTime() {
             tableRow.insertAdjacentElement('beforeend', turnCell);
             tableRow.insertAdjacentElement('beforeend', limitCell);
 
+            // Depending on it's turn, we'll choose if insert it on the morning or evening table
             if (classr.turn === 'M') {
                 morningTable.insertAdjacentElement('beforeend', tableRow);
             } else {
@@ -84,6 +88,7 @@ function showTime() {
 }
 
 function loadUserNavBarButtons() {
+    // We create and show the neccessary buttons for the study manager teacher
     const liSchedule = document.createElement('li');
     const liDepartments = document.createElement('li');
     const aSchedule = document.createElement('a');
@@ -108,6 +113,11 @@ function loadUserNavBarButtons() {
     document.querySelector('#teachersName').textContent = userData.name.charAt(0).toUpperCase() + userData.name.slice(1);
 }
 
+
+
+/* ######################################################################################################################## */
+/* ################################################### LOGOUT FUNCTIONS ################################################### */
+/* ######################################################################################################################## */
 function logoutUser(event) {
     event.preventDefault();
 
@@ -137,6 +147,7 @@ function logoutUser(event) {
             }
         });
 }
+
 
 function displayLogout() {
     if (document.querySelector('#logoutForm').className === 'blindfolded') {

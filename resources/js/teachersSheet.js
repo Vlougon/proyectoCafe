@@ -21,6 +21,7 @@ const logoutForm = document.querySelector('#logoutForm');
 const pdfButton = document.querySelector('#downloadPDF');
 const profileBox = document.querySelector('#profileBox');
 
+// Get loged user data and token
 const token = sessionStorage.getItem('user') ? JSON.parse(sessionStorage.getItem('user')).token : null;
 let userData = sessionStorage.getItem('user') ? JSON.parse(sessionStorage.getItem('user')).data : null;
 
@@ -33,6 +34,7 @@ pdfButton.addEventListener('click', htmlToPDF);
 logoutForm.addEventListener('submit', logoutUser);
 
 async function loadFirstContentPage() {
+    //Fetch to get all the classrooms by modules data
     await fetch(location.origin + '/api/V1/aulapormodulo', {
         method: "GET",
         mode: "cors",
@@ -54,6 +56,7 @@ async function loadFirstContentPage() {
 
         setNavBArButtons();
 
+        // Fetch to get all the modules
         await fetch(location.origin + '/api/V1/modulos', {
             method: "GET",
             mode: "cors",
@@ -78,7 +81,16 @@ async function loadFirstContentPage() {
 
                 return modules;
             });
+        /* 
+            With the last fetch data we've filtered the modules we use.
+            First we filter by the speciality id.
+            Then we see if there is any taken module by this teacher, depending on this:
+                1. If there is, we'll only get all that doesn't have a teacher associated yet 
+                or those associated with the current teacher.
+                2. On the other hand, only get all the modules available (null).
+        */
 
+        // If there is any module already taken by this user, we'll load it's information
         if (modules.some(modulo => modulo.user_id !== null && modulo.user_id.id === userData.id)) {
             const userModules = modules.filter(modulo => modulo.user_id !== null && modulo.user_id.id === userData.id);
 
@@ -105,6 +117,7 @@ async function loadFirstContentPage() {
         previosUserData = userData;
         document.querySelector('#leyendBox').remove();
 
+        // Fetch to retrieve the data from the specified user
         await fetch(location.origin + '/api/V1/users/' + parseInt(location.href.split('/').pop()), {
             method: "GET",
             mode: "cors",
@@ -123,6 +136,7 @@ async function loadFirstContentPage() {
         setUserData();
         setNavBArButtons();
 
+        // Fetch to get all the modules
         await fetch(location.origin + '/api/V1/modulos', {
             method: "GET",
             mode: "cors",
@@ -147,6 +161,7 @@ async function loadFirstContentPage() {
 
                 return modules;
             });
+        // Same Logic as before, but now we prepare the view to be read-only
 
         modules = modules.filter(modulo => modulo.user_id !== null && modulo.user_id.id === userData.id);
 
@@ -157,6 +172,7 @@ async function loadFirstContentPage() {
 
         loadObservations();
 
+        // Only the head of department teacher can end or discard a scheudle
         if (previosUserData && previosUserData.rol === 'head_of_department') {
             loadEndButton();
             loadDiscardButton();
@@ -190,6 +206,11 @@ function setNavBArButtons() {
             navbarLinkEelement.textContent = 'Vista de Estudio';
         }
 
+        if (userData.rol != 'teacher') {
+            navbarLiElement.insertAdjacentElement('beforeend', navbarLinkEelement);
+            document.querySelector('#teachersNavbar ul').insertAdjacentElement('beforeend', navbarLiElement);
+        }
+
     } else {
         // Delete the Profile elements
         profileBox.remove();
@@ -216,10 +237,10 @@ function setNavBArButtons() {
             navbarLinkEelement.setAttribute('href', location.origin + '/studyManager');
             navbarLinkEelement.textContent = 'Jefatura';
         }
-    }
 
-    navbarLiElement.insertAdjacentElement('beforeend', navbarLinkEelement);
-    document.querySelector('#teachersNavbar ul').insertAdjacentElement('beforeend', navbarLiElement);
+        navbarLiElement.insertAdjacentElement('beforeend', navbarLinkEelement);
+        document.querySelector('#teachersNavbar ul').insertAdjacentElement('beforeend', navbarLiElement);
+    }
 }
 
 
@@ -372,6 +393,7 @@ function updateUserTotalHours(status = 'started') {
                 }
             }
         });
+    // Depending of the resposne of the previous fetch, will give the necesary feedback
 }
 
 
@@ -439,6 +461,7 @@ async function updateUserModules() {
                 });
         }
 
+        // If at the end of the loop we've recieved any failed status, we'll give a failed feedback
         if (!failed) {
             generateFeedBack('success', '¡Horario Actualizado Exitosamente!');
         } else {
@@ -475,6 +498,7 @@ function loadModuleData(target) {
 
 
 function updateSelectedModuels(modulo, id) {
+    // This function will handle all the update of the modules selected
     if (selectedModules.some(moduleSelected => moduleSelected.optionID === id)) {
         const index = selectedModules.findIndex(moduleSelected => moduleSelected.optionID === id);
 
@@ -547,7 +571,7 @@ function setModuleData(turn, academicYear, moduleCode, moduelHours, weeklyDistri
         document.querySelector('#listadoDistribucion' + rowsNumber).textContent = weeklyDistribution;
 
         document.querySelector('#teacherClasses' + rowsNumber).remove();
-        document.querySelector('#listadoClases' + rowsNumber).textContent = classRoom;
+        document.querySelector('#listadoClases' + rowsNumber).textContent = classRoomsByModules.filter(aula => aula.aulaID === classRoom)[0].name;
     }
 
     updateTotalHours();
@@ -700,6 +724,7 @@ function loadDiscardButton() {
 /* ################################################### BUTTONS/SELECT FUNCTIONS ################################################### */
 /* ################################################################################################################################ */
 function addTableRow() {
+    // This function will handle the creation of a new tr element and will show it afterwards
     rowsNumber++;
 
     const newTableRow = document.createElement('tr');
@@ -773,6 +798,7 @@ function removeTableRow() {
     }
 }
 
+
 function displayLogout() {
     if (document.querySelector('#logoutForm').className === 'blindfolded') {
         document.querySelector('#logoutForm').className = 'showed';
@@ -787,9 +813,11 @@ function saveScheduleData() {
     updateUserModules();
 }
 
+
 function sendScheduleForRevision() {
     updateUserTotalHours('sent');
 }
+
 
 function finalizeSchedule() {
     //if para id en url y cambiar con updateUserTotalHours('finalized')
@@ -800,6 +828,7 @@ function finalizeSchedule() {
         updateUserTotalHours('finalized')
     }
 }
+
 
 function discardScheudle() {
     //if para id en url y cambiar con updateUserTotalHours('finalized')
@@ -1028,6 +1057,7 @@ function readSelectedElement(event) {
         window.speechSynthesis.speak(message);
 
     } else if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+        // This part is used for select elemetns
         window.speechSynthesis.cancel();
 
         let message = new SpeechSynthesisUtterance();

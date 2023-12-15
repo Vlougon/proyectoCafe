@@ -1,4 +1,4 @@
-let usuariospordepartamento = []; //Tendremos que tener un lugar donde ir añadiendo los departamentos
+let usuariospordepartamento = [];
 let currentDepartment = 0;
 const header = document.querySelector('#header');
 const userNavbar = document.querySelector('#teachersNavbar ul');
@@ -6,39 +6,26 @@ const logoutForm = document.querySelector('#logoutForm');
 const profileBox = document.querySelector('#profileBox');
 const finishSchedules = document.querySelector('#finishSchedules');
 
-/*
-Con el sessionStorage necesito obtener el id del usuario
-
-Necesito filtar los usuarios con el departamento igual al del jefe de departamento y que su 
-schedule_status = send
-
-
-Ahora tengo que implemetar la funcionalidad de los botones de finalizar y descartar 
-denntro de la vista de teacherSheets
-
-*/
-
-// Con esto opotenemos datos del usuario que se logea, en concreto, necesitoamos obtener su id
+// Get loged user data and token
 const token = sessionStorage.getItem('user') ? JSON.parse(sessionStorage.getItem('user')).token : null;
 let userData = sessionStorage.getItem('user') ? JSON.parse(sessionStorage.getItem('user')).data : null;
 
-//Para que al cargar meta los usuarios
 window.addEventListener('load', CargarUsuarios);
 window.addEventListener('keyup', readSelectedElement);
 
 profileBox.addEventListener('click', displayLogout);
 logoutForm.addEventListener('submit', logoutUser);
 
-//Ahora procedemos ha hacer el FECHT  a nuestra base de datos
 async function CargarUsuarios() {
 
+    // Depending on the URL, we see which department ID we use
     if (!isNaN(parseInt(location.href.charAt(location.href.length - 1)))) {
         currentDepartment = parseInt(location.href.charAt(location.href.length - 1));
     } else {
         currentDepartment = userData.departamento_id.id;
     }
 
-
+    // Fetch to get all the user by the specified department
     await fetch(location.origin + '/api/V1/departamento/' + currentDepartment, {
         method: 'GET',
         mode: 'cors',
@@ -65,6 +52,7 @@ async function CargarUsuarios() {
 function CambiarTitulo() {
     header.textContent = `Departamento de ${currentDepartment[0].name}`;
 
+    // If the user is not a study manager, if it is a head of department, we show the finalize all button
     if (isNaN(parseInt(location.href.charAt(location.href.length - 1)))) {
         const finishButton = document.createElement('button');
 
@@ -79,7 +67,7 @@ function CambiarTitulo() {
 
 
 function checkDepartments() {
-
+    // We check if there are any schedule sent for revision, to know what to show
     if (usuariospordepartamento.length < 1) {
         const noFoundText = document.createElement('h1');
 
@@ -92,19 +80,19 @@ function checkDepartments() {
 }
 
 
-//Queremos filtar por Departamento_id y si su schedule_status=send
 function CardsForUsers() {
-    // console.log(userData.departamento_id); //&& user.schedule_status == 'send'
+    // For each user retrieved we create a card for him
     for (let user of usuariospordepartamento) {
         CrearCardUser(user);
     }
 }
 
+
 function CrearCardUser(usuario) {
 
-    // ---------------------------------------------
-    // --------------- CARD PROFESOR ---------------
-    // ---------------------------------------------
+    // ----------------------------------------------------
+    // --------------- CREATE CARD PROFESOR ---------------
+    // ----------------------------------------------------
 
     const col = document.createElement("div");
     col.classList.add("col-10", "col-md-5", "departmentCard");
@@ -146,9 +134,9 @@ function CrearCardUser(usuario) {
     enlace.classList.add("btn", "btn-primary", "mt-2", "mt-md-0", 'align-middle');
     enlace.textContent = "Ver";
 
-    // ---------------------------------------------
-    // --------------- CARD PROFESOR ---------------
-    // ---------------------------------------------
+    // --------------------------------------------------
+    // --------------- SHOW CARD PROFESOR ---------------
+    // --------------------------------------------------
 
     dataBox.insertAdjacentElement('beforeend', img);
     dataBox.insertAdjacentElement('beforeend', cardTitle);
@@ -164,6 +152,7 @@ function CrearCardUser(usuario) {
 }
 
 function loadUserNavBarButtons() {
+    // We create and show the respective navbar buttons needed for the user
     const liElement = document.createElement('li');
     const aElement = document.createElement('a');
 
@@ -180,6 +169,7 @@ function loadUserNavBarButtons() {
     document.querySelector('#teachersName').textContent = userData.name.charAt(0).toUpperCase() + userData.name.slice(1);
     document.querySelector('title').textContent += ' ' + currentDepartment[0].name;
 
+    // If the study manager teacher is looking into the departments, we give him an extra button to go back
     if (!isNaN(location.href.charAt(location.href.length - 1))) {
         const departamentElement = document.createElement('li');
         const linkElement = document.createElement('a');
@@ -198,6 +188,11 @@ function loadUserNavBarButtons() {
     }
 }
 
+
+
+/* ######################################################################################################################## */
+/* ################################################### LOGOUT FUNCTIONS ################################################### */
+/* ######################################################################################################################## */
 function logoutUser(event) {
     event.preventDefault();
 
@@ -227,6 +222,7 @@ function logoutUser(event) {
             }
         });
 }
+
 
 function displayLogout() {
     if (document.querySelector('#logoutForm').className === 'blindfolded') {

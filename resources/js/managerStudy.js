@@ -3,6 +3,7 @@ const userNavbar = document.querySelector('#teachersNavbar ul');
 const logoutForm = document.querySelector('#logoutForm');
 const profileBox = document.querySelector('#profileBox');
 
+// Get loged user data and token
 const token = sessionStorage.getItem('user') ? JSON.parse(sessionStorage.getItem('user')).token : null;
 let userData = sessionStorage.getItem('user') ? JSON.parse(sessionStorage.getItem('user')).data : null;
 
@@ -16,6 +17,7 @@ async function loadDepartments() {
 
     loadUserNavBarButtons();
 
+    // Fetch to retrieve all the departments
     await fetch(location.origin + '/api/V1/departamentos', {
         method: 'GET',
         mode: 'cors',
@@ -31,12 +33,11 @@ async function loadDepartments() {
         .then(respuesta => respuesta.json())
         .then(datos => departamentos = datos.data)
 
-
     showDepartmentCards();
-
 }
 
 function showDepartmentCards() {
+    // For each department stores, we create and show the data of each of them
     for (const department of departamentos) {
         const departmentCard = document.createElement('div');
         const responsiveBox = document.createElement('div');
@@ -63,6 +64,7 @@ function showDepartmentCards() {
 }
 
 function loadUserNavBarButtons() {
+    // We create and give attributes and content to the Navbar buttons
     const liSchedule = document.createElement('li');
     const liClassrooms = document.createElement('li');
     const aSchedule = document.createElement('a');
@@ -87,6 +89,11 @@ function loadUserNavBarButtons() {
     document.querySelector('#teachersName').textContent = userData.name.charAt(0).toUpperCase() + userData.name.slice(1);
 }
 
+
+
+/* ######################################################################################################################## */
+/* ################################################### LOGOUT FUNCTIONS ################################################### */
+/* ######################################################################################################################## */
 function logoutUser(event) {
     event.preventDefault();
 
@@ -117,6 +124,7 @@ function logoutUser(event) {
         });
 }
 
+
 function displayLogout() {
     if (document.querySelector('#logoutForm').className === 'blindfolded') {
         document.querySelector('#logoutForm').className = 'showed';
@@ -124,6 +132,8 @@ function displayLogout() {
         document.querySelector('#logoutForm').className = 'blindfolded';
     }
 }
+
+
 
 /* ############################################################################################################################### */
 /* ################################################### ACCESSIBILITY FUNCTIONS ################################################### */
