@@ -78,6 +78,7 @@ input[type=password] {
     padding: 7.5px 5px;
     border-top-right-radius: 9px;
     border-bottom-right-radius: 9px;
+    vertical-align: -1%;
 }
 
 input[type=email]:focus,
@@ -213,7 +214,7 @@ input::placeholder {
     input[type=email],
     input[type=password] {
         width: 80%;
-        vertical-align: -1px;
+        vertical-align: -1%;
     }
 
     input::placeholder {
@@ -242,7 +243,7 @@ input::placeholder {
     input[type=email],
     input[type=password] {
         width: 70%;
-        vertical-align: -1px;
+        vertical-align: -1%;
     }
 
     input::placeholder {
