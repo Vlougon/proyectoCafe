@@ -115,4 +115,21 @@ class AulaModuloController extends Controller
 
         return response()->json($response, 200);
     }
+
+    public function classroomByModule()
+    {
+
+        $classroomsByModule = Aula::join('aula_modulo', 'aulas.id', '=', 'aula_modulo.aula_id')
+            ->join('modulos', 'aula_modulo.modulo_id', '=', 'modulos.id')
+            ->select('aulas.id as aulaID', 'aulas.name', 'modulos.id as moduloID')
+            ->get();
+
+        $response = [
+            'status' => 'success',
+            'message' => '¡Se ha conseguido extraer las Aulas Por Modulos!.',
+            'data' => $classroomsByModule,
+        ];
+
+        return response()->json($response, 200);
+    }
 }

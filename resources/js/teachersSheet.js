@@ -33,7 +33,7 @@ pdfButton.addEventListener('click', htmlToPDF);
 logoutForm.addEventListener('submit', logoutUser);
 
 async function loadFirstContentPage() {
-    await fetch(location.origin + '/api/V1/aulamodulos', {
+    await fetch(location.origin + '/api/V1/aulapormodulo', {
         method: "GET",
         mode: "cors",
         cache: "no-cache",
@@ -569,9 +569,9 @@ function loadObservations() {
 }
 
 
-async function updateModuleClassrooms(moduloID, elementID) {
+async function updateModuleClassrooms(moduloId, elementID) {
     let actualClassrooms = document.querySelectorAll('#teacherClasses' + elementID + ' option');
-    let classrooms = classRoomsByModules.filter(modulo => modulo.modulo_id.id == moduloID);
+    let classrooms = classRoomsByModules.filter(modulo => modulo.moduloID == moduloId);
 
     // Delete all classrooms on the select element
     for (const actualClassroom of actualClassrooms) {
@@ -582,9 +582,9 @@ async function updateModuleClassrooms(moduloID, elementID) {
     for (const classroom of classrooms) {
         const classroomOption = document.createElement('option');
 
-        classroomOption.setAttribute('value', classroom.aula_id.id);
-        classroomOption.setAttribute('id', classroom.aula_id.name + elementID);
-        classroomOption.textContent = classroom.aula_id.name;
+        classroomOption.setAttribute('value', classroom.aulaID);
+        classroomOption.setAttribute('id', classroom.name + elementID);
+        classroomOption.textContent = classroom.name;
 
         document.querySelector('#teacherClasses' + elementID).insertAdjacentElement('beforeend', classroomOption);
     }
