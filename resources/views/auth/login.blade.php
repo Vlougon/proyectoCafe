@@ -18,7 +18,7 @@
 </head>
 
 <body>
-    <header>
+    <header id="floatingHeader">
         <h1>INICIO DE SESIÓN</h1>
     </header>
 
