@@ -11,7 +11,7 @@
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 </ul>
 
-                <button id="profileBox">
+                <button id="profileBox" name="Perfil de Usuario">
                     <img src="{{ asset('images/defaultUserIcon.png') }}" alt="Icono de Perfil del Profesor" class="d-inline-block">
                     <span id="teachersName"></span>
                 </button>

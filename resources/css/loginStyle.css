@@ -15,6 +15,7 @@ header {
     background: transparent;
     color: white;
     text-align: center;
+    font-family: 'Times New Roman', Times, serif;
     overflow-x: auto;
 }
 
@@ -43,7 +44,7 @@ footer p {
 
 footer p a {
     display: inline-block;
-    color: #c4eafa
+    color: #A5DFF8;
 }
 
 footer p a img {
@@ -75,9 +76,10 @@ form p {
 
 input[type=email],
 input[type=password] {
-    padding: 10px 5px;
+    padding: 7.5px 5px;
     border-top-right-radius: 9px;
     border-bottom-right-radius: 9px;
+    vertical-align: -1%;
 }
 
 input[type=email]:focus,
@@ -196,18 +198,28 @@ input::placeholder {
     border: none;
 }
 
+.alert {
+    width: 80%;
+    top: 5%;
+}
+
 /* #################################################################################################### */
 /* ####################################### EXTRA SMALL (MOBILE) ####################################### */
 /* #################################################################################################### */
 @media (max-width: 576px) {
     header {
-        top: 2.6vh;
-        font-size: 1.6em;
+        top: 2.6vh !important;
+        font-size: 1.6em !important;
+    }
+
+    header > h1 {
+        font-size: 1.6em !important;
     }
 
     input[type=email],
     input[type=password] {
         width: 80%;
+        vertical-align: -1%;
     }
 
     input::placeholder {
@@ -229,13 +241,18 @@ input::placeholder {
 /* ########################################################################################################### */
 @media (min-width: 576px) and (max-width: 768px) {
     header {
-        top: 1.6vh;
-        font-size: 1.3em;
+        top: 1.6vh !important;
+        font-size: 1.3em !important;
+    }
+
+    header > h1 {
+        font-size: 1.3em !important;
     }
 
     input[type=email],
     input[type=password] {
         width: 70%;
+        vertical-align: -1%;
     }
 
     input::placeholder {
@@ -257,8 +274,12 @@ input::placeholder {
 /* ############################################################################################################## */
 @media (min-width: 768px) and (max-width: 992px) {
     header {
-        top: 1vh;
-        font-size: 2em;
+        top: 1vh !important;
+        font-size: 2em !important;
+    }
+
+    header > h1 {
+        font-size: 2em !important;
     }
 
     input[type=email],
@@ -279,8 +300,8 @@ input::placeholder {
         display: grid;
         grid-template-rows: 1fr;
         grid-template-columns: 2fr 1fr;
-        grid-template-areas: 
-        'form img';
+        grid-template-areas:
+            'form img';
         width: 60%;
     }
 
@@ -308,8 +329,12 @@ input::placeholder {
 /* ################################################################################################## */
 @media (min-width: 992px) and (max-width: 1200px) {
     header {
-        top: 10vh;
-        font-size: 1.8em;
+        top: 10vh !important;
+        font-size: 1.8em !important;
+    }
+
+    header > h1 {
+        font-size: 1.8em !important;
     }
 
     input[type=email],
@@ -330,8 +355,8 @@ input::placeholder {
         display: grid;
         grid-template-rows: 1fr;
         grid-template-columns: 1fr 1fr;
-        grid-template-areas: 
-        'form img';
+        grid-template-areas:
+            'form img';
         width: 55%;
     }
 
@@ -359,13 +384,17 @@ input::placeholder {
 /* ############################################################################################################ */
 @media (min-width: 1200px) {
     header {
-        top: 10vh;
-        font-size: 1.8em;
+        top: 10vh !important;
+        font-size: 1.8em !important;
+    }
+
+    header > h1 {
+        font-size: 1.8em !important;
     }
 
     input[type=email],
     input[type=password] {
-        width: 85%;
+        width: 84%;
     }
 
     input::placeholder {
@@ -381,8 +410,8 @@ input::placeholder {
         display: grid;
         grid-template-rows: 1fr;
         grid-template-columns: 1fr 1fr;
-        grid-template-areas: 
-        'form img';
+        grid-template-areas:
+            'form img';
         width: 45%;
     }
 

@@ -37,10 +37,8 @@ class AulaModuloController extends Controller
         return response()->json(['modulo' => $modulo]);
     }
 
-
     public function index()
     {
-        // $aulaModulos = AulaModuloResource::collection(AulaModulo::latest()->get());
         $aulaModulos = AulaModulo::latest()->get();
 
         if (is_null($aulaModulos->first())) {
@@ -89,5 +87,49 @@ class AulaModuloController extends Controller
     public function destroy(AulaModulo $AulaModulo)
     {
         //
+    }
+
+    public function getClassHoursByTurn()
+    {
+        $classroomsByTurn = Aula::join('aula_modulo', 'aulas.id', '=', 'aula_modulo.aula_id')
+            ->join('modulos', 'aula_modulo.modulo_id', '=', 'modulos.id')
+            ->join('cursos', 'modulos.curso_id', '=', 'cursos.id')
+            ->select('name', Modulo::raw('sum(hours_per_week) as scheudleLoad'), 'turn')
+            ->groupBy('name', 'turn')
+            ->get();
+
+        // select('name', Aula::raw('count(name) as count'))->groupBy('name')->get();
+
+        if (is_null($classroomsByTurn->first())) {
+            return response()->json([
+                'status' => 'failed',
+                'message' => '¡No hay Aulas por Modulos que mostrar!',
+            ], 404);
+        }
+
+        $response = [
+            'status' => 'success',
+            'message' => '¡Se ha conseguido extraer las Aulas Por Modulos!.',
+            'data' => $classroomsByTurn,
+        ];
+
+        return response()->json($response, 200);
+    }
+
+    public function classroomByModule()
+    {
+
+        $classroomsByModule = Aula::join('aula_modulo', 'aulas.id', '=', 'aula_modulo.aula_id')
+            ->join('modulos', 'aula_modulo.modulo_id', '=', 'modulos.id')
+            ->select('aulas.id as aulaID', 'aulas.name', 'modulos.id as moduloID')
+            ->get();
+
+        $response = [
+            'status' => 'success',
+            'message' => '¡Se ha conseguido extraer las Aulas Por Modulos!.',
+            'data' => $classroomsByModule,
+        ];
+
+        return response()->json($response, 200);
     }
 }

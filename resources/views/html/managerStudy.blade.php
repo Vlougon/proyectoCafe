@@ -10,7 +10,7 @@
     <!-- Agrega Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
 
     @vite(['resources/css/managerStudy.css', 'resources/js/managerStudy.js'])
 
@@ -22,24 +22,6 @@
     <main>
         <div id="container" class="container-fluid text-center">
             <h1>Listado de Departamentos</h1>
-
-            <div class="departmentCard">
-                <div class="d-block d-sm-flex justify-content-between">
-                    <div>
-                        <h2>Nombre Departamento</h2>
-                    </div>
-                    <a class="btn btn-info">Ver</a>
-                </div>
-            </div>
-
-            <div class="departmentCard">
-                <div class="d-block d-sm-flex justify-content-between">
-                    <div>
-                        <h2>Nombre Departamento</h2>
-                    </div>
-                    <a class="btn btn-info">Ver</a>
-                </div>
-            </div>
         </div>
     </main>
 

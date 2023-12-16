@@ -15,6 +15,7 @@ footer {
 }
 
 header {
+    margin-bottom: 10px;
     padding: 15px;
     text-align: end;
 }
@@ -25,21 +26,8 @@ main {
     margin: 20px 0;
 }
 
-table {
-    border-collapse: collapse;
-    width: 100%;
-    text-align: center;
-}
-
-table td,
-table th {
-    border: 2px solid #000;
-    height: 29px;
-    padding: 5px;
-    vertical-align: middle;
-}
-
 footer {
+    margin-top: 10px;
     padding: 10px;
     text-align: center;
 }
@@ -66,25 +54,6 @@ footer img {
     height: 41px !important;
     margin-top: 5px;
     vertical-align: middle;
-}
-
-label {
-    margin-top: 10px;
-}
-
-textarea {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 10px;
-}
-
-#container {
-    background-color: white;
-    padding: 15px;
-    border-radius: 10px;
-    border: 1px solid black;
-    overflow-x: auto;
 }
 
 #profileBox {
@@ -124,32 +93,13 @@ textarea {
     text-align: start;
 }
 
-#teacherDataBox span {
-    font-weight: normal;
-}
-
-#totalCell {
-    font-weight: 900;
-}
-
-.btn-success {
-    margin-right: 2px;
-}
-
-.btn-danger {
-    margin-left: 2px;
-}
-
-td.selectCell {
-    padding: 0 !important;
-}
-
-td.selectCell select {
-    width: 100%;
-    height: 100%;
-    border: none;
-    border-radius: 0;
+#departmentContainer {
     text-align: center;
+}
+
+#finishSchedules {
+    display: block;
+    margin: 0 auto;
 }
 
 .blindfolded {
@@ -175,72 +125,74 @@ td.selectCell select {
     background-color: white !important;
 }
 
-.mainButtonsBox {
-    text-align: center;
-}
-
-.mainButtonsBox button {
-    margin-top: 15px;
-}
-
 .nav-link {
     color: white !important;
 }
 
-.teacherInlineData {
-    padding-bottom: 3px;
-    border-bottom: 2px dashed black;
-}
-
-.blankCells {
-    border: none !important;
-}
-
-.totalCell {
+.departmentCard {
+    background-color: white;
+    margin: 15px;
+    padding: 13px;
+    border-radius: 7px;
+    border: 1px solid black;
     text-align: start;
 }
 
-#totalCell.idealHours {
+.departmentCard p {
+    margin: 1px 0;
+}
+
+.idealHours,
+.inRangeHours,
+.undesideredHours {
+    padding: 3px;
+    width: fit-content;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.idealHours {
     background-color: #c6ffc9;
     color: #005004;
 }
 
-#totalCell.inRangeHours {
+.inRangeHours {
     background-color: #fdeab5;
     color: #574000;
 }
 
-#totalCell.undesideredHours {
+.undesideredHours {
     background-color: #ffc6c6;
     color: #4b0000;
 }
 
-#leyendBox {
-    display: block;
-    width: fit-content;
-    max-width: 50%;
-    margin: 10px auto;
+.idealBox {
+    box-shadow: 0 0 10px 10px rgba(0, 80, 4, .7);
 }
 
-#leyendBox div {
-    margin: 10px auto;
+.inRangeBox {
+    box-shadow: 0 0 10px 10px rgba(87, 64, 0, .7);
 }
 
-.alert {
-    width: 80%;
-    top: 10%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+.undesiredBox {
+    box-shadow: 0 0 10px 10px rgba(75, 0, 0, .7);
 }
 
-@media (max-width: 767px) {
-    #leyendBox {
-        display: block;
+@media (max-width: 576px) {
+    .departmentCard {
+        text-align: center;
         width: fit-content;
-        max-width: 90%;
-        margin: 10px auto;
     }
 
+    .idealHours,
+    .inRangeHours,
+    .undesideredHours {
+        margin: 1px auto !important;
+    }
+}
+
+
+@media (max-width: 767px) {
     .nav-item {
         max-width: fit-content;
         padding: 8px;

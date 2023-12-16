@@ -62,7 +62,7 @@
 
                 <div class="mainButtonsBox" id="principalButtonsBox">
                     <div class="w-100"></div>
-                    <button id="downloadPDF" type="button" class="btn btn-warning">Descargar PDF</button>
+                    <button id="downloadPDF" type="button" class="btn btn-warning" name="Botón para Descargar el Horario en PDF">Descargar PDF</button>
                 </div>
 
                 <label for="teacherObservations">Observaciones: </label>
@@ -71,6 +71,31 @@
             </div>
 
             <div class="mainButtonsBox" id="teacherSendButtonBox">
+            </div>
+        </div>
+
+        <div id="leyendBox">
+            <p>
+                <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#leyend" aria-expanded="false" aria-controls="leyend">
+                    Ayuda
+                </button>
+            </p>
+            <div>
+                <div class="collapse" id="leyend">
+                    <div class="card card-body">
+                        <ol>
+                            <li>El profesorado tutor tiene que impartir al menos un módulo del curso que tutoriza.</li>
+                            <li>En ningún caso se debe superar las 24 horas semanales de permanencia en el centro.</li>
+                            <li>El aula o taller será fijado por el departamento y no podrá modificarse posteriormente.</li>
+                            <li>No se debe concentrar el horario en una modalidad o grupo.</li>
+                            <li>Al hacer click sobre tu perfil, aparecerá la opción para Cerrar Sesión.</li>
+                            <li>En la tabla, las columnas de Módulo, Distribución Semanal y Aula/Taller son selectores.</li>
+                            <li>Haz click sobre un selector para hacer aparecer un listado con las opciones que tiene.</li>
+                            <li>El botón 'Guardar Cambios' guardará los cambios hechos en su horario, incluyendo las observaciones.</li>
+                            <li>Para que el jefe de Departamento pueda ver su horario, tendrá que hacer click en el botón 'Enviar Horario'</li>
+                        </ol>
+                    </div>
+                </div>
             </div>
         </div>
 

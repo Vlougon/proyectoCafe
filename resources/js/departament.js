@@ -1,38 +1,32 @@
-
-
-const container = document.querySelector('#container')
-const header = document.querySelector('#header')
-
-
-
-let usuariospordepartamento = []; //Tendremos que tener un lugar donde ir añadiendo los departamentos
+let usuariospordepartamento = [];
+let currentDepartment = 0;
+const header = document.querySelector('#header');
 const userNavbar = document.querySelector('#teachersNavbar ul');
+const logoutForm = document.querySelector('#logoutForm');
+const profileBox = document.querySelector('#profileBox');
+const finishSchedules = document.querySelector('#finishSchedules');
 
-/*
-Con el sessionStorage necesito obtener el id del usuario
-
-Necesito filtar los usuarios con el departamento igual al del jefe de departamento y que su 
-schedule_status = send
-
-
-Ahora tengo que implemetar la funcionalidad de los botones de finalizar y descartar 
-denntro de la vista de teacherSheets
-
-*/
-
-// Con esto opotenemos datos del usuario que se logea, en concreto, necesitoamos obtener su id
+// Get loged user data and token
 const token = sessionStorage.getItem('user') ? JSON.parse(sessionStorage.getItem('user')).token : null;
 let userData = sessionStorage.getItem('user') ? JSON.parse(sessionStorage.getItem('user')).data : null;
 
-//Para que al cargar meta los usuarios
 window.addEventListener('load', CargarUsuarios);
+window.addEventListener('keyup', readSelectedElement);
 
-//Ahora procedemos ha hacer el FECHT  a nuestra base de datos
+profileBox.addEventListener('click', displayLogout);
+logoutForm.addEventListener('submit', logoutUser);
+
 async function CargarUsuarios() {
 
-    loadUserNavBarButtons();
+    // Depending on the URL, we see which department ID we use
+    if (!isNaN(parseInt(location.href.charAt(location.href.length - 1)))) {
+        currentDepartment = parseInt(location.href.charAt(location.href.length - 1));
+    } else {
+        currentDepartment = userData.departamento_id.id;
+    }
 
-    await fetch(location.origin + '/api/V1/users', {
+    // Fetch to get all the user by the specified department
+    await fetch(location.origin + '/api/V1/departamento/' + currentDepartment, {
         method: 'GET',
         mode: 'cors',
         cache: 'no-cache',
@@ -45,90 +39,120 @@ async function CargarUsuarios() {
         referrerPolicy: 'no-referrer'
     })
         .then(respuesta => respuesta.json())
-        .then(datos => usuariospordepartamento = datos.data)
+        .then((datos) => {
+            usuariospordepartamento = datos.data;
+            currentDepartment = datos.departamento;
+        })
 
-
+    loadUserNavBarButtons();
     CambiarTitulo();
-    ComprobarDepartamentoID(usuariospordepartamento);
-
+    checkDepartments();
 }
 
 function CambiarTitulo() {
-    header.textContent = `Departamento de ${userData.departamento_id.name}`;
-}
+    header.textContent = `Departamento de ${currentDepartment[0].name}`;
 
+    // If the user is not a study manager, if it is a head of department, we show the finalize all button
+    if (isNaN(parseInt(location.href.charAt(location.href.length - 1)))) {
+        const finishButton = document.createElement('button');
 
-//Queremos filtar por Departamento_id y si su schedule_status=send
-function ComprobarDepartamentoID(usuariospordepartamento) {
-    console.log(userData.departamento_id); //&& user.schedule_status == 'send'
-    for (let user of usuariospordepartamento) {
-        if (userData.departamento_id.id === user.departamento_id.id && userData.id !== user.id) {
-            CrearCardUser(user);
-            console.log(user);
-        }
+        finishButton.setAttribute('id', 'finishSchedules');
+        finishButton.setAttribute('type', 'button');
+        finishButton.className = 'btn btn-dark';
+        finishButton.textContent = 'Finalizar Departamentos';
+
+        document.querySelector('#finishBox').insertAdjacentElement('beforeend', finishButton);
     }
 }
 
+
+function checkDepartments() {
+    // We check if there are any schedule sent for revision, to know what to show
+    if (usuariospordepartamento.length < 1) {
+        const noFoundText = document.createElement('h1');
+
+        noFoundText.textContent = '¡No se ha encontrado ningún horario! \uD83D\uDCCE';
+
+        document.querySelector('#departmentContainer').insertAdjacentElement('beforeend', noFoundText);
+    } else {
+        CardsForUsers();
+    }
+}
+
+
+function CardsForUsers() {
+    // For each user retrieved we create a card for him
+    for (let user of usuariospordepartamento) {
+        CrearCardUser(user);
+    }
+}
+
+
 function CrearCardUser(usuario) {
 
-    // ---------------------------------------------
-    // --------------- CARD PROFESOR ---------------
-    // ---------------------------------------------
-
-    const cardRow = document.createElement("div");
-    cardRow.classList.add("row", "row-cols-1", "row-cols-sm-2", "row-cols-md-2", "row-cols-lg-2", "g-4");
+    // ----------------------------------------------------
+    // --------------- CREATE CARD PROFESOR ---------------
+    // ----------------------------------------------------
 
     const col = document.createElement("div");
-    col.classList.add("col");
+    col.classList.add("col-10", "col-md-5", "departmentCard");
 
-    const card = document.createElement("div");
-    card.classList.add("card");
+    const cardRow = document.createElement("div");
+    cardRow.classList.add("row");
 
-    const cardBody = document.createElement("div");
-    cardBody.classList.add("card-body");
+    const dataBox = document.createElement("div");
+    dataBox.classList.add("col-12", "col-sm-10");
+
+    const buttonBox = document.createElement("div");
+    buttonBox.classList.add("col-12", "col-sm-2", "d-sm-flex", "align-items-center", "justify-content-end");
 
     const img = document.createElement("img");
-    img.src = "../images/defaultUserIcon.png";
-    img.alt = "Icono de Perfil del Profesor";
-    img.classList.add("d-inline-block");
+    img.src = `${location.origin}/images/defaultUserIcon.png`;
+    img.alt = `Icono de Perfil del Profesor: ${usuario.name}`;
 
     const cardTitle = document.createElement("h5");
-    cardTitle.classList.add("card-title");
-    cardTitle.textContent = `Profesor: ${usuario.name}`;
+    cardTitle.textContent = `Profesor: ${usuario.name.charAt(0).toUpperCase() + usuario.name.slice(1)}`;
 
     const especialidad = document.createElement("p");
-    especialidad.classList.add("card-text");
-    especialidad.textContent = `Especialidad: ${usuario.especialidad_id.name}`;
+    especialidad.textContent = `Especialidad: ${usuario.nombre_especialidad}`;
     const horas = document.createElement("p");
-    horas.classList.add("card-text");
     horas.textContent = `Horas Totales: ${usuario.total_hours}`;
+
+    if (parseInt(usuario.total_hours) === 18) {
+        horas.classList.add('idealHours');
+        col.classList.add('idealBox');
+    } else if (parseInt(usuario.total_hours) >= 16 && parseInt(usuario.total_hours) <= 20) {
+        horas.classList.add('inRangeHours');
+        col.classList.add('inRangeBox');
+    } else {
+        horas.classList.add('undesideredHours');
+        col.classList.add('undesiredBox');
+    }
 
     const enlace = document.createElement("a");
     enlace.setAttribute('href', location.origin + '/teacherSheets/' + usuario.id);
-    enlace.classList.add("btn", "btn-primary", "mt-2", "mt-md-0");
+    enlace.classList.add("btn", "btn-primary", "mt-2", "mt-md-0", 'align-middle');
     enlace.textContent = "Ver";
 
-    // ---------------------------------------------
-    // --------------- CARD PROFESOR ---------------
-    // ---------------------------------------------
+    // --------------------------------------------------
+    // --------------- SHOW CARD PROFESOR ---------------
+    // --------------------------------------------------
 
-    cardBody.insertAdjacentElement('beforeend', img);
-    cardBody.insertAdjacentElement('beforeend', cardTitle);
-    cardBody.insertAdjacentElement('beforeend', especialidad);
-    cardBody.insertAdjacentElement('beforeend', horas);
-    cardBody.insertAdjacentElement('beforeend', enlace);
+    dataBox.insertAdjacentElement('beforeend', img);
+    dataBox.insertAdjacentElement('beforeend', cardTitle);
+    dataBox.insertAdjacentElement('beforeend', especialidad);
+    dataBox.insertAdjacentElement('beforeend', horas);
+    buttonBox.insertAdjacentElement('beforeend', enlace);
 
-    card.insertAdjacentElement('beforeend', cardBody);
-    col.insertAdjacentElement('beforeend', card);
-    cardRow.insertAdjacentElement('beforeend', col);
+    cardRow.insertAdjacentElement('beforeend', dataBox);
+    cardRow.insertAdjacentElement('beforeend', buttonBox);
+    col.insertAdjacentElement('beforeend', cardRow);
 
-    departmentContainer.insertAdjacentElement('beforeend', cardRow);
-    console.log(departmentContainer);
-    // Añadir departmentContainer al lugar donde quieras mostrar estos bloques en tu página
-    header.insertAdjacentElement('afterend', departmentContainer);
+    departmentContainer.insertAdjacentElement('beforeend', col);
 }
 
 function loadUserNavBarButtons() {
+    // We create and show the respective navbar buttons needed for the user
     const liElement = document.createElement('li');
     const aElement = document.createElement('a');
 
@@ -141,4 +165,110 @@ function loadUserNavBarButtons() {
     liElement.insertAdjacentElement('beforeend', aElement);
 
     userNavbar.insertAdjacentElement('beforeend', liElement);
+
+    document.querySelector('#teachersName').textContent = userData.name.charAt(0).toUpperCase() + userData.name.slice(1);
+    document.querySelector('title').textContent += ' ' + currentDepartment[0].name;
+
+    // If the study manager teacher is looking into the departments, we give him an extra button to go back
+    if (!isNaN(location.href.charAt(location.href.length - 1))) {
+        const departamentElement = document.createElement('li');
+        const linkElement = document.createElement('a');
+
+        departamentElement.className = 'nav-item';
+        linkElement.className = 'nav-link';
+
+        linkElement.setAttribute('href', location.origin + '/studyManager');
+        linkElement.textContent = 'Jefatura';
+
+        departamentElement.insertAdjacentElement('beforeend', linkElement);
+
+        userNavbar.insertAdjacentElement('beforeend', departamentElement);
+
+        document.querySelector('#teachersName').textContent = userData.name.charAt(0).toUpperCase() + userData.name.slice(1);
+    }
+}
+
+
+
+/* ######################################################################################################################## */
+/* ################################################### LOGOUT FUNCTIONS ################################################### */
+/* ######################################################################################################################## */
+function logoutUser(event) {
+    event.preventDefault();
+
+    fetch(location.origin + '/api/logout', {
+        method: "POST",
+        mode: "cors",
+        cache: "no-cache",
+        credentials: "same-origin",
+        headers: {
+            Authorization: "Bearer " + token,
+            Accept: "application/json",
+        },
+        redirect: "follow",
+        referrerPolicy: "no-referrer",
+    })
+        .then((respuesta) => respuesta.status === 200 ? respuesta.json() : '')
+        .then((datos) => {
+
+            // Check if the user was able to login
+            if (datos.status === "success") {
+
+                // Remove the User Data and Token from the sessionStorage
+                sessionStorage.removeItem('user');
+
+                // Submit to logout the user
+                logoutForm.submit();
+            }
+        });
+}
+
+
+function displayLogout() {
+    if (document.querySelector('#logoutForm').className === 'blindfolded') {
+        document.querySelector('#logoutForm').className = 'showed';
+    } else {
+        document.querySelector('#logoutForm').className = 'blindfolded';
+    }
+}
+
+
+
+/* ############################################################################################################################### */
+/* ################################################### ACCESSIBILITY FUNCTIONS ################################################### */
+/* ############################################################################################################################### */
+function readSelectedElement(event) {
+    if (event.key === 'Tab') {
+        window.speechSynthesis.cancel();
+
+        let message = new SpeechSynthesisUtterance();
+
+        message.lang = 'es-ES';
+
+        switch (document.activeElement.tagName) {
+            case 'INPUT':
+                message.text += document.activeElement.getAttribute('value');
+                break;
+
+            case 'BUTTON':
+                message.text += document.activeElement.textContent;
+                break;
+
+            default:
+                message.text += document.activeElement.textContent;
+
+                if (document.activeElement.classList.contains('btn')) {
+                    const professorName = document.activeElement.parentElement.previousElementSibling.querySelector('h5').textContent.split(' ')[1];
+                    const totalHoursText = document.activeElement.parentElement.previousElementSibling.querySelectorAll('p')[1].textContent;
+                    const totalHours = totalHoursText.charAt(totalHoursText.length - 1);
+
+                    message.text += ' Horario de ' + professorName + '...';
+                    message.text += 'Quien tiene un total de ' + totalHours + ' horas asignadas.'
+                }
+
+                break;
+        }
+
+        window.speechSynthesis.speak(message);
+    }
 }

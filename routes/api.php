@@ -65,20 +65,31 @@ Route::middleware('auth:sanctum')->group(function () {
             return response()->json("No se encontró las aulas para los modulos", 404);
         });
 
+        /* ###################################################################################################################### */
+        /* ################################################## OTHER API ROUTES ################################################## */
+        /* ###################################################################################################################### */
+
+        Route::get('/cargahorariaaulas',[AulaModuloController::class, 'getClassHoursByTurn'] )
+        ->missing(function (Request $request) {
+            return response()->json("No se encontró la carga horaria de las Aulas", 404);
+        });
+
+        Route::get('/aulapormodulo',[AulaModuloController::class, 'classroomByModule'] )
+        ->missing(function (Request $request) {
+            return response()->json("No se encontró la carga horaria de las Aulas", 404);
+        });
+
+        Route::get('departamento/{departamentoID}', [DepartamentoController::class, 'obtenerUsuariosPorDepartamentoYEstado'])
+        ->where('departamentoID', '[0-9]+')
+        ->missing(function (Request $request) {
+            return response()->json("No se encontró los users del departamento_id del user logeado", 404);
+        });
+
+        
         Route::get('/especialidad/{especialidadId}/modulos',[EspecialidadController::class, 'obtenerModulosPorEspecialidad'] )
         ->missing(function (Request $request) {
             return response()->json("No se encontró la especialidad indicada con sus modulos", 404);
         });
-
-        // Route::get('/aulamodulo/{aula_id}/modulos',[AulaModuloController::class, 'obtenerModulosPorAula'] )
-        // ->missing(function (Request $request) {
-        //     return response()->json("No se encontró los modulos para este aula", 404);
-        // });
-        
-        // Route::get('/aulamodulo/{modulo_id}/aulas',[AulaModuloController::class, 'obtenerAulasPorModulo'] )
-        // ->missing(function (Request $request) {
-        //     return response()->json("No se encontró los modulos para este aula", 404);
-        // });
 
         Route::get('/especialidad/{especialidadId}/users',[EspecialidadController::class, 'obtenerUsersPorEspecialidad'] )
         ->missing(function (Request $request) {
@@ -89,7 +100,6 @@ Route::middleware('auth:sanctum')->group(function () {
         ->missing(function (Request $request) {
             return response()->json("No se encontró el curso indicada con sus modulos", 404);
         });
-
     });
 });
 
