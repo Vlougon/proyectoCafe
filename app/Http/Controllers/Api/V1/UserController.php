@@ -19,7 +19,7 @@ class UserController extends Controller
     {
         //Guardamos la coleccion de Usuarios
         $users = UserResource::collection(User::latest()->get());
-        if(is_null($users->first())){
+        if (is_null($users->first())) {
             return response()->json([
                 'status' => 'failes',
                 'message' => ' !User no encontrado¡'
@@ -38,10 +38,10 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(UserForm $request)
     {
         $users = User::create($request->all());
-    
+
         $response = [
             'status' => 'success',
             'message' => 'Se ha crado el User correctamente.',
@@ -70,13 +70,12 @@ class UserController extends Controller
         ];
 
         return response()->json($response, 200);
-
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $user)
+    public function update(UserForm $request, User $user)
     {
         if (is_null($user)) {
             return response()->json([
@@ -99,8 +98,37 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $user = User::find($id)->delete();
+
+        $response = [
+            'status' => 'success',
+            'message' => '¡Se ha borrado exitosamente el Usuario!',
+            'data' => $user,
+        ];
+
+        return response()->json($response, 200);
+    }
+
+
+    public function partialUpdate(Request $request, User $user)
+    {
+        if (is_null($user)) {
+            return response()->json([
+                'status' => 'failed',
+                'message' => '¡No se ha encontrado el usuario Indicado!',
+            ], 200);
+        }
+
+        $user->update($request->all());
+
+        $response = [
+            'status' => 'success',
+            'message' => '¡Se ha actualizado exitosamente el Usuario!',
+            'data' => new UserResource($user),
+        ];
+
+        return response()->json($response, 200);
     }
 }

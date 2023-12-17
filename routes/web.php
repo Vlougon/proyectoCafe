@@ -49,3 +49,11 @@ Route::get('studyManager', function () {
 Route::get('classrooms', function () {
     return view('html.classRooms');
 })->middleware('auth')->middleware('can:viewStudy,App\Models\User');
+
+Route::get('dashboard', function () {
+    return view('html.dashboard');
+})->middleware('auth')->middleware('can:viewStudy,App\Models\User');
+
+Route::get('userForm/{id?}', function ($id = null) {
+    return view('layouts.userForm');
+})->middleware('auth')->middleware('can:viewStudy,App\Models\User');

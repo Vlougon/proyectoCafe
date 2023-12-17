@@ -132,6 +132,10 @@ textarea {
     font-weight: 900;
 }
 
+#downloadPDF {
+    border: 2px solid black;
+}
+
 .btn-success {
     margin-right: 2px;
 }

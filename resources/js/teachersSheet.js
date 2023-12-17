@@ -201,12 +201,23 @@ function setNavBArButtons() {
             navbarLinkEelement.textContent = 'Vista de Departamento';
 
         } else if (userData.rol === 'study_manager') {
+            const dashboardList = document.createElement('li');
+            const dashboardLink = document.createElement('a');
+
+            dashboardList.className = 'nav-item';
+            dashboardLink.className = 'nav-link';
 
             navbarLinkEelement.setAttribute('href', location.origin + '/studyManager');
             navbarLinkEelement.textContent = 'Vista de Estudio';
+
+            dashboardLink.setAttribute('href', location.origin + '/dashboard');
+            dashboardLink.textContent = 'Dashboard';
+
+            dashboardList.insertAdjacentElement('beforeend', dashboardLink);
+            document.querySelector('#teachersNavbar ul').insertAdjacentElement('beforeend', dashboardList);
         }
 
-        if (userData.rol != 'teacher') {
+        if (userData.rol === 'head_of_department' || userData.rol === 'study_manager') {
             navbarLiElement.insertAdjacentElement('beforeend', navbarLinkEelement);
             document.querySelector('#teachersNavbar ul').insertAdjacentElement('beforeend', navbarLiElement);
         }
@@ -358,7 +369,7 @@ function updateUserTotalHours(status = 'started') {
     };
     formBody = formBody.join("&");
 
-    fetch(location.origin + '/api/V1/users/' + userData.id, {
+    fetch(location.origin + '/api/V1/userpartialupdate/' + userData.id, {
         method: "PUT",
         headers: {
             'Authorization': "Bearer " + token,
@@ -385,6 +396,9 @@ function updateUserTotalHours(status = 'started') {
                         generateFeedBack('danger', '¡Fallo al Descartar el horario del Profesor!');
                         break;
                 }
+
+            } else if (datos.status === 'success' && status !== 'started') {
+                generateFeedBack(datos.status, datos.message);
             }
         });
     // Depending of the resposne of the previous fetch, will give the necesary feedback
@@ -809,11 +823,13 @@ function saveScheduleData() {
 
 
 function sendScheduleForRevision() {
+    const modulesOfUser = modules.filter(module => module.user_id !== null);
 
-    if (userData.schedule_status !== 'sent') {
+    if ((modulesOfUser.length !== 0 && modulesOfUser[0].user_id.schedule_status !== 'sent') ||
+        userData.schedule_status !== 'sent') {
         updateUserTotalHours('sent');
 
-        if (parseInt(totalHoursCell.textContent) >= 17 || parseInt(totalHoursCell.textContent) <= 20) {
+        if (parseInt(totalHoursCell.textContent) < 17 || parseInt(totalHoursCell.textContent) > 20) {
             generateFeedBack('warning', '¡Se ha enviado el horario, pero no cumples con los requisitos de horas!');
         } else {
             generateFeedBack('success', '¡Se ha enviado el horario para revisión!');

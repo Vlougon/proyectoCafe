@@ -85,6 +85,11 @@ Route::middleware('auth:sanctum')->group(function () {
             return response()->json("No se encontró los users del departamento_id del user logeado", 404);
         });
 
+        Route::put('/userpartialupdate/{user}', [UserController::class, 'partialUpdate'])
+        ->missing(function (Request $request) {
+            return response()->json("No se encontró el Usuario indicado", 404);
+        });
+
         
         Route::get('/especialidad/{especialidadId}/modulos',[EspecialidadController::class, 'obtenerModulosPorEspecialidad'] )
         ->missing(function (Request $request) {

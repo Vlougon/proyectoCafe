@@ -1,0 +1,108 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #f4f4f4 !important;
+}
+
+main {
+    background-color: #f4f4f4;
+    min-height: 100vh;
+}
+
+main>div.container-fluid div#lateralBox {
+    background-color: #1D2333;
+    margin-bottom: 20px;
+    padding: 10px;
+}
+
+#profileBox {
+    display: block;
+    background: none;
+    margin: 0 auto;
+    padding: 5px;
+    border: none;
+    text-align: center;
+}
+
+#profileBox img {
+    background-color: white;
+    border-radius: 50%;
+}
+
+#profileBox span {
+    color: white;
+    text-decoration: underline;
+    vertical-align: middle;
+}
+
+#logoutForm {
+    margin: 0 auto;
+    text-align: center;
+}
+
+#logoutForm input {
+    background: none;
+    border: none;
+    color: red;
+}
+
+#logoutForm input:hover {
+    text-shadow: 0 0 7px rgba(255, 0, 0, 0.9);
+}
+
+#modelsList,
+#generalData {
+    margin: 0 0;
+}
+
+#modelsList div {
+    background-color: white;
+    padding: 10px 5px;
+    border-radius: 20%;
+    border: none;
+    text-align: center;
+    font-weight: bold;
+}
+
+#modelsList div:hover {
+    background-color: #d1d1d1;
+    cursor: pointer;
+}
+
+.blindfolded {
+    display: none;
+}
+
+.alert {
+    width: 80%;
+    top: 5%;
+}
+
+@media (min-width: 992px) {
+    main>div.container-fluid div#lateralBox {
+        background-color: #1D2333;
+        min-height: 100vh;
+        margin-bottom: 0;
+    }
+
+    #profileBox img {
+        margin: 0 auto;
+    }
+
+    #modelsList div {
+        background: none;
+        padding: 15px 0;
+        border-bottom: 1px solid white;
+        border-top: 1px solid white;
+        border-radius: 0;
+        color: white;
+    }
+
+    #modelsList div:hover {
+        background-color: #000a25;
+    }
+}
